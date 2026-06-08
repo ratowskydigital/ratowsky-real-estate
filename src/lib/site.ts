@@ -62,11 +62,12 @@ export const site = {
       { href: "/about", label: "Meet the Group" },
       { href: "/sellers", label: "Listing Your Home" },
       { href: "/buyers", label: "The Buying Process" },
+      { href: "/luxury", label: "Luxury & Waterfront" },
+      { href: "/home-value", label: "Home Valuation" },
       { href: "/communities", label: "Communities" },
       { href: "/insights", label: "Insights" },
       { href: "/sold-stories", label: "Sold Stories" },
       { href: "/the-tides", label: "The Tides Newsletter" },
-      { href: "/home-value", label: "Home Valuation" },
     ],
     legal: [
       { href: "/fair-housing", label: "Fair Housing" },

@@ -22,7 +22,7 @@ const faqItems = [
   {
     question: "How is selling a luxury home in Huntington Harbour different from a standard listing?",
     answer:
-      "At the $3M+ level, the buyer pool is smaller, the diligence is deeper, and one bad photo or a price that misses the comp set costs you six figures. We run a pre-market phase through the Compass network before the public MLS opens, so we've already identified the most capable buyers before the public clock starts. The dock permit file, the seawall inspection, the water-depth measurement at MLLW — that work gets done before the listing goes live, not during escrow.",
+      "At the $3M+ level, the buyer pool is smaller, the diligence is deeper, and one bad photo or a price that misses the comp set costs you six figures. We run a pre-market phase through the Compass network before the public MLS opens, so we've already identified the most capable buyers before the public clock starts. The dock permit file, the seawall inspection, the water-depth measurement at MLLW. That work gets done before the listing goes live, not during escrow.",
   },
   {
     question: "What does your marketing plan actually include at this price point?",
@@ -32,7 +32,7 @@ const faqItems = [
   {
     question: "What is the Compass Private Exclusive and why does it matter for luxury?",
     answer:
-      "It's a pre-market listing inside the Compass agent network — roughly 30,000 agents and their qualified buyer pools — before anything goes public. At the $3M+ level, this phase does two things: it surfaces the most capable buyers quietly, and it lets us refine our pricing story before the public MLS launch. Deals that start in the Private Exclusive phase frequently close without ever needing a price reduction, because we're not testing demand on an open market where every visitor leaves a digital footprint.",
+      "It's a pre-market listing inside the Compass agent network (roughly 30,000 agents and their qualified buyer pools) before anything goes public. At the $3M+ level, this phase does two things: it surfaces the most capable buyers quietly, and it lets us refine our pricing story before the public MLS launch. Deals that start in the Private Exclusive phase frequently close without ever needing a price reduction, because we're not testing demand on an open market where every visitor leaves a digital footprint.",
   },
   {
     question: "How do you price waterfront accurately when Zillow is so far off?",
@@ -42,7 +42,7 @@ const faqItems = [
   {
     question: "Do I have to list with you to get the marketing portfolio?",
     answer:
-      "No. The portfolio and confidential value opinion are complimentary, with no strings. Plenty of homeowners use it to plan a decision that's still 12 to 18 months out. When you're ready to list, we'd like to earn it — but the first conversation carries no obligation.",
+      "No. The portfolio and confidential value opinion are complimentary, with no strings. Plenty of homeowners use it to plan a decision that's still 12 to 18 months out. When you're ready to list, we'd like to earn it. The first conversation carries no obligation.",
   },
 ];
 
@@ -50,7 +50,7 @@ const features = [
   {
     n: "01",
     title: "Cinematic presentation",
-    body: "Architectural photography, twilight and aerial drone video, and a designed property story. The goal is to make the right buyer feel the home before they walk in — not to document it.",
+    body: "Architectural photography, twilight and aerial drone video, and a designed property story. The goal is to make the right buyer feel the home before they walk in. Not to document it.",
   },
   {
     n: "02",
@@ -217,7 +217,7 @@ export default function LuxuryPage() {
               The best Harbour homes are sold before they're listed.
             </h2>
             <p className="text-md text-ink-soft leading-relaxed mb-4">
-              If you're looking in the $2M+ range, you want access — off-market and coming-soon
+              If you're looking in the $2M+ range, you want access: off-market and coming-soon
               inventory, private showings, and an advocate who negotiates quietly on your behalf.
               That's how the top of this market actually moves.
             </p>

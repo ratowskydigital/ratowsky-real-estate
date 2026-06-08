@@ -102,7 +102,7 @@ export function TourBookingForm() {
 
       <div className="flex items-start justify-between gap-4 pt-2 flex-wrap">
         <p className="text-xs text-muted max-w-xs">
-          We reach out same day. No spam, no automated drip — just a real reply from Craig or
+          We reach out same day. No spam, no automated drip. A real reply from Craig or
           Justin.
         </p>
         <Button type="submit" disabled={status === "submitting"}>

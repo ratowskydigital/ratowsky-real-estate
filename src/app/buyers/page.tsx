@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Buy a Home in Huntington Beach | Ratowsky Group at Compass",
     description:
-      "Pre-approved and looking? Send us your criteria and we'll have a curated tour lined up by the weekend — including coming-soon and Compass Private Exclusive inventory.",
+      "Pre-approved and looking? Send us your criteria and we'll have a curated tour lined up by the weekend, including coming-soon and Compass Private Exclusive inventory.",
   },
   alternates: {
     canonical: "https://ratowskyrealestate.com/buyers",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 const faqItems = [
   {
-    question: "I'm pre-approved — how fast can you set up showings?",
+    question: "I'm pre-approved. How fast can you set up showings?",
     answer:
       "Same week. Send us your criteria and budget and we'll have a curated set of showings lined up by the weekend, with first access to anything coming-soon or off-market that fits. We don't line up everything on Zillow and call it a tour. You'll see homes that are actually worth your time.",
   },
@@ -32,7 +32,7 @@ const faqItems = [
   {
     question: "What is Compass Private Exclusive and why does it matter?",
     answer:
-      "It's a pre-market listing inside the Compass agent network — usually 7 to 14 days before the public MLS, sometimes longer in Huntington Harbour where owners move slowly. We often have showings on Private Exclusive homes before they hit Zillow. That access is how several of our buyers have bought without ever entering a bidding war.",
+      "It's a pre-market listing inside the Compass agent network, usually 7 to 14 days before the public MLS, sometimes longer in Huntington Harbour where owners move slowly. We often have showings on Private Exclusive homes before they hit Zillow. That access is how several of our buyers have bought without ever entering a bidding war.",
   },
   {
     question: "We're selling and buying at the same time. Is that manageable?",
@@ -117,7 +117,7 @@ export default function BuyersPage() {
           </h1>
           <p className="mt-6 text-md text-ink-soft max-w-xl">
             Stop refreshing Zillow. Send us your criteria and we&rsquo;ll have the right showings
-            lined up by the weekend — including coastal homes before they hit the open market.
+            lined up by the weekend, including coastal homes before they hit the open market.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <a
@@ -183,7 +183,7 @@ export default function BuyersPage() {
               </h2>
               <p className="text-md text-ink-soft leading-relaxed mb-8">
                 Send your criteria and budget. We&rsquo;ll have a tight, curated tour set up fast
-                — only the homes actually worth your time.
+                , only the homes actually worth your time.
               </p>
               <ul className="space-y-3">
                 {[
