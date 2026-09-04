@@ -1,0 +1,60 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "dutch-haven-marina",
+      "properties": {
+        "slug": "dutch-haven-marina",
+        "name": "Dutch Haven Marina",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "South Huntington Beach tract between Magnolia Street and Brookhurst Street, from Atlanta Avenue south toward the Magnolia Marsh and PCH.",
+        "subdivisionNames": [
+          "Dutch Haven Marina",
+          "Dutch Haven"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92646"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -117.96239997939466,
+          33.652249994135616
+        ],
+        "pageUrl": "/communities/dutch-haven-marina"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -117.9711,
+              33.6575
+            ],
+            [
+              -117.9537,
+              33.6575
+            ],
+            [
+              -117.9537,
+              33.647
+            ],
+            [
+              -117.9711,
+              33.647
+            ],
+            [
+              -117.9711,
+              33.6575
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

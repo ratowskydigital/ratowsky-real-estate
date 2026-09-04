@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "gilbert-island",
+      "properties": {
+        "slug": "gilbert-island",
+        "name": "Gilbert Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Bounded by Admiralty Island on the west and the Main Channel on the east; reached through Admiralty Island via Gilbert Drive.",
+        "subdivisionNames": [
+          "Gilbert Island",
+          "Gilbert"
+        ],
+        "streetNames": [
+          "Gilbert"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.06470047217657,
+          33.719400134892
+        ],
+        "pageUrl": "/communities/gilbert-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0662,
+              33.7162
+            ],
+            [
+              -118.0632,
+              33.7162
+            ],
+            [
+              -118.0632,
+              33.7226
+            ],
+            [
+              -118.0662,
+              33.7226
+            ],
+            [
+              -118.0662,
+              33.7162
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

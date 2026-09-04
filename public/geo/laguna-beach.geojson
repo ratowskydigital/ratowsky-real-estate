@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "laguna-beach",
+      "properties": {
+        "slug": "laguna-beach",
+        "name": "Laguna Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Laguna Beach.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92651",
+          "92652"
+        ],
+        "mlsCity": "Laguna Beach",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/laguna-beach"
+      },
+      "geometry": null
+    }
+  ]
+}

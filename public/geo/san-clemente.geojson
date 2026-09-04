@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "san-clemente",
+      "properties": {
+        "slug": "san-clemente",
+        "name": "San Clemente",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = San Clemente.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92672",
+          "92673"
+        ],
+        "mlsCity": "San Clemente",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/san-clemente"
+      },
+      "geometry": null
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "dana-point",
+      "properties": {
+        "slug": "dana-point",
+        "name": "Dana Point",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Dana Point, including Capistrano Beach (92624).",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92624",
+          "92629"
+        ],
+        "mlsCity": "Dana Point",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/dana-point"
+      },
+      "geometry": null
+    }
+  ]
+}

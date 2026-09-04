@@ -1,0 +1,80 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "huntington-beach",
+      "properties": {
+        "slug": "huntington-beach",
+        "name": "Huntington Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Coarse city outline from Anderson Street (Seal Beach line) to the Santa Ana River. Listings are matched to the city by the CRMLS City field first; this ring is a coverage and validation aid.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "90742",
+          "92646",
+          "92647",
+          "92648",
+          "92649"
+        ],
+        "mlsCity": "Huntington Beach",
+        "mlsCityAliases": [
+          "Sunset Beach",
+          "Huntington Harbour"
+        ],
+        "centroid": [
+          -117.99797117183358,
+          33.6906364684464
+        ],
+        "pageUrl": "/cities/huntington-beach"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.086,
+              33.723
+            ],
+            [
+              -118.08,
+              33.727
+            ],
+            [
+              -118.072,
+              33.734
+            ],
+            [
+              -117.995,
+              33.734
+            ],
+            [
+              -117.94,
+              33.73
+            ],
+            [
+              -117.94,
+              33.645
+            ],
+            [
+              -117.952,
+              33.628
+            ],
+            [
+              -118.02,
+              33.648
+            ],
+            [
+              -118.086,
+              33.723
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "humboldt-island",
+      "properties": {
+        "slug": "humboldt-island",
+        "name": "Humboldt Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The island reached from Edinger Avenue and Saybrook Lane via Humboldt Drive, between Trinidad Island and Saybrook Lane, north of Davenport Island.",
+        "subdivisionNames": [
+          "Humboldt Island",
+          "Humboldt"
+        ],
+        "streetNames": [
+          "Humboldt"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05365061651177,
+          33.723850176116215
+        ],
+        "pageUrl": "/communities/humboldt-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0558,
+              33.7205
+            ],
+            [
+              -118.0515,
+              33.7205
+            ],
+            [
+              -118.0515,
+              33.7272
+            ],
+            [
+              -118.0558,
+              33.7272
+            ],
+            [
+              -118.0558,
+              33.7205
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

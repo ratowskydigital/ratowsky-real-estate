@@ -1,0 +1,1356 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "huntington-beach",
+      "properties": {
+        "slug": "huntington-beach",
+        "name": "Huntington Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Coarse city outline from Anderson Street (Seal Beach line) to the Santa Ana River. Listings are matched to the city by the CRMLS City field first; this ring is a coverage and validation aid.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "90742",
+          "92646",
+          "92647",
+          "92648",
+          "92649"
+        ],
+        "mlsCity": "Huntington Beach",
+        "mlsCityAliases": [
+          "Sunset Beach",
+          "Huntington Harbour"
+        ],
+        "centroid": [
+          -117.99797117183358,
+          33.6906364684464
+        ],
+        "pageUrl": "/cities/huntington-beach"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.086,
+              33.723
+            ],
+            [
+              -118.08,
+              33.727
+            ],
+            [
+              -118.072,
+              33.734
+            ],
+            [
+              -117.995,
+              33.734
+            ],
+            [
+              -117.94,
+              33.73
+            ],
+            [
+              -117.94,
+              33.645
+            ],
+            [
+              -117.952,
+              33.628
+            ],
+            [
+              -118.02,
+              33.648
+            ],
+            [
+              -118.086,
+              33.723
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "huntington-harbour",
+      "properties": {
+        "slug": "huntington-harbour",
+        "name": "Huntington Harbour",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "PCH on the west, the Naval Weapons Station on the north, Bolsa Chica Street on the east, and the Sea Bridge / Bay Club streets south of Warner on the south. Covers all five islands (Trinidad, Davenport, Humboldt, Gilbert, Admiralty) and every Mainland block (Coral Cay, Weatherly Bay, Broadmoor, Seagate, Huntington Bay, the Cape, Sea Bridge, Peter's Landing).",
+        "subdivisionNames": [
+          "Huntington Harbour",
+          "Trinidad Island",
+          "Davenport Island",
+          "Humboldt Island",
+          "Gilbert Island",
+          "Admiralty Island",
+          "Coral Cay",
+          "Weatherly Bay",
+          "Broadmoor",
+          "Seagate",
+          "Huntington Bay",
+          "Sea Bridge",
+          "Seabridge",
+          "Mainland",
+          "Peter's Landing",
+          "Portofino Cove",
+          "Bay Club"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05667958050446,
+          33.72257462131525
+        ],
+        "pageUrl": "/communities/huntington-harbour"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0655,
+              33.7125
+            ],
+            [
+              -118.0771,
+              33.7245
+            ],
+            [
+              -118.072,
+              33.7335
+            ],
+            [
+              -118.04,
+              33.7335
+            ],
+            [
+              -118.04,
+              33.7137
+            ],
+            [
+              -118.0505,
+              33.7137
+            ],
+            [
+              -118.0505,
+              33.7075
+            ],
+            [
+              -118.058,
+              33.7075
+            ],
+            [
+              -118.0655,
+              33.7125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "trinidad-island",
+      "properties": {
+        "slug": "trinidad-island",
+        "name": "Trinidad Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The island reached from Edinger Avenue via the Trinidad Lane bridge, west of Humboldt Island and east of the Main Channel.",
+        "subdivisionNames": [
+          "Trinidad Island",
+          "Trinidad"
+        ],
+        "streetNames": [
+          "Trinidad"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05869980114757,
+          33.72269994310159
+        ],
+        "pageUrl": "/communities/trinidad-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0612,
+              33.7182
+            ],
+            [
+              -118.0562,
+              33.7182
+            ],
+            [
+              -118.0562,
+              33.7272
+            ],
+            [
+              -118.0612,
+              33.7272
+            ],
+            [
+              -118.0612,
+              33.7182
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "davenport-island",
+      "properties": {
+        "slug": "davenport-island",
+        "name": "Davenport Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The southernmost island, reached from Saybrook Lane via Davenport Drive, south of Humboldt Island and north of Warner Avenue.",
+        "subdivisionNames": [
+          "Davenport Island",
+          "Davenport"
+        ],
+        "streetNames": [
+          "Davenport"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05474956039,
+          33.717149874449085
+        ],
+        "pageUrl": "/communities/davenport-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.058,
+              33.7145
+            ],
+            [
+              -118.0515,
+              33.7145
+            ],
+            [
+              -118.0515,
+              33.7198
+            ],
+            [
+              -118.058,
+              33.7198
+            ],
+            [
+              -118.058,
+              33.7145
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "humboldt-island",
+      "properties": {
+        "slug": "humboldt-island",
+        "name": "Humboldt Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The island reached from Edinger Avenue and Saybrook Lane via Humboldt Drive, between Trinidad Island and Saybrook Lane, north of Davenport Island.",
+        "subdivisionNames": [
+          "Humboldt Island",
+          "Humboldt"
+        ],
+        "streetNames": [
+          "Humboldt"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05365061651177,
+          33.723850176116215
+        ],
+        "pageUrl": "/communities/humboldt-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0558,
+              33.7205
+            ],
+            [
+              -118.0515,
+              33.7205
+            ],
+            [
+              -118.0515,
+              33.7272
+            ],
+            [
+              -118.0558,
+              33.7272
+            ],
+            [
+              -118.0558,
+              33.7205
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gilbert-island",
+      "properties": {
+        "slug": "gilbert-island",
+        "name": "Gilbert Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Bounded by Admiralty Island on the west and the Main Channel on the east; reached through Admiralty Island via Gilbert Drive.",
+        "subdivisionNames": [
+          "Gilbert Island",
+          "Gilbert"
+        ],
+        "streetNames": [
+          "Gilbert"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.06470047217657,
+          33.719400134892
+        ],
+        "pageUrl": "/communities/gilbert-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0662,
+              33.7162
+            ],
+            [
+              -118.0632,
+              33.7162
+            ],
+            [
+              -118.0632,
+              33.7226
+            ],
+            [
+              -118.0662,
+              33.7226
+            ],
+            [
+              -118.0662,
+              33.7162
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "admiralty-island",
+      "properties": {
+        "slug": "admiralty-island",
+        "name": "Admiralty Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The westernmost island, entered directly from Pacific Coast Highway at Admiralty Drive.",
+        "subdivisionNames": [
+          "Admiralty Island",
+          "Admiralty"
+        ],
+        "streetNames": [
+          "Admiralty"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.06952259412267,
+          33.720509052907005
+        ],
+        "pageUrl": "/communities/admiralty-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.069,
+              33.7172
+            ],
+            [
+              -118.0665,
+              33.7172
+            ],
+            [
+              -118.0665,
+              33.7228
+            ],
+            [
+              -118.075,
+              33.7228
+            ],
+            [
+              -118.069,
+              33.7172
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "harbour-mainland",
+      "properties": {
+        "slug": "harbour-mainland",
+        "name": "Harbour Mainland",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Every non-island block of the Harbour: east of Saybrook Lane from Warner to Edinger (Seagate, Huntington Bay, the Mainland grid), north of Edinger to the Naval Weapons Station (Coral Cay, Weatherly Bay, Broadmoor), south of Warner (Sea Bridge, the Cape, Bay Club), and the PCH-side strip (Peter's Landing, Portofino Cove).",
+        "subdivisionNames": [
+          "Coral Cay",
+          "Weatherly Bay",
+          "Broadmoor",
+          "Seagate",
+          "Huntington Bay",
+          "Sea Bridge",
+          "Seabridge",
+          "Mainland",
+          "Peter's Landing",
+          "Portofino Cove",
+          "Bay Club",
+          "The Cape"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.04549989742793,
+          33.72084997069973
+        ],
+        "pageUrl": "/communities/harbour-mainland"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -118.051,
+                33.7137
+              ],
+              [
+                -118.04,
+                33.7137
+              ],
+              [
+                -118.04,
+                33.728
+              ],
+              [
+                -118.051,
+                33.728
+              ],
+              [
+                -118.051,
+                33.7137
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -118.072,
+                33.7282
+              ],
+              [
+                -118.04,
+                33.7282
+              ],
+              [
+                -118.04,
+                33.7335
+              ],
+              [
+                -118.072,
+                33.7335
+              ],
+              [
+                -118.072,
+                33.7282
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -118.058,
+                33.7075
+              ],
+              [
+                -118.0508,
+                33.7075
+              ],
+              [
+                -118.0508,
+                33.7135
+              ],
+              [
+                -118.058,
+                33.7135
+              ],
+              [
+                -118.058,
+                33.7075
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -118.0655,
+                33.7127
+              ],
+              [
+                -118.0512,
+                33.714
+              ],
+              [
+                -118.0585,
+                33.7143
+              ],
+              [
+                -118.0585,
+                33.7168
+              ],
+              [
+                -118.0688,
+                33.7168
+              ],
+              [
+                -118.0655,
+                33.7127
+              ]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sunset-beach",
+      "properties": {
+        "slug": "sunset-beach",
+        "name": "Sunset Beach",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Anderson Street (Seal Beach line) on the north to Warner Avenue on the south, the sand on the west, and the PCH-side alley and Park Avenue strip on the east.",
+        "subdivisionNames": [
+          "Sunset Beach"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "90742",
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.07516762081337,
+          33.71784789395516
+        ],
+        "pageUrl": "/communities/sunset-beach"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0655,
+              33.7125
+            ],
+            [
+              -118.0771,
+              33.7245
+            ],
+            [
+              -118.08,
+              33.7262
+            ],
+            [
+              -118.085,
+              33.7225
+            ],
+            [
+              -118.07,
+              33.709
+            ],
+            [
+              -118.0655,
+              33.7125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "brightwater",
+      "properties": {
+        "slug": "brightwater",
+        "name": "Brightwater",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Warner Avenue on the north, the Bolsa Chica Ecological Reserve on the west, Los Patos Avenue on the south, and the older residential streets on the east.",
+        "subdivisionNames": [
+          "Brightwater"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.04535005126044,
+          33.711500014655265
+        ],
+        "pageUrl": "/communities/brightwater"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.05,
+              33.7135
+            ],
+            [
+              -118.0407,
+              33.7135
+            ],
+            [
+              -118.0407,
+              33.7095
+            ],
+            [
+              -118.05,
+              33.7095
+            ],
+            [
+              -118.05,
+              33.7135
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bolsa-landmark",
+      "properties": {
+        "slug": "bolsa-landmark",
+        "name": "Bolsa Landmark",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Mid-century tract east of Bolsa Chica Street between Warner Avenue and the northern edge of the Bolsa Chica wetlands.",
+        "subdivisionNames": [
+          "Bolsa Landmark",
+          "Landmark"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.03534998718342,
+          33.70874999633906
+        ],
+        "pageUrl": "/communities/bolsa-landmark"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0407,
+              33.7135
+            ],
+            [
+              -118.03,
+              33.7135
+            ],
+            [
+              -118.03,
+              33.704
+            ],
+            [
+              -118.0407,
+              33.704
+            ],
+            [
+              -118.0407,
+              33.7135
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "edwards-hill",
+      "properties": {
+        "slug": "edwards-hill",
+        "name": "Edwards Hill",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Ellis Avenue on the north, Garfield Avenue on the south, Edwards Street on the west, Goldenwest Street on the east.",
+        "subdivisionNames": [
+          "Edwards Hill",
+          "Ellis-Goldenwest",
+          "Ellis Goldenwest"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.01895007733853,
+          33.68900002206657
+        ],
+        "pageUrl": "/communities/edwards-hill"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0233,
+              33.6925
+            ],
+            [
+              -118.0146,
+              33.6925
+            ],
+            [
+              -118.0146,
+              33.6855
+            ],
+            [
+              -118.0233,
+              33.6855
+            ],
+            [
+              -118.0233,
+              33.6925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "seacliff",
+      "properties": {
+        "slug": "seacliff",
+        "name": "Seacliff",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The Seacliff master plan: Ellis Avenue on the north, Goldenwest Street on the east, PCH on the south-west, and the Bolsa Chica bluff on the west. Covers Seacliff on the Greens, the Peninsula, Turnberry, the Estates, and the original Seacliff tract nearest PCH.",
+        "subdivisionNames": [
+          "Seacliff",
+          "Sea Cliff",
+          "Seacliff Estates",
+          "Peninsula",
+          "Turnberry",
+          "Sandcastle",
+          "Greens"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.02287018880551,
+          33.678886642534515
+        ],
+        "pageUrl": "/communities/seacliff"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.029,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.6643
+            ],
+            [
+              -118.033,
+              33.676
+            ],
+            [
+              -118.029,
+              33.6925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "seacliff-on-the-greens",
+      "properties": {
+        "slug": "seacliff-on-the-greens",
+        "name": "Seacliff on the Greens",
+        "kind": "community",
+        "parentSlug": "seacliff",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The golf-course half of the Seacliff master plan: west of Edwards Street between Ellis and Garfield, wrapping the Huntington Club fairways down to the streets north of Palm Avenue.",
+        "subdivisionNames": [
+          "Seacliff on the Greens",
+          "Sea Cliff on the Greens",
+          "Greens"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.02325563457435,
+          33.68479440027892
+        ],
+        "pageUrl": "/communities/seacliff-on-the-greens"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.029,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.68
+            ],
+            [
+              -118.029,
+              33.68
+            ],
+            [
+              -118.029,
+              33.6925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "downtown-pier",
+      "properties": {
+        "slug": "downtown-pier",
+        "name": "Downtown Pier District",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Pacific Coast Highway to Yorktown Avenue, Goldenwest Street east to Beach Boulevard.",
+        "subdivisionNames": [
+          "Downtown",
+          "Pacific City",
+          "Old Town",
+          "Townsquare",
+          "Pier Colony",
+          "Huntington Pacific",
+          "Beachwalk"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -117.99994109871805,
+          33.66536442860772
+        ],
+        "pageUrl": "/communities/downtown-pier"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0146,
+              33.6643
+            ],
+            [
+              -118.0146,
+              33.6795
+            ],
+            [
+              -117.9885,
+              33.6795
+            ],
+            [
+              -117.9895,
+              33.6413
+            ],
+            [
+              -118.0146,
+              33.6643
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dutch-haven-marina",
+      "properties": {
+        "slug": "dutch-haven-marina",
+        "name": "Dutch Haven Marina",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "South Huntington Beach tract between Magnolia Street and Brookhurst Street, from Atlanta Avenue south toward the Magnolia Marsh and PCH.",
+        "subdivisionNames": [
+          "Dutch Haven Marina",
+          "Dutch Haven"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92646"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -117.96239997939466,
+          33.652249994135616
+        ],
+        "pageUrl": "/communities/dutch-haven-marina"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -117.9711,
+              33.6575
+            ],
+            [
+              -117.9537,
+              33.6575
+            ],
+            [
+              -117.9537,
+              33.647
+            ],
+            [
+              -117.9711,
+              33.647
+            ],
+            [
+              -117.9711,
+              33.6575
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "newport-beach",
+      "properties": {
+        "slug": "newport-beach",
+        "name": "Newport Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Newport Beach, excluding the 92657 Newport Coast and 92625 Corona del Mar postal codes which have their own pages.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92660",
+          "92661",
+          "92662",
+          "92663"
+        ],
+        "mlsCity": "Newport Beach",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/newport-beach"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "newport-coast",
+      "properties": {
+        "slug": "newport-coast",
+        "name": "Newport Coast",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Newport Coast (some listings file under Newport Beach with postal code 92657; the postal gate catches those).",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92657"
+        ],
+        "mlsCity": "Newport Coast",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/newport-coast"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "corona-del-mar",
+      "properties": {
+        "slug": "corona-del-mar",
+        "name": "Corona del Mar",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Corona del Mar, or Newport Beach with postal code 92625.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92625"
+        ],
+        "mlsCity": "Corona del Mar",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/corona-del-mar"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "seal-beach",
+      "properties": {
+        "slug": "seal-beach",
+        "name": "Seal Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Seal Beach.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "90740"
+        ],
+        "mlsCity": "Seal Beach",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/seal-beach"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "fountain-valley",
+      "properties": {
+        "slug": "fountain-valley",
+        "name": "Fountain Valley",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Fountain Valley.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92708"
+        ],
+        "mlsCity": "Fountain Valley",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/fountain-valley"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "costa-mesa",
+      "properties": {
+        "slug": "costa-mesa",
+        "name": "Costa Mesa",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Costa Mesa.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92626",
+          "92627"
+        ],
+        "mlsCity": "Costa Mesa",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/costa-mesa"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "irvine",
+      "properties": {
+        "slug": "irvine",
+        "name": "Irvine",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Irvine.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92602",
+          "92603",
+          "92604",
+          "92606",
+          "92612",
+          "92614",
+          "92617",
+          "92618",
+          "92620"
+        ],
+        "mlsCity": "Irvine",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/irvine"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "westminster",
+      "properties": {
+        "slug": "westminster",
+        "name": "Westminster",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Westminster.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92683"
+        ],
+        "mlsCity": "Westminster",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/westminster"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "dana-point",
+      "properties": {
+        "slug": "dana-point",
+        "name": "Dana Point",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Dana Point, including Capistrano Beach (92624).",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92624",
+          "92629"
+        ],
+        "mlsCity": "Dana Point",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/dana-point"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "san-clemente",
+      "properties": {
+        "slug": "san-clemente",
+        "name": "San Clemente",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = San Clemente.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92672",
+          "92673"
+        ],
+        "mlsCity": "San Clemente",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/san-clemente"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "laguna-beach",
+      "properties": {
+        "slug": "laguna-beach",
+        "name": "Laguna Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Laguna Beach.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92651",
+          "92652"
+        ],
+        "mlsCity": "Laguna Beach",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/laguna-beach"
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "san-juan-capistrano",
+      "properties": {
+        "slug": "san-juan-capistrano",
+        "name": "San Juan Capistrano",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = San Juan Capistrano.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92675"
+        ],
+        "mlsCity": "San Juan Capistrano",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/san-juan-capistrano"
+      },
+      "geometry": null
+    }
+  ]
+}

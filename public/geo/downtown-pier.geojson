@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "downtown-pier",
+      "properties": {
+        "slug": "downtown-pier",
+        "name": "Downtown Pier District",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Pacific Coast Highway to Yorktown Avenue, Goldenwest Street east to Beach Boulevard.",
+        "subdivisionNames": [
+          "Downtown",
+          "Pacific City",
+          "Old Town",
+          "Townsquare",
+          "Pier Colony",
+          "Huntington Pacific",
+          "Beachwalk"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -117.99994109871805,
+          33.66536442860772
+        ],
+        "pageUrl": "/communities/downtown-pier"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0146,
+              33.6643
+            ],
+            [
+              -118.0146,
+              33.6795
+            ],
+            [
+              -117.9885,
+              33.6795
+            ],
+            [
+              -117.9895,
+              33.6413
+            ],
+            [
+              -118.0146,
+              33.6643
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "seal-beach",
+      "properties": {
+        "slug": "seal-beach",
+        "name": "Seal Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Seal Beach.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "90740"
+        ],
+        "mlsCity": "Seal Beach",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/seal-beach"
+      },
+      "geometry": null
+    }
+  ]
+}

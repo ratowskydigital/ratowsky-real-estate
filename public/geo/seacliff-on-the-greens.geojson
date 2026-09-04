@@ -1,0 +1,69 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "seacliff-on-the-greens",
+      "properties": {
+        "slug": "seacliff-on-the-greens",
+        "name": "Seacliff on the Greens",
+        "kind": "community",
+        "parentSlug": "seacliff",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The golf-course half of the Seacliff master plan: west of Edwards Street between Ellis and Garfield, wrapping the Huntington Club fairways down to the streets north of Palm Avenue.",
+        "subdivisionNames": [
+          "Seacliff on the Greens",
+          "Sea Cliff on the Greens",
+          "Greens"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.02325563457435,
+          33.68479440027892
+        ],
+        "pageUrl": "/communities/seacliff-on-the-greens"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.029,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.68
+            ],
+            [
+              -118.029,
+              33.68
+            ],
+            [
+              -118.029,
+              33.6925
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

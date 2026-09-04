@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "costa-mesa",
+      "properties": {
+        "slug": "costa-mesa",
+        "name": "Costa Mesa",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Costa Mesa.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92626",
+          "92627"
+        ],
+        "mlsCity": "Costa Mesa",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/costa-mesa"
+      },
+      "geometry": null
+    }
+  ]
+}

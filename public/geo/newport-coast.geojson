@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "newport-coast",
+      "properties": {
+        "slug": "newport-coast",
+        "name": "Newport Coast",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Newport Coast (some listings file under Newport Beach with postal code 92657; the postal gate catches those).",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92657"
+        ],
+        "mlsCity": "Newport Coast",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/newport-coast"
+      },
+      "geometry": null
+    }
+  ]
+}

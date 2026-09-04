@@ -64,6 +64,7 @@ export const site = {
       { href: "/buyers", label: "The Buying Process" },
       { href: "/luxury", label: "Luxury & Waterfront" },
       { href: "/home-value", label: "Home Valuation" },
+      { href: "/cities", label: "Cities We Work" },
       { href: "/communities", label: "Communities" },
       { href: "/insights", label: "Insights" },
       { href: "/sold-stories", label: "Sold Stories" },

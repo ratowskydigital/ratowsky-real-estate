@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "edwards-hill",
+      "properties": {
+        "slug": "edwards-hill",
+        "name": "Edwards Hill",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Ellis Avenue on the north, Garfield Avenue on the south, Edwards Street on the west, Goldenwest Street on the east.",
+        "subdivisionNames": [
+          "Edwards Hill",
+          "Ellis-Goldenwest",
+          "Ellis Goldenwest"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.01895007733853,
+          33.68900002206657
+        ],
+        "pageUrl": "/communities/edwards-hill"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0233,
+              33.6925
+            ],
+            [
+              -118.0146,
+              33.6925
+            ],
+            [
+              -118.0146,
+              33.6855
+            ],
+            [
+              -118.0233,
+              33.6855
+            ],
+            [
+              -118.0233,
+              33.6925
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

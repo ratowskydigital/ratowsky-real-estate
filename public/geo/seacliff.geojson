@@ -1,0 +1,73 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "seacliff",
+      "properties": {
+        "slug": "seacliff",
+        "name": "Seacliff",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The Seacliff master plan: Ellis Avenue on the north, Goldenwest Street on the east, PCH on the south-west, and the Bolsa Chica bluff on the west. Covers Seacliff on the Greens, the Peninsula, Turnberry, the Estates, and the original Seacliff tract nearest PCH.",
+        "subdivisionNames": [
+          "Seacliff",
+          "Sea Cliff",
+          "Seacliff Estates",
+          "Peninsula",
+          "Turnberry",
+          "Sandcastle",
+          "Greens"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92648"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.02287018880551,
+          33.678886642534515
+        ],
+        "pageUrl": "/communities/seacliff"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.029,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6925
+            ],
+            [
+              -118.0235,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.6855
+            ],
+            [
+              -118.0146,
+              33.6643
+            ],
+            [
+              -118.033,
+              33.676
+            ],
+            [
+              -118.029,
+              33.6925
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

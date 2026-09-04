@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "trinidad-island",
+      "properties": {
+        "slug": "trinidad-island",
+        "name": "Trinidad Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The island reached from Edinger Avenue via the Trinidad Lane bridge, west of Humboldt Island and east of the Main Channel.",
+        "subdivisionNames": [
+          "Trinidad Island",
+          "Trinidad"
+        ],
+        "streetNames": [
+          "Trinidad"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05869980114757,
+          33.72269994310159
+        ],
+        "pageUrl": "/communities/trinidad-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0612,
+              33.7182
+            ],
+            [
+              -118.0562,
+              33.7182
+            ],
+            [
+              -118.0562,
+              33.7272
+            ],
+            [
+              -118.0612,
+              33.7272
+            ],
+            [
+              -118.0612,
+              33.7182
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

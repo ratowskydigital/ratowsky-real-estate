@@ -9,6 +9,7 @@ import { JsonLd, buildFaqPageSchema, buildBreadcrumbSchema } from "@/components/
 import { pickDroneImage } from "@/lib/drone";
 import {
   communities,
+  getBreadcrumb,
   getCommunity,
   getCommunitySlugs,
 } from "@/content/communities";
@@ -33,6 +34,8 @@ export async function generateMetadata({
     title,
     description: c.oneLine,
     alternates: { canonical: `${site.url}/communities/${c.slug}` },
+    // A stub is thin content. Keep it out of the index until the brief is written.
+    robots: c.status === "published" ? undefined : { index: false, follow: true },
     openGraph: {
       title,
       description: c.oneLine,
@@ -57,10 +60,10 @@ export default async function CommunityDetailPage({
     .filter((x): x is (typeof communities)[number] => Boolean(x))
     .slice(0, 3);
 
+  const trail = getBreadcrumb(c.slug);
   const breadcrumb = buildBreadcrumbSchema([
     { name: "Home", url: site.url },
-    { name: "Communities", url: `${site.url}/communities` },
-    { name: c.name, url: `${site.url}/communities/${c.slug}` },
+    ...trail.map((t) => ({ name: t.name, url: `${site.url}${t.href}` })),
   ]);
 
   const faqSchema = c.faqs.length > 0 ? buildFaqPageSchema(c.faqs) : null;
@@ -94,7 +97,10 @@ export default async function CommunityDetailPage({
             <Link href="/communities" className="hover:text-white">
               Communities
             </Link>{" "}
-            &middot; {c.parentCity}
+            &middot;{" "}
+            <Link href={`/cities/${c.parentCitySlug}`} className="hover:text-white">
+              {c.parentCity}
+            </Link>
           </p>
           <h1 className="mt-4 font-serif text-2xl tracking-tightest leading-[1.05]">{c.name}</h1>
           <p className="mt-6 text-md text-white/85 italic">{c.oneLine}</p>
@@ -120,11 +126,13 @@ export default async function CommunityDetailPage({
             <h2 className="mt-4 font-serif text-xl tracking-tightest leading-tight">
               {sec.heading}
             </h2>
-            <div className="mt-6 space-y-5 text-base text-ink-soft leading-relaxed">
-              {sec.paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
+            {sec.paragraphs && sec.paragraphs.length > 0 && (
+              <div className="mt-6 space-y-5 text-base text-ink-soft leading-relaxed">
+                {sec.paragraphs.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            )}
             {sec.bullets && (
               <div className="mt-8">
                 {sec.bullets.title && (
