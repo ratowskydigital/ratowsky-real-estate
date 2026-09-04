@@ -1,0 +1,31 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "newport-beach",
+      "properties": {
+        "slug": "newport-beach",
+        "name": "Newport Beach",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Newport Beach, excluding the 92657 Newport Coast and 92625 Corona del Mar postal codes which have their own pages.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92660",
+          "92661",
+          "92662",
+          "92663"
+        ],
+        "mlsCity": "Newport Beach",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/newport-beach"
+      },
+      "geometry": null
+    }
+  ]
+}

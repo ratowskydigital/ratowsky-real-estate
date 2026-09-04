@@ -15,7 +15,7 @@ export type CommunitySection = {
   id: string;
   eyebrow?: string;
   heading: string;
-  paragraphs: string[];
+  paragraphs?: string[];              // optional — a section may be bullets-only
   bullets?: { title?: string; items: string[] };
   callout?: { title?: string; body: string };
 };
@@ -60,6 +60,7 @@ export type City = {
   status: "published" | "draft" | "stub";
   lastUpdated: string;                 // ISO date
   isPrimaryMarket?: boolean;           // true for HB — gets featured treatment
+  isCoastal?: boolean;                 // groups the /cities hub (coastal vs inland)
   sections?: CommunitySection[];       // optional long-form content
   faqs?: CommunityFaq[];
   sources?: CommunitySource[];

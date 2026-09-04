@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "brightwater",
+      "properties": {
+        "slug": "brightwater",
+        "name": "Brightwater",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Warner Avenue on the north, the Bolsa Chica Ecological Reserve on the west, Los Patos Avenue on the south, and the older residential streets on the east.",
+        "subdivisionNames": [
+          "Brightwater"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.04535005126044,
+          33.711500014655265
+        ],
+        "pageUrl": "/communities/brightwater"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.05,
+              33.7135
+            ],
+            [
+              -118.0407,
+              33.7135
+            ],
+            [
+              -118.0407,
+              33.7095
+            ],
+            [
+              -118.05,
+              33.7095
+            ],
+            [
+              -118.05,
+              33.7135
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

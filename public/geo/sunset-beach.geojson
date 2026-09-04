@@ -1,0 +1,64 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "sunset-beach",
+      "properties": {
+        "slug": "sunset-beach",
+        "name": "Sunset Beach",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Anderson Street (Seal Beach line) on the north to Warner Avenue on the south, the sand on the west, and the PCH-side alley and Park Avenue strip on the east.",
+        "subdivisionNames": [
+          "Sunset Beach"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "90742",
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.07516762081337,
+          33.71784789395516
+        ],
+        "pageUrl": "/communities/sunset-beach"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0655,
+              33.7125
+            ],
+            [
+              -118.0771,
+              33.7245
+            ],
+            [
+              -118.08,
+              33.7262
+            ],
+            [
+              -118.085,
+              33.7225
+            ],
+            [
+              -118.07,
+              33.709
+            ],
+            [
+              -118.0655,
+              33.7125
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

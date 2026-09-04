@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "davenport-island",
+      "properties": {
+        "slug": "davenport-island",
+        "name": "Davenport Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The southernmost island, reached from Saybrook Lane via Davenport Drive, south of Humboldt Island and north of Warner Avenue.",
+        "subdivisionNames": [
+          "Davenport Island",
+          "Davenport"
+        ],
+        "streetNames": [
+          "Davenport"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05474956039,
+          33.717149874449085
+        ],
+        "pageUrl": "/communities/davenport-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.058,
+              33.7145
+            ],
+            [
+              -118.0515,
+              33.7145
+            ],
+            [
+              -118.0515,
+              33.7198
+            ],
+            [
+              -118.058,
+              33.7198
+            ],
+            [
+              -118.058,
+              33.7145
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

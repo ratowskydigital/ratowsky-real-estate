@@ -23,6 +23,10 @@
 // Constants
 // ---------------------------------------------------------------------------
 
+import { getGeoArea } from "@/content/geo";
+import { listingBelongsTo, odataFilterForArea, resolveCommunity } from "@/lib/geo";
+import type { GeoMatch } from "@/lib/geo";
+
 const TRESTLE_TOKEN_URL = "https://api.trestle.io/connect/token";
 const TRESTLE_ODATA_BASE = "https://api.trestle.io/reso/odata";
 
@@ -63,6 +67,14 @@ export type TrestleListing = {
   waterfrontFeatures: string[];
   dockFeatures: string[];
   communityFeatures: string[];
+  /** CRMLS subdivision / tract name, e.g. "Trinidad Island (HTRI)". */
+  subdivisionName: string | null;
+  /** CRMLS area, e.g. "17 - Northwest Huntington Beach". */
+  mlsAreaMajor: string | null;
+  /** Community page slug resolved from the coverage layer, if any. */
+  communitySlug: string | null;
+  /** Which signal resolved the community: subdivision, street, or polygon. */
+  communityMatchedBy: GeoMatch["matchedBy"] | null;
 };
 
 /** Raw Trestle Property record (partial — only fields we map). */
@@ -97,6 +109,8 @@ type TrestleRawProperty = {
   WaterfrontFeatures?: string[];
   DockFeatures?: string[];
   CommunityFeatures?: string[];
+  SubdivisionName?: string;
+  MLSAreaMajor?: string;
   Media?: { MediaURL?: string; Order?: number }[];
 };
 
@@ -195,6 +209,15 @@ function normalise(raw: TrestleRawProperty): TrestleListing {
     .map((m) => m.MediaURL ?? "")
     .filter(Boolean);
 
+  const match = resolveCommunity({
+    latitude: raw.Latitude ?? null,
+    longitude: raw.Longitude ?? null,
+    subdivisionName: raw.SubdivisionName ?? null,
+    streetName: raw.StreetName ?? null,
+    postalCode: raw.PostalCode ?? null,
+    city: raw.City ?? null,
+  });
+
   return {
     listingKey: raw.ListingKey ?? "",
     listingId: raw.ListingId ?? "",
@@ -226,6 +249,10 @@ function normalise(raw: TrestleRawProperty): TrestleListing {
     waterfrontFeatures: raw.WaterfrontFeatures ?? [],
     dockFeatures: raw.DockFeatures ?? [],
     communityFeatures: raw.CommunityFeatures ?? [],
+    subdivisionName: raw.SubdivisionName ?? null,
+    mlsAreaMajor: raw.MLSAreaMajor ?? null,
+    communitySlug: match?.area.slug ?? null,
+    communityMatchedBy: match?.matchedBy ?? null,
     photos,
   };
 }
@@ -266,6 +293,8 @@ const BASE_SELECT = [
   "WaterfrontFeatures",
   "DockFeatures",
   "CommunityFeatures",
+  "SubdivisionName",
+  "MLSAreaMajor",
   "Media",
 ].join(",");
 
@@ -324,6 +353,50 @@ export async function getHarbourListings(top = 12): Promise<TrestleListing[]> {
     top,
     orderBy: "ListPrice desc",
   });
+}
+
+/**
+ * Listings inside a community or city coverage area.
+ *
+ * Two-pass: Trestle gets a coarse OData filter (bounding box + postal code
+ * for communities, City field for cities) so the feed only returns
+ * candidates, then every candidate is checked against the page's polygon
+ * and CRMLS subdivision matchers in `resolveCommunity`. A parent area
+ * (Huntington Harbour) returns listings from every child (all five islands
+ * plus Mainland), which is what the dashboards expect.
+ */
+export async function getListingsInArea(
+  slug: string,
+  options: { status?: string; propertyType?: string; top?: number; orderBy?: string } = {},
+): Promise<TrestleListing[]> {
+  const area = getGeoArea(slug);
+  if (!area) throw new Error(`Unknown coverage area: ${slug}`);
+
+  const { status = "Active", propertyType = "Residential", top = 48, orderBy = "ListPrice desc" } = options;
+
+  const filter = [
+    `StandardStatus eq '${status}'`,
+    `PropertyType eq '${propertyType}'`,
+    odataFilterForArea(area),
+  ]
+    .filter(Boolean)
+    .join(" and ");
+
+  // Over-fetch, since the bounding box is wider than the polygon.
+  const candidates = await getListings({ filter, top: Math.min(top * 3, 200), orderBy });
+
+  return candidates
+    .filter((l) =>
+      listingBelongsTo(slug, {
+        latitude: l.latitude,
+        longitude: l.longitude,
+        subdivisionName: l.subdivisionName,
+        streetName: l.streetName,
+        postalCode: l.postalCode,
+        city: l.city,
+      }),
+    )
+    .slice(0, top);
 }
 
 /**

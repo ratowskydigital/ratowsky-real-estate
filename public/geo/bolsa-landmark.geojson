@@ -1,0 +1,60 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "bolsa-landmark",
+      "properties": {
+        "slug": "bolsa-landmark",
+        "name": "Bolsa Landmark",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Mid-century tract east of Bolsa Chica Street between Warner Avenue and the northern edge of the Bolsa Chica wetlands.",
+        "subdivisionNames": [
+          "Bolsa Landmark",
+          "Landmark"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.03534998718342,
+          33.70874999633906
+        ],
+        "pageUrl": "/communities/bolsa-landmark"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0407,
+              33.7135
+            ],
+            [
+              -118.03,
+              33.7135
+            ],
+            [
+              -118.03,
+              33.704
+            ],
+            [
+              -118.0407,
+              33.704
+            ],
+            [
+              -118.0407,
+              33.7135
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "fountain-valley",
+      "properties": {
+        "slug": "fountain-valley",
+        "name": "Fountain Valley",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Fountain Valley.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92708"
+        ],
+        "mlsCity": "Fountain Valley",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/fountain-valley"
+      },
+      "geometry": null
+    }
+  ]
+}

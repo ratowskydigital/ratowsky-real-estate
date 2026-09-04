@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "geo:check": "tsx --tsconfig tsconfig.scripts.json scripts/geo-check.ts",
+    "geo:export": "tsx --tsconfig tsconfig.scripts.json scripts/geo-export.ts",
+    "prebuild": "npm run geo:check && npm run geo:smoke && npm run geo:export",
+    "geo:smoke": "tsx --tsconfig tsconfig.scripts.json scripts/geo-smoke.ts"
   },
   "dependencies": {
     "next": "15.5.15",
@@ -23,6 +27,7 @@
     "eslint-config-next": "15.5.15",
     "postcss": "8.5.1",
     "tailwindcss": "3.4.17",
+    "tsx": "^4.23.13",
     "typescript": "5.7.3"
   }
 }

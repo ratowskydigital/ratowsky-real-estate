@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "westminster",
+      "properties": {
+        "slug": "westminster",
+        "name": "Westminster",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Westminster.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92683"
+        ],
+        "mlsCity": "Westminster",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/westminster"
+      },
+      "geometry": null
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "harbour-mainland",
+      "properties": {
+        "slug": "harbour-mainland",
+        "name": "Harbour Mainland",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "Every non-island block of the Harbour: east of Saybrook Lane from Warner to Edinger (Seagate, Huntington Bay, the Mainland grid), north of Edinger to the Naval Weapons Station (Coral Cay, Weatherly Bay, Broadmoor), south of Warner (Sea Bridge, the Cape, Bay Club), and the PCH-side strip (Peter's Landing, Portofino Cove).",
+        "subdivisionNames": [
+          "Coral Cay",
+          "Weatherly Bay",
+          "Broadmoor",
+          "Seagate",
+          "Huntington Bay",
+          "Sea Bridge",
+          "Seabridge",
+          "Mainland",
+          "Peter's Landing",
+          "Portofino Cove",
+          "Bay Club",
+          "The Cape"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.04549989742793,
+          33.72084997069973
+        ],
+        "pageUrl": "/communities/harbour-mainland"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -118.051,
+                33.7137
+              ],
+              [
+                -118.04,
+                33.7137
+              ],
+              [
+                -118.04,
+                33.728
+              ],
+              [
+                -118.051,
+                33.728
+              ],
+              [
+                -118.051,
+                33.7137
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -118.072,
+                33.7282
+              ],
+              [
+                -118.04,
+                33.7282
+              ],
+              [
+                -118.04,
+                33.7335
+              ],
+              [
+                -118.072,
+                33.7335
+              ],
+              [
+                -118.072,
+                33.7282
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -118.058,
+                33.7075
+              ],
+              [
+                -118.0508,
+                33.7075
+              ],
+              [
+                -118.0508,
+                33.7135
+              ],
+              [
+                -118.058,
+                33.7135
+              ],
+              [
+                -118.058,
+                33.7075
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -118.0655,
+                33.7127
+              ],
+              [
+                -118.0512,
+                33.714
+              ],
+              [
+                -118.0585,
+                33.7143
+              ],
+              [
+                -118.0585,
+                33.7168
+              ],
+              [
+                -118.0688,
+                33.7168
+              ],
+              [
+                -118.0655,
+                33.7127
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

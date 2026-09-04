@@ -1,0 +1,91 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "huntington-harbour",
+      "properties": {
+        "slug": "huntington-harbour",
+        "name": "Huntington Harbour",
+        "kind": "community",
+        "parentSlug": "huntington-beach",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "PCH on the west, the Naval Weapons Station on the north, Bolsa Chica Street on the east, and the Sea Bridge / Bay Club streets south of Warner on the south. Covers all five islands (Trinidad, Davenport, Humboldt, Gilbert, Admiralty) and every Mainland block (Coral Cay, Weatherly Bay, Broadmoor, Seagate, Huntington Bay, the Cape, Sea Bridge, Peter's Landing).",
+        "subdivisionNames": [
+          "Huntington Harbour",
+          "Trinidad Island",
+          "Davenport Island",
+          "Humboldt Island",
+          "Gilbert Island",
+          "Admiralty Island",
+          "Coral Cay",
+          "Weatherly Bay",
+          "Broadmoor",
+          "Seagate",
+          "Huntington Bay",
+          "Sea Bridge",
+          "Seabridge",
+          "Mainland",
+          "Peter's Landing",
+          "Portofino Cove",
+          "Bay Club"
+        ],
+        "streetNames": [],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.05667958050446,
+          33.72257462131525
+        ],
+        "pageUrl": "/communities/huntington-harbour"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.0655,
+              33.7125
+            ],
+            [
+              -118.0771,
+              33.7245
+            ],
+            [
+              -118.072,
+              33.7335
+            ],
+            [
+              -118.04,
+              33.7335
+            ],
+            [
+              -118.04,
+              33.7137
+            ],
+            [
+              -118.0505,
+              33.7137
+            ],
+            [
+              -118.0505,
+              33.7075
+            ],
+            [
+              -118.058,
+              33.7075
+            ],
+            [
+              -118.0655,
+              33.7125
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

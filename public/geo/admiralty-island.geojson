@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "admiralty-island",
+      "properties": {
+        "slug": "admiralty-island",
+        "name": "Admiralty Island",
+        "kind": "community",
+        "parentSlug": "huntington-harbour",
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "The westernmost island, entered directly from Pacific Coast Highway at Admiralty Drive.",
+        "subdivisionNames": [
+          "Admiralty Island",
+          "Admiralty"
+        ],
+        "streetNames": [
+          "Admiralty"
+        ],
+        "postalCodes": [
+          "92649"
+        ],
+        "mlsCity": null,
+        "mlsCityAliases": [],
+        "centroid": [
+          -118.06952259412267,
+          33.720509052907005
+        ],
+        "pageUrl": "/communities/admiralty-island"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -118.069,
+              33.7172
+            ],
+            [
+              -118.0665,
+              33.7172
+            ],
+            [
+              -118.0665,
+              33.7228
+            ],
+            [
+              -118.075,
+              33.7228
+            ],
+            [
+              -118.069,
+              33.7172
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

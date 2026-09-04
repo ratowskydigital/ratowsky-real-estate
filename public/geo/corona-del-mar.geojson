@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "corona-del-mar",
+      "properties": {
+        "slug": "corona-del-mar",
+        "name": "Corona del Mar",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Corona del Mar, or Newport Beach with postal code 92625.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92625"
+        ],
+        "mlsCity": "Corona del Mar",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/corona-del-mar"
+      },
+      "geometry": null
+    }
+  ]
+}

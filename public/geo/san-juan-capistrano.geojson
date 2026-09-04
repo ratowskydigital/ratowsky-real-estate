@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "san-juan-capistrano",
+      "properties": {
+        "slug": "san-juan-capistrano",
+        "name": "San Juan Capistrano",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = San Juan Capistrano.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92675"
+        ],
+        "mlsCity": "San Juan Capistrano",
+        "mlsCityAliases": [],
+        "centroid": null,
+        "pageUrl": "/cities/san-juan-capistrano"
+      },
+      "geometry": null
+    }
+  ]
+}
