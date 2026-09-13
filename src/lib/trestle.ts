@@ -189,10 +189,12 @@ async function odataFetch<T>(path: string, params: Record<string, string> = {}):
  * complete URL carrying the original $filter/$select/$skiptoken.
  */
 async function odataFetchUrl<T>(url: string): Promise<ODataResponse<T>> {
-  const token = await getAccessToken();
-  if (!url.startsWith(TRESTLE_ODATA_BASE)) {
-    throw new Error(`Refusing to follow a nextLink outside Trestle: ${url}`);
+  if (!isTrestleOdataUrl(url)) {
+    // Never send the bearer token anywhere but Trestle, whatever a nextLink says.
+    console.error("[trestle] refusing to follow a link outside the OData base:", url);
+    throw new Error("Trestle returned a continuation link outside its API; request aborted.");
   }
+  const token = await getAccessToken();
 
   const res = await fetch(url, {
     headers: {
@@ -204,11 +206,29 @@ async function odataFetchUrl<T>(url: string): Promise<ODataResponse<T>> {
   });
 
   if (!res.ok) {
+    // Full URL (with $skiptoken) and body stay in the server log; the thrown
+    // message is what the public route echoes back, so it carries only the status.
     const body = await res.text();
-    throw new Error(`Trestle OData request failed [${url}]: ${res.status} ${body}`);
+    console.error(`[trestle] OData request failed ${res.status} [${url}]: ${body}`);
+    throw new Error(`Trestle OData request failed with status ${res.status}.`);
   }
 
   return (await res.json()) as ODataResponse<T>;
+}
+
+/** True only for URLs on Trestle's origin whose path is the OData base or a resource under it. */
+function isTrestleOdataUrl(url: string): boolean {
+  let parsed: URL;
+  let base: URL;
+  try {
+    parsed = new URL(url);
+    base = new URL(TRESTLE_ODATA_BASE);
+  } catch {
+    return false;
+  }
+  if (parsed.origin !== base.origin) return false;
+  const basePath = base.pathname.replace(/\/$/, "");
+  return parsed.pathname === basePath || parsed.pathname.startsWith(basePath + "/");
 }
 
 // ---------------------------------------------------------------------------
@@ -434,7 +454,10 @@ export async function getListingsInArea(
     });
 
   const matched: TrestleListing[] = [];
-  let page = await getListingsPage({ filter, top: Math.min(top, AREA_PAGE_SIZE), orderBy });
+  // Always ask for a full coarse page. Requesting only `top` candidates would
+  // let Trestle satisfy the page without a nextLink while rejected candidates
+  // leave the result short and wrongly reported as complete.
+  let page = await getListingsPage({ filter, top: AREA_PAGE_SIZE, orderBy });
   let pagesFetched = 1;
   for (;;) {
     for (const l of page.listings) {

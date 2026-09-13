@@ -219,8 +219,8 @@ const cityCases: { hints: ListingLocationHints; expect: string | null }[] = [
   const coast = odataFilterForArea(getGeoArea("newport-coast")!);
   const trinidadFilter = odataFilterForArea(getGeoArea("trinidad-island")!);
   const checks: [string, boolean][] = [
-    ["city filter matches on the CRMLS City value", cityFilter.includes("City eq 'Huntington Beach'")],
-    ["city filter matches on aliases", cityFilter.includes("City eq 'Sunset Beach'")],
+    ["city filter matches on the CRMLS City value, case-insensitively", cityFilter.includes("tolower(City) eq 'huntington beach'")],
+    ["city filter matches on aliases", cityFilter.includes("tolower(City) eq 'sunset beach'")],
     ["city filter includes postal codes so unrecognised City values still reach the resolver", cityFilter.includes("startswith(PostalCode, '92648')")],
     ["child city filter reaches umbrella-filed listings by postal code", coast.includes("startswith(PostalCode, '92657')")],
     ["postal clauses are prefix matches so ZIP+4 values pass like the resolver's five-digit compare", !trinidadFilter.includes("PostalCode eq '92649'") && trinidadFilter.includes("startswith(PostalCode, '92649')")],
@@ -229,7 +229,7 @@ const cityCases: { hints: ListingLocationHints; expect: string | null }[] = [
     ["community filter keeps records matched by CRMLS subdivision even when the pin is outside the box", trinidadFilter.includes("contains(tolower(SubdivisionName), 'trinidad island')")],
     ["community filter keeps records matched by street name, bare or with a suffix", trinidadFilter.includes("(tolower(StreetName) eq 'trinidad' or startswith(tolower(StreetName), 'trinidad '))")],
     ["parent filter carries every descendant's matchers", odataFilterForArea(getGeoArea("huntington-harbour")!).includes("contains(tolower(SubdivisionName), 'coral cay')") && odataFilterForArea(getGeoArea("huntington-harbour")!).includes("tolower(StreetName) eq 'davenport'")],
-    ["community filter lets records with no postal code through", trinidadFilter.includes("PostalCode eq null")],
+    ["community filter lets records with a null or empty postal code through", trinidadFilter.includes("PostalCode eq null") && trinidadFilter.includes("PostalCode eq ''")],
   ];
   for (const [name, ok] of checks) {
     if (!ok) fail++;

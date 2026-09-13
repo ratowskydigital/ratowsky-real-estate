@@ -51,10 +51,17 @@ export type GeoArea = {
    * MLS matchers. These are checked BEFORE the polygon because when the
    * listing agent filled in the CRMLS subdivision correctly it is more
    * reliable than a GPS pin that may have been dropped on the street.
-   * Matching is case-insensitive "contains".
+   * Subdivision matching is case-insensitive "contains": the record's
+   * SubdivisionName must contain one of these strings ("Trinidad Island
+   * (HTRI)" matches "Trinidad Island").
    */
   subdivisionNames?: string[];
-  /** Street names (without suffix) that exist only inside this area. */
+  /**
+   * Street names (without suffix) that exist only inside this area.
+   * Matching is case-insensitive and exact-or-suffix: the record's
+   * StreetName must equal the name or start with the name plus a space
+   * ("Davenport" and "Davenport Drive" match; "Davenporter" does not).
+   */
   streetNames?: string[];
   /** Postal codes that can contain this area. Used as a sanity gate. */
   postalCodes?: string[];

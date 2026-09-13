@@ -190,19 +190,28 @@ export default async function CityPage({ params }: { params: Promise<Params> }) 
               {topLevel.map((community) => {
                 const children = published(getChildren(community.slug));
                 return (
-                  <li key={community.slug}>
+                  <li key={community.slug} className="flex flex-col">
                     <Link
                       href={`/communities/${community.slug}`}
-                      className="block h-full rounded-card border border-hairline bg-surface-warm p-6 hover:border-accent/40 transition-colors"
+                      className="flex-1 rounded-card border border-hairline bg-surface-warm p-6 hover:border-accent/40 transition-colors"
                     >
                       <p className="font-serif text-lg text-ink">{community.name}</p>
                       <p className="mt-2 text-sm text-muted">{community.oneLine}</p>
-                      {children.length > 0 && (
-                        <p className="mt-3 text-xs text-muted uppercase tracking-label">
-                          {children.length} sub-areas: {children.map((k) => k.name).join(", ")}
-                        </p>
-                      )}
                     </Link>
+                    {children.length > 0 && (
+                      <ul className="mt-3 flex flex-wrap gap-2 px-1" aria-label={`${community.name} sub-areas`}>
+                        {children.map((k) => (
+                          <li key={k.slug}>
+                            <Link
+                              href={`/communities/${k.slug}`}
+                              className="inline-block rounded-full border border-hairline px-3 py-1 text-xs text-ink-soft hover:border-accent/40 hover:text-ink"
+                            >
+                              {k.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 );
               })}

@@ -33,7 +33,7 @@ export const danaPoint: City = {
           "Lantern District and Lantern Village. Cottages, condos, and rebuilt homes on the bluff above the harbor with a walkable commercial core. The most active infill and remodel zone in the city.",
           "The Headlands. Guard-gated custom estates on the point between the harbor and Salt Creek, the top of the Dana Point price stack.",
           "Monarch Bay and Monarch Beach. Gated oceanfront and resort-adjacent communities with private beach club access and some of the highest values in the city.",
-          "Niguel Shores. A gated bluff-top community with a private beach access, a range of single-family homes and townhomes, and strong association amenities.",
+          "Niguel Shores. A gated bluff-top community with private beach access, a range of single-family homes and townhomes, and strong association amenities.",
           "Capistrano Beach and Palisades. Bluff-top tracts and beachfront lots along the southern coastline toward San Clemente, with ocean views and a quieter feel.",
           "Dana Point condos and townhomes. Concentrated near the harbor and the Lantern District, forming the entry tier and a strong second-home market.",
         ],

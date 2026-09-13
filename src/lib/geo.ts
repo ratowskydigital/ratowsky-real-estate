@@ -482,7 +482,7 @@ function matcherClauses(area: GeoArea): string {
  * accepts: every record `resolveCity` / `resolveCommunity` could route to
  * the page must pass it, and `listingBelongsTo` then does the precise cut.
  *
- * City areas: `City eq <name or alias>` OR `startswith(PostalCode, <any of
+ * City areas: `tolower(City) eq <name or alias>` OR `startswith(PostalCode, <any of
  * the area's zips>)`. The postal clauses are what make the resolver's two postal paths
  * reachable from the feed: umbrella-filed child listings (City "Newport
  * Beach" + a Newport Coast zip) and records whose City value we do not
@@ -505,7 +505,8 @@ export function odataFilterForArea(area: GeoArea): string {
 
   if (area.kind === "city" && area.mlsCity) {
     const names = [area.mlsCity, ...(area.mlsCityAliases ?? [])];
-    const clauses = [...names.map((n) => `City eq ${odataLiteral(n)}`), ...postalClauses];
+    // tolower on both sides: the resolver compares City case-insensitively.
+    const clauses = [...names.map((n) => `tolower(City) eq ${odataLiteral(norm(n))}`), ...postalClauses];
     parts.push(clauses.length === 1 ? clauses[0] : "(" + clauses.join(" or ") + ")");
     return parts.join(" and ");
   }
@@ -520,7 +521,8 @@ export function odataFilterForArea(area: GeoArea): string {
     parts.push(`((${inBox}) or Latitude eq null or Longitude eq null${matcherClauses(area)})`);
   }
   if (postalClauses.length > 0) {
-    parts.push("(" + [...postalClauses, "PostalCode eq null"].join(" or ") + ")");
+    // null or empty: postalOk treats both as "no postal code on the record".
+    parts.push("(" + [...postalClauses, "PostalCode eq null", "PostalCode eq ''"].join(" or ") + ")");
   }
   return parts.join(" and ");
 }
