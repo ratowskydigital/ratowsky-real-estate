@@ -171,7 +171,7 @@ const SEACLIFF_ON_THE_GREENS: Ring = [
   [-118.0235, 33.6925], // Edwards & Ellis
   [-118.0235, 33.6855], // Edwards & Garfield
   [-118.0146, 33.6855], // Goldenwest & Garfield
-  [-118.0255, 33.6800], // Inset to stay inside the Seacliff parent ring
+  [-118.0146, 33.6800], // Goldenwest, north of Palm (on the parent's Goldenwest edge; shared street line)
   [-118.0290, 33.6800],
   [-118.0290, 33.6925],
 ];

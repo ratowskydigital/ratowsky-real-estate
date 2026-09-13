@@ -55,6 +55,14 @@ const cases: Case[] = [
     expect: "davenport-island",
   },
   {
+    // Regression: the Greens ring shares the Goldenwest street line with its
+    // Seacliff parent. A pin on that strip belongs to the Greens, not to the
+    // parent; insetting the east edge (as once proposed) misroutes it.
+    name: "Pin on the Goldenwest strip of Seacliff on the Greens",
+    hints: { latitude: 33.682, longitude: -118.015, postalCode: "92648" },
+    expect: "seacliff-on-the-greens",
+  },
+  {
     name: "Davenport Drive with a ZIP+4 postal code",
     hints: { streetName: "Davenport Drive", postalCode: "92649-1234" },
     expect: "davenport-island",
@@ -87,6 +95,14 @@ for (const a of geoAreas.filter((x) => x.kind === "community")) {
   const ok = listingBelongsTo(a.slug, { latitude: c[1], longitude: c[0] });
   if (!ok) fail++;
   console.log(`${ok ? "ok  " : "FAIL"} centroid of ${a.slug} belongs on its own page`);
+}
+
+// Seacliff on the Greens sits inside Seacliff with a shared Goldenwest edge:
+// containment must hold with the east vertices on the parent boundary.
+{
+  const ok = areaContains(getGeoArea("seacliff")!, getGeoArea("seacliff-on-the-greens")!);
+  if (!ok) fail++;
+  console.log(`${ok ? "ok  " : "FAIL"} seacliff-on-the-greens is contained by seacliff (shared Goldenwest edge)`);
 }
 
 // The Harbour page must claim every island and Mainland listing.
