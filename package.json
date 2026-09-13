@@ -11,7 +11,8 @@
     "geo:check": "tsx --tsconfig tsconfig.scripts.json scripts/geo-check.ts",
     "geo:export": "tsx --tsconfig tsconfig.scripts.json scripts/geo-export.ts",
     "prebuild": "npm run geo:check && npm run geo:smoke && npm run geo:export",
-    "geo:smoke": "tsx --tsconfig tsconfig.scripts.json scripts/geo-smoke.ts"
+    "geo:smoke": "tsx --tsconfig tsconfig.scripts.json scripts/geo-smoke.ts",
+    "site:check": "tsx --tsconfig tsconfig.scripts.json scripts/site-check.ts"
   },
   "dependencies": {
     "next": "15.5.15",
