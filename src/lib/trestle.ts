@@ -176,13 +176,25 @@ async function getAccessToken(): Promise<string> {
 // ---------------------------------------------------------------------------
 
 async function odataFetch<T>(path: string, params: Record<string, string> = {}): Promise<ODataResponse<T>> {
-  const token = await getAccessToken();
   const url = new URL(`${TRESTLE_ODATA_BASE}/${path}`);
   for (const [key, val] of Object.entries(params)) {
     url.searchParams.set(key, val);
   }
+  return odataFetchUrl<T>(url.toString());
+}
 
-  const res = await fetch(url.toString(), {
+/**
+ * Fetch an absolute OData URL. Used for the first page (built by odataFetch)
+ * and for every `@odata.nextLink` Trestle hands back, which is already a
+ * complete URL carrying the original $filter/$select/$skiptoken.
+ */
+async function odataFetchUrl<T>(url: string): Promise<ODataResponse<T>> {
+  const token = await getAccessToken();
+  if (!url.startsWith(TRESTLE_ODATA_BASE)) {
+    throw new Error(`Refusing to follow a nextLink outside Trestle: ${url}`);
+  }
+
+  const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
@@ -193,7 +205,7 @@ async function odataFetch<T>(path: string, params: Record<string, string> = {}):
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Trestle OData request failed [${path}]: ${res.status} ${body}`);
+    throw new Error(`Trestle OData request failed [${url}]: ${res.status} ${body}`);
   }
 
   return (await res.json()) as ODataResponse<T>;
@@ -307,11 +319,10 @@ export type ListingsQueryOptions = {
   orderBy?: string;
 };
 
-/**
- * Fetch listings from Trestle.
- * Throws if Trestle credentials are not configured.
- */
-export async function getListings(options: ListingsQueryOptions = {}): Promise<TrestleListing[]> {
+/** One page of listings plus the link to the next page, when Trestle has more. */
+type ListingsPage = { listings: TrestleListing[]; nextLink: string | null };
+
+async function getListingsPage(options: ListingsQueryOptions = {}): Promise<ListingsPage> {
   const {
     filter = "StandardStatus eq 'Active' and City eq 'Huntington Beach' and PropertyType eq 'Residential'",
     top = 24,
@@ -326,7 +337,15 @@ export async function getListings(options: ListingsQueryOptions = {}): Promise<T
     $expand: "Media($select=MediaURL,Order;$orderby=Order asc;$top=10)",
   });
 
-  return data.value.map(normalise);
+  return { listings: data.value.map(normalise), nextLink: data["@odata.nextLink"] ?? null };
+}
+
+/**
+ * Fetch listings from Trestle.
+ * Throws if Trestle credentials are not configured.
+ */
+export async function getListings(options: ListingsQueryOptions = {}): Promise<TrestleListing[]> {
+  return (await getListingsPage(options)).listings;
 }
 
 /**
@@ -355,15 +374,26 @@ export async function getHarbourListings(top = 12): Promise<TrestleListing[]> {
   });
 }
 
+/** Trestle page size for the coarse area query (its documented maximum is 200 per page). */
+const AREA_PAGE_SIZE = 200;
+/** Hard stop so a very wide coarse filter can never turn into an unbounded crawl. */
+const AREA_MAX_PAGES = 10;
+
 /**
  * Listings inside a community or city coverage area.
  *
  * Two-pass: Trestle gets a coarse OData filter (bounding box + postal code
- * for communities, City field for cities) so the feed only returns
- * candidates, then every candidate is checked against the page's polygon
- * and CRMLS subdivision matchers in `resolveCommunity`. A parent area
- * (Huntington Harbour) returns listings from every child (all five islands
- * plus Mainland), which is what the dashboards expect.
+ * for communities, City field + postal codes for cities) so the feed only
+ * returns candidates, then every candidate is checked against the page's
+ * polygon and CRMLS subdivision matchers in `resolveCommunity`. A parent
+ * area (Huntington Harbour) returns listings from every child (all five
+ * islands plus Mainland), which is what the dashboards expect.
+ *
+ * Because the coarse filter is wider than the polygon, a single page of
+ * candidates can hold fewer than `top` matches even when more exist. Pages
+ * are followed through `@odata.nextLink` until `top` matches are collected,
+ * the feed is exhausted, or AREA_MAX_PAGES is hit. Order is preserved, so
+ * `orderBy` applies across the whole result, not just the first page.
  */
 export async function getListingsInArea(
   slug: string,
@@ -372,7 +402,12 @@ export async function getListingsInArea(
   const area = getGeoArea(slug);
   if (!area) throw new Error(`Unknown coverage area: ${slug}`);
 
-  const { status = "Active", propertyType = "Residential", top = 48, orderBy = "ListPrice desc" } = options;
+  const {
+    status = "Active",
+    propertyType = "Residential",
+    top = 48,
+    orderBy = "ModificationTimestamp desc",
+  } = options;
 
   const filter = [
     `StandardStatus eq ${odataLiteral(status)}`,
@@ -382,21 +417,28 @@ export async function getListingsInArea(
     .filter(Boolean)
     .join(" and ");
 
-  // Over-fetch, since the bounding box is wider than the polygon.
-  const candidates = await getListings({ filter, top: Math.min(top * 3, 200), orderBy });
+  const belongs = (l: TrestleListing) =>
+    listingBelongsTo(slug, {
+      latitude: l.latitude,
+      longitude: l.longitude,
+      subdivisionName: l.subdivisionName,
+      streetName: l.streetName,
+      postalCode: l.postalCode,
+      city: l.city,
+    });
 
-  return candidates
-    .filter((l) =>
-      listingBelongsTo(slug, {
-        latitude: l.latitude,
-        longitude: l.longitude,
-        subdivisionName: l.subdivisionName,
-        streetName: l.streetName,
-        postalCode: l.postalCode,
-        city: l.city,
-      }),
-    )
-    .slice(0, top);
+  const matched: TrestleListing[] = [];
+  let page = await getListingsPage({ filter, top: Math.min(Math.max(top, 1), AREA_PAGE_SIZE), orderBy });
+  for (let pages = 1; ; pages++) {
+    for (const l of page.listings) {
+      if (belongs(l)) matched.push(l);
+      if (matched.length >= top) return matched;
+    }
+    if (!page.nextLink || pages >= AREA_MAX_PAGES) break;
+    const next = await odataFetchUrl<TrestleRawProperty>(page.nextLink);
+    page = { listings: next.value.map(normalise), nextLink: next["@odata.nextLink"] ?? null };
+  }
+  return matched;
 }
 
 /**

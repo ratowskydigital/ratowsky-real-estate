@@ -6,7 +6,8 @@
  * Fails the build (exit 1) when:
  *   - a community or city page has no GeoArea
  *   - a GeoArea points at a slug with no page
- *   - a child area is not fully inside its parent (e.g. an island outside the Harbour)
+ *   - a child area is not fully inside its parent (e.g. an island outside the
+ *     Harbour): every vertex inside and no edge crossing or leaving the parent
  *   - a ring is degenerate (fewer than 3 vertices or zero area)
  *   - sibling community polygons share interior area (edge crossing or a vertex
  *     strictly inside the other); touching along a shared boundary is allowed
@@ -69,17 +70,27 @@ for (const g of geoAreas) {
   });
 }
 
-// 3. Containment — every child fully inside its parent.
+// 3. Containment — every child fully inside its parent (vertices and edges).
 for (const g of geoAreas) {
   if (!g.parentSlug) continue;
   const parent = getGeoArea(g.parentSlug);
   if (!parent) continue;
+  if (g.polygons.length === 0) continue;
+  if (parent.polygons.length === 0) {
+    // Matcher-only parents (every city except Huntington Beach today) cannot
+    // prove containment. Surface it so nobody assumes the check ran.
+    warnings.push(
+      `"${g.slug}" containment in "${parent.slug}" cannot be verified: the parent has no polygon. Add a coarse outline to the parent to enforce it.`,
+    );
+    continue;
+  }
   if (!areaContains(parent, g)) {
     const bad = g.polygons
       .flatMap((ring, i) => ring.filter((v) => !pointInArea(v, parent)).map((v) => `poly${i} [${v[0]}, ${v[1]}]`))
       .slice(0, 4)
       .join(", ");
-    errors.push(`"${g.slug}" is not fully inside "${parent.slug}" — outside vertices: ${bad}`);
+    const why = bad ? `outside vertices: ${bad}` : "an edge crosses or leaves the parent boundary";
+    errors.push(`"${g.slug}" is not fully inside "${parent.slug}" — ${why}`);
   }
 }
 

@@ -9,6 +9,8 @@ export const coronaDelMar: City = {
   state: "California",
   stateCode: "CA",
   isCoastal: true,
+  placeType: "Place",
+  containedInCity: "Newport Beach",
   oneLine:
     "Village walkability, ocean-view bluffs, and one of the highest price-per-square-foot markets in coastal Orange County.",
   directAnswer:

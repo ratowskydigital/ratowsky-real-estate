@@ -10,7 +10,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { geoAreas } from "@/content/geo";
 import { areasToFeatureCollection, descendantSlugs } from "@/lib/geo";
 
-export const dynamic = "force-static";
+// The kind/parent query filters are read per request, so this handler must
+// stay dynamic. force-static would serve the unfiltered collection for every
+// query string. The Cache-Control header below handles CDN caching instead.
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;

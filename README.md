@@ -11,11 +11,11 @@ Every city (`src/content/cities/`) and community (`src/content/communities/`) pa
 
 Resolution order for a listing: CRMLS `SubdivisionName`, then street name, then polygon, deepest area first, each gated by postal code. For cities the `City` field is authoritative; a postal code only changes the answer inside the explicit umbrella mapping (Newport Beach with a 92657 or 92625 zip routes to Newport Coast or Corona del Mar, and the reverse).
 
-- `npm run geo:check` — fails if any page lacks coverage, any child polygon (an island) is not fully inside its parent (Huntington Harbour), or any two unrelated polygons share interior area (edge crossing or a vertex strictly inside the other; touching along a shared boundary is fine). Runs automatically before `next build`.
+- `npm run geo:check` — fails if any page lacks coverage, any child polygon (an island) is not fully inside its parent (Huntington Harbour; vertices and edges are both checked, so an edge cannot leave a concave parent), or any two unrelated polygons share interior area (crossing, a vertex inside the other, a collinear strip, or the same outline; touching along a shared boundary is fine). Warns when a parent has no polygon and containment cannot be verified. Runs automatically before `next build`.
 - `npm run geo:smoke` — feeds sample CRMLS-shaped records through the resolver and asserts each lands on the right page.
 - `npm run geo:export` — writes `public/geo/*.geojson` (one file per area plus `coverage.geojson` and `communities.geojson`).
 - `GET /api/geo`, `GET /api/geo/[slug]?children=true` — the same polygons as GeoJSON for dashboards and the IDX map layer.
-- `GET /api/listings?community=<slug>` — Trestle listings filtered to that page's coverage. A parent (`huntington-harbour`) returns every island plus the Mainland.
+- `GET /api/listings?community=<slug>` — Trestle listings filtered to that page's coverage. A parent (`huntington-harbour`) returns every island plus the Mainland. Pages of candidates are followed through `@odata.nextLink` until `top` matches are found. Default sort is newest first; add `sort=price` or `sort=price-asc`.
 
 ### Reviewing a polygon
 

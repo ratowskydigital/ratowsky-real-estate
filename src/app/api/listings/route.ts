@@ -6,6 +6,7 @@
  * GET /api/listings?community=trinidad-island&top=24
  * GET /api/listings?community=huntington-harbour   (returns all five islands + Mainland)
  * GET /api/listings?city=newport-coast&top=24      (slug or CRMLS City name both work)
+ * GET /api/listings?community=trinidad-island&sort=price   (recent | price | price-asc)
  * GET /api/listings?key=<listingKey>
  *
  * Returns { ok: true, listings: TrestleListing[] } or a "coming-soon" stub
@@ -37,6 +38,13 @@ function resolveAreaSlug(value: string | null): string | null {
 }
 
 export const runtime = "nodejs";
+
+/** Sort options exposed on the endpoint. Default is newest first, matching getListings. */
+const SORTS: Record<string, string> = {
+  recent: "ModificationTimestamp desc",
+  price: "ListPrice desc",
+  "price-asc": "ListPrice asc",
+};
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -73,6 +81,14 @@ export async function GET(request: NextRequest) {
 
     const status = searchParams.get("status") ?? "Active";
     const propertyType = searchParams.get("type") ?? "Residential";
+    const sortKey = searchParams.get("sort") ?? "recent";
+    const orderBy = SORTS[sortKey];
+    if (!orderBy) {
+      return NextResponse.json(
+        { ok: false, error: `unknown-sort: ${sortKey} (use ${Object.keys(SORTS).join(", ")})` },
+        { status: 400 },
+      );
+    }
 
     // Community / city coverage area (polygon + subdivision matched)
     const community = searchParams.get("community");
@@ -83,7 +99,7 @@ export async function GET(request: NextRequest) {
       if (!area) {
         return NextResponse.json({ ok: false, error: `unknown-area: ${areaSlug}` }, { status: 404 });
       }
-      const listings = await getListingsInArea(areaSlug, { status, propertyType, top });
+      const listings = await getListingsInArea(areaSlug, { status, propertyType, top, orderBy });
       return NextResponse.json({
         ok: true,
         configured: true,
@@ -99,7 +115,7 @@ export async function GET(request: NextRequest) {
       `PropertyType eq ${odataLiteral(propertyType)}`,
     ].join(" and ");
 
-    const listings = await getListings({ filter, top });
+    const listings = await getListings({ filter, top, orderBy });
     return NextResponse.json({ ok: true, configured: true, listings });
   } catch (err) {
     console.error("[listings] Error:", err);

@@ -142,11 +142,66 @@ function onRingBoundary(point: LngLat, ring: Ring): boolean {
   return false;
 }
 
+function strictlyInsideRing(p: LngLat, ring: Ring): boolean {
+  return pointInRing(p, ring) && !onRingBoundary(p, ring);
+}
+
+/** True when `p` lies on the closed segment from `a` to `b`. */
+function onSegment(p: LngLat, a: LngLat, b: LngLat): boolean {
+  const cross = (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+  return (
+    Math.abs(cross) < 1e-12 &&
+    p[0] >= Math.min(a[0], b[0]) - 1e-12 &&
+    p[0] <= Math.max(a[0], b[0]) + 1e-12 &&
+    p[1] >= Math.min(a[1], b[1]) - 1e-12 &&
+    p[1] <= Math.max(a[1], b[1]) + 1e-12
+  );
+}
+
 /**
- * True when two rings share interior area: any edge properly crosses an edge
- * of the other, or any vertex of one lies strictly inside the other. Rings
- * that only touch along a shared boundary (Sunset Beach and the Harbour meet
- * on the PCH line) are not overlapping.
+ * Midpoints of the pieces of every edge of `ring`, after each edge is split
+ * at every vertex of `cutter` that touches it (T-junctions and the ends of
+ * any collinear overlap). Between two consecutive cuts an edge is either
+ * entirely inside, entirely outside, or entirely on the boundary of the
+ * polygon `cutter` bounds, so testing the midpoint of each piece classifies
+ * the whole piece. Proper crossings are handled separately by callers.
+ */
+function edgePieceMidpoints(ring: Ring, cutter: Ring): LngLat[] {
+  const out: LngLat[] = [];
+  for (let i = 0; i < ring.length; i++) {
+    const p = ring[i];
+    const q = ring[(i + 1) % ring.length];
+    const dx = q[0] - p[0];
+    const dy = q[1] - p[1];
+    const len2 = dx * dx + dy * dy;
+    if (len2 === 0) continue;
+    const t = (v: LngLat) => ((v[0] - p[0]) * dx + (v[1] - p[1]) * dy) / len2;
+    const cuts = [0, 1, ...cutter.filter((v) => onSegment(v, p, q)).map(t)].sort((x, y) => x - y);
+    for (let k = 0; k + 1 < cuts.length; k++) {
+      if (cuts[k + 1] - cuts[k] < 1e-12) continue;
+      const m = (cuts[k] + cuts[k + 1]) / 2;
+      out.push([p[0] + dx * m, p[1] + dy * m]);
+    }
+  }
+  return out;
+}
+
+/** True when some piece of ring `a`'s boundary runs strictly through the interior of ring `b`. */
+function boundaryEntersInterior(a: Ring, b: Ring): boolean {
+  return edgePieceMidpoints(a, b).some((m) => strictlyInsideRing(m, b));
+}
+
+/**
+ * True when two rings share interior area. Rings that only touch along a
+ * shared boundary (Sunset Beach and the Harbour meet on the PCH line) are
+ * not overlapping. For simple polygons the test is exact:
+ *   1. an edge of one properly crosses an edge of the other;
+ *   2. a vertex of one lies strictly inside the other;
+ *   3. a piece of one boundary runs through the other's interior, which
+ *      catches partial collinear overlaps where every vertex sits on the
+ *      other ring's boundary;
+ *   4. the boundaries coincide (identical rings, or the same outline with
+ *      extra collinear vertices), which none of the above can see.
  */
 export function ringsOverlap(a: Ring, b: Ring): boolean {
   for (let i = 0; i < a.length; i++) {
@@ -156,8 +211,12 @@ export function ringsOverlap(a: Ring, b: Ring): boolean {
       if (segmentsCross(a1, a2, b[j], b[(j + 1) % b.length])) return true;
     }
   }
-  const strictlyInside = (p: LngLat, ring: Ring) => pointInRing(p, ring) && !onRingBoundary(p, ring);
-  return a.some((v) => strictlyInside(v, b)) || b.some((v) => strictlyInside(v, a));
+  if (a.some((v) => strictlyInsideRing(v, b)) || b.some((v) => strictlyInsideRing(v, a))) return true;
+  if (boundaryEntersInterior(a, b) || boundaryEntersInterior(b, a)) return true;
+  // Neither boundary enters the other's interior. Either the rings are
+  // disjoint or merely touching, or they trace the same outline.
+  const sameOutline = a.every((v) => onRingBoundary(v, b)) && b.every((v) => onRingBoundary(v, a));
+  return sameOutline && Math.abs(ringSignedArea(a)) > 1e-15;
 }
 
 /** True when any polygon of `a` shares interior area with any polygon of `b`. */
@@ -166,13 +225,37 @@ export function areasOverlap(a: GeoArea, b: GeoArea): boolean {
 }
 
 /**
- * True when every vertex of `child` sits inside `parent`. For the simple
- * convex-ish rings we draw this is a sufficient containment test, and it is
- * exactly the guarantee we want: "the Harbour page covers every island".
+ * True when `ring` sits inside `container`: every vertex inside, no edge
+ * properly crossing the container boundary, and no piece of any edge running
+ * outside between two boundary touches (which is how an edge between two
+ * inside vertices can still leave a concave container).
+ */
+function ringInsideRing(ring: Ring, container: Ring): boolean {
+  if (!ring.every((v) => pointInRing(v, container))) return false;
+  for (let i = 0; i < ring.length; i++) {
+    const p = ring[i];
+    const q = ring[(i + 1) % ring.length];
+    for (let j = 0; j < container.length; j++) {
+      if (segmentsCross(p, q, container[j], container[(j + 1) % container.length])) return false;
+    }
+  }
+  return edgePieceMidpoints(ring, container).every((m) => pointInRing(m, container));
+}
+
+/**
+ * True when every polygon of `child` sits entirely inside one polygon of
+ * `parent`: all vertices inside, no edge crossing the parent boundary, and no
+ * edge running outside a concave parent between two boundary touches. This is
+ * the guarantee "the Harbour page covers every island" rests on.
+ *
+ * A parent with no polygon (a matcher-only city) cannot verify containment
+ * and returns false; geo:check reports that case separately as a warning. A
+ * child with no polygon has nothing to contain and returns true.
  */
 export function areaContains(parent: GeoArea, child: GeoArea): boolean {
-  if (parent.polygons.length === 0 || child.polygons.length === 0) return true;
-  return child.polygons.every((ring) => ring.every((v) => pointInArea(v, parent)));
+  if (child.polygons.length === 0) return true;
+  if (parent.polygons.length === 0) return false;
+  return child.polygons.every((ring) => parent.polygons.some((container) => ringInsideRing(ring, container)));
 }
 
 // ---------------------------------------------------------------------------
@@ -369,19 +452,27 @@ export const COARSE_QUERY_PAD_DEG = 0.006;
 
 /**
  * Build the coarse OData filter for an area so Trestle only sends back
- * candidates. Polygon precision is applied afterwards in resolveCommunity.
+ * candidates. The filter is deliberately a superset of what the resolver
+ * accepts: every record `resolveCity` / `resolveCommunity` could route to
+ * the page must pass it, and `listingBelongsTo` then does the precise cut.
+ *
+ * City areas: `City eq <name or alias>` OR `PostalCode eq <any of the area's
+ * zips>`. The postal clauses are what make the resolver's two postal paths
+ * reachable from the feed: umbrella-filed child listings (City "Newport
+ * Beach" + a Newport Coast zip) and records whose City value we do not
+ * recognise at all ("Huntington Bch"), which resolve by postal code alone.
+ *
+ * Community areas: padded bounding box AND (postal code in the area's list OR
+ * postal code missing). `postalOk` lets a record with no postal code through,
+ * so the coarse filter must too.
  */
 export function odataFilterForArea(area: GeoArea): string {
   const parts: string[] = [];
+  const postalClauses = (area.postalCodes ?? []).map((p) => `PostalCode eq ${odataLiteral(p)}`);
 
   if (area.kind === "city" && area.mlsCity) {
     const names = [area.mlsCity, ...(area.mlsCityAliases ?? [])];
-    const clauses = names.map((n) => `City eq ${odataLiteral(n)}`);
-    if (area.umbrellaMlsCity && area.postalCodes && area.postalCodes.length > 0) {
-      // Newport Coast / Corona del Mar listings are often filed under Newport Beach.
-      const pcs = area.postalCodes.map((p) => `PostalCode eq ${odataLiteral(p)}`).join(" or ");
-      clauses.push(`(City eq ${odataLiteral(area.umbrellaMlsCity)} and (${pcs}))`);
-    }
+    const clauses = [...names.map((n) => `City eq ${odataLiteral(n)}`), ...postalClauses];
     parts.push(clauses.length === 1 ? clauses[0] : "(" + clauses.join(" or ") + ")");
     return parts.join(" and ");
   }
@@ -394,8 +485,8 @@ export function odataFilterForArea(area: GeoArea): string {
       `Longitude ge ${(box.west - pad).toFixed(5)} and Longitude le ${(box.east + pad).toFixed(5)}`,
     );
   }
-  if (area.postalCodes && area.postalCodes.length > 0) {
-    parts.push("(" + area.postalCodes.map((p) => `PostalCode eq ${odataLiteral(p)}`).join(" or ") + ")");
+  if (postalClauses.length > 0) {
+    parts.push("(" + [...postalClauses, "PostalCode eq null"].join(" or ") + ")");
   }
   return parts.join(" and ");
 }

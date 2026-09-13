@@ -8,6 +8,8 @@ export const newportCoast: City = {
   state: "California",
   stateCode: "CA",
   isCoastal: true,
+  placeType: "Place",
+  containedInCity: "Newport Beach",
   oneLine:
     "Custom estates, ocean-view condos, and the gated communities south of MacArthur. The natural Compass move-up market for coastal Orange County sellers.",
   directAnswer:

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBlock } from "@/components/CtaBlock";
 import { JsonLd, buildBreadcrumbSchema } from "@/components/JsonLd";
-import { cities, getPrimaryMarket } from "@/content/cities";
+import { getPrimaryMarket, listPublishedCities } from "@/content/cities";
 import { getCommunitiesByCity } from "@/content/communities";
+import type { City } from "@/content/communities/_types";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,9 +15,15 @@ export const metadata: Metadata = {
 };
 
 export default function CitiesHubPage() {
-  const primary = getPrimaryMarket();
+  // The hub only lists and links published briefs. A draft or stub city is
+  // noindexed and left out of the sitemap, so it must not be linked from here.
+  const cities = listPublishedCities();
+  const primaryCandidate = getPrimaryMarket();
+  const primary = primaryCandidate?.status === "published" ? primaryCandidate : undefined;
   const coastal = cities.filter((c) => !c.isPrimaryMarket && c.isCoastal);
   const inland = cities.filter((c) => !c.isPrimaryMarket && !c.isCoastal);
+  const publishedCommunitiesIn = (slug: string) =>
+    getCommunitiesByCity(slug).filter((k) => k.status === "published");
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: "Home", url: site.url },
@@ -35,8 +42,8 @@ export default function CitiesHubPage() {
     })),
   };
 
-  const Card = ({ c }: { c: (typeof cities)[number] }) => {
-    const count = getCommunitiesByCity(c.slug).length;
+  const Card = ({ c }: { c: City }) => {
+    const count = publishedCommunitiesIn(c.slug).length;
     return (
       <Link
         href={`/cities/${c.slug}`}
@@ -85,7 +92,7 @@ export default function CitiesHubPage() {
               <div className="rounded-card border border-hairline p-7">
                 <p className="font-serif text-lg text-ink">Community pages inside Huntington Beach</p>
                 <ul className="mt-4 grid gap-2 text-sm text-ink-soft sm:grid-cols-2">
-                  {getCommunitiesByCity(primary.slug).map((k) => (
+                  {publishedCommunitiesIn(primary.slug).map((k) => (
                     <li key={k.slug}>
                       <Link href={`/communities/${k.slug}`} className="hover:text-accent">
                         {k.parentCommunitySlug ? "— " : ""}

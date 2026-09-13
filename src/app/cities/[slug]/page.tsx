@@ -6,8 +6,9 @@ import { Callout } from "@/components/Callout";
 import { CtaBlock } from "@/components/CtaBlock";
 import { JsonLd, buildFaqPageSchema, buildBreadcrumbSchema } from "@/components/JsonLd";
 import { pickDroneImage } from "@/lib/drone";
-import { cities, getCity, getCitySlugs } from "@/content/cities";
+import { getCity, getCitySlugs, listPublishedCities } from "@/content/cities";
 import { getCommunitiesByCity, getTopLevelInCity, getChildren } from "@/content/communities";
+import type { Community } from "@/content/communities/_types";
 import { getGeoArea } from "@/content/geo";
 import { site } from "@/lib/site";
 
@@ -43,14 +44,17 @@ export default async function CityPage({ params }: { params: Promise<Params> }) 
   const c = getCity(slug);
   if (!c) notFound();
 
-  const topLevel = getTopLevelInCity(c.slug);
-  const allInCity = getCommunitiesByCity(c.slug);
+  // Only published community briefs are linked from a published city page.
+  const published = (list: Community[]) => list.filter((k) => k.status === "published");
+  const topLevel = published(getTopLevelInCity(c.slug));
+  const allInCity = published(getCommunitiesByCity(c.slug));
   const geo = getGeoArea(c.slug);
   const sections = c.sections ?? [];
   const faqs = c.faqs ?? [];
   const sources = c.sources ?? [];
 
-  const otherCities = cities.filter((x) => x.slug !== c.slug && x.status === "published").slice(0, 3);
+  const publishedCities = listPublishedCities();
+  const otherCities = publishedCities.filter((x) => x.slug !== c.slug).slice(0, 3);
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: "Home", url: site.url },
@@ -58,13 +62,22 @@ export default async function CityPage({ params }: { params: Promise<Params> }) 
     { name: c.name, url: `${site.url}/cities/${c.slug}` },
   ]);
 
+  // Newport Coast and Corona del Mar are places inside the City of Newport
+  // Beach, not municipalities, so they are typed as Place and nested under it.
+  const placeType = c.placeType ?? "City";
+  const county = { "@type": "AdministrativeArea", name: `${c.county}, ${c.state}` };
+  const containedInPlace =
+    placeType === "Place" && c.containedInCity
+      ? { "@type": "City", name: c.containedInCity, containedInPlace: county }
+      : county;
+
   const placeSchema = {
     "@context": "https://schema.org",
-    "@type": "City",
+    "@type": placeType,
     name: c.name,
     description: c.directAnswer,
     url: `${site.url}/cities/${c.slug}`,
-    containedInPlace: { "@type": "AdministrativeArea", name: `${c.county}, ${c.state}` },
+    containedInPlace,
     ...(geo?.postalCodes && geo.postalCodes.length > 0 ? { postalCode: geo.postalCodes.join(", ") } : {}),
   };
 
@@ -83,7 +96,7 @@ export default async function CityPage({ params }: { params: Promise<Params> }) 
       postalCode: site.address.zip,
       addressCountry: "US",
     },
-    areaServed: { "@type": "City", name: c.name },
+    areaServed: { "@type": placeType, name: c.name, containedInPlace },
   };
 
   const faqSchema = faqs.length > 0 ? buildFaqPageSchema(faqs) : null;
@@ -175,7 +188,7 @@ export default async function CityPage({ params }: { params: Promise<Params> }) 
             </h2>
             <ul className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {topLevel.map((community) => {
-                const children = getChildren(community.slug);
+                const children = published(getChildren(community.slug));
                 return (
                   <li key={community.slug}>
                     <Link
@@ -279,7 +292,7 @@ export default async function CityPage({ params }: { params: Promise<Params> }) 
             </ul>
             <p className="mt-6 text-sm">
               <Link href="/cities" className="text-accent hover:text-accent-deep underline underline-offset-[3px]">
-                All {cities.length} cities we work
+                All {publishedCities.length} cities we work
               </Link>
             </p>
           </div>

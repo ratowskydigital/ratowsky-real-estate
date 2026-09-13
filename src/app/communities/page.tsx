@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBlock } from "@/components/CtaBlock";
 import { JsonLd, buildBreadcrumbSchema } from "@/components/JsonLd";
-import { cities } from "@/content/cities";
-import { communities, getChildren, getTopLevelInCity } from "@/content/communities";
+import { listPublishedCities } from "@/content/cities";
+import { getChildren, getTopLevelInCity, listPublishedCommunities } from "@/content/communities";
+import type { Community } from "@/content/communities/_types";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,7 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default function CommunitiesHubPage() {
-  const citiesWithCommunities = cities.filter((c) => getTopLevelInCity(c.slug).length > 0);
+  // Published briefs only. Drafts and stubs are noindexed and out of the
+  // sitemap, so the hub and its ItemList must not point at them either.
+  const cities = listPublishedCities();
+  const communities = listPublishedCommunities();
+  const published = (list: Community[]) => list.filter((k) => k.status === "published");
+  const citiesWithCommunities = cities.filter((c) => published(getTopLevelInCity(c.slug)).length > 0);
   const total = communities.length;
 
   const breadcrumb = buildBreadcrumbSchema([
@@ -62,7 +68,7 @@ export default function CommunitiesHubPage() {
       </section>
 
       {citiesWithCommunities.map((city) => {
-        const topLevel = getTopLevelInCity(city.slug);
+        const topLevel = published(getTopLevelInCity(city.slug));
         return (
           <section key={city.slug} className="border-b border-hairline">
             <div className="max-w-landing mx-auto px-6 lg:px-10 py-section">
@@ -74,7 +80,7 @@ export default function CommunitiesHubPage() {
               </div>
               <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {topLevel.map((c) => {
-                  const children = getChildren(c.slug);
+                  const children = published(getChildren(c.slug));
                   return (
                     <li key={c.slug} className="flex flex-col">
                       <Link
@@ -83,9 +89,7 @@ export default function CommunitiesHubPage() {
                       >
                         <h2 className="font-serif text-lg leading-tight tracking-tightest">{c.name}</h2>
                         <p className="mt-3 text-sm text-ink-soft">{c.oneLine}</p>
-                        <p className="mt-6 text-sm text-accent">
-                          {c.status === "published" ? "Read the full brief →" : "See current status →"}
-                        </p>
+                        <p className="mt-6 text-sm text-accent">Read the full brief →</p>
                       </Link>
                       {children.length > 0 && (
                         <ul className="mt-3 flex flex-wrap gap-2 px-1">
