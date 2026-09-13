@@ -39,6 +39,9 @@ function resolveAreaSlug(value: string | null): string | null {
 
 export const runtime = "nodejs";
 
+/** Largest page a single request may ask for. */
+const MAX_TOP = 100;
+
 /** Sort options exposed on the endpoint. Default is newest first, matching getListings. */
 const SORTS: Record<string, string> = {
   recent: "ModificationTimestamp desc",
@@ -71,11 +74,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ ok: true, listing });
     }
 
-    const top = Math.min(Number(searchParams.get("top") ?? "24"), 100);
+    // `top` is parsed once here and every helper below receives a finite
+    // positive integer. Anything else (NaN, 0, negatives, fractions) is a 400
+    // rather than a NaN forwarded to Trestle.
+    const topRaw = searchParams.get("top");
+    const top = topRaw === null ? 24 : Number(topRaw);
+    if (!Number.isInteger(top) || top < 1) {
+      return NextResponse.json({ ok: false, error: `invalid-top: ${topRaw} (use an integer from 1 to ${MAX_TOP})` }, { status: 400 });
+    }
+    const cappedTop = Math.min(top, MAX_TOP);
 
     // Huntington Harbour shortcut
     if (searchParams.get("harbour") === "true") {
-      const listings = await getHarbourListings(top);
+      const listings = await getHarbourListings(cappedTop);
       return NextResponse.json({ ok: true, configured: true, listings });
     }
 
@@ -99,7 +110,7 @@ export async function GET(request: NextRequest) {
       if (!area) {
         return NextResponse.json({ ok: false, error: `unknown-area: ${areaSlug}` }, { status: 404 });
       }
-      const listings = await getListingsInArea(areaSlug, { status, propertyType, top, orderBy });
+      const listings = await getListingsInArea(areaSlug, { status, propertyType, top: cappedTop, orderBy });
       return NextResponse.json({
         ok: true,
         configured: true,
@@ -115,7 +126,7 @@ export async function GET(request: NextRequest) {
       `PropertyType eq ${odataLiteral(propertyType)}`,
     ].join(" and ");
 
-    const listings = await getListings({ filter, top, orderBy });
+    const listings = await getListings({ filter, top: cappedTop, orderBy });
     return NextResponse.json({ ok: true, configured: true, listings });
   } catch (err) {
     console.error("[listings] Error:", err);

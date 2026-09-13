@@ -230,7 +230,7 @@ export function areasOverlap(a: GeoArea, b: GeoArea): boolean {
  * outside between two boundary touches (which is how an edge between two
  * inside vertices can still leave a concave container).
  */
-function ringInsideRing(ring: Ring, container: Ring): boolean {
+export function ringInsideRing(ring: Ring, container: Ring): boolean {
   if (!ring.every((v) => pointInRing(v, container))) return false;
   for (let i = 0; i < ring.length; i++) {
     const p = ring[i];

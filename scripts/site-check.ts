@@ -1,8 +1,14 @@
 /**
  * Post-deploy verification for the live site (or a Vercel preview).
  *
- *   npm run site:check                       # checks https://ratowskyrealestate.com
  *   npm run site:check -- https://<preview>.vercel.app
+ *   SITE_URL=http://localhost:3000 npm run site:check
+ *
+ * The target is required. There is no default because the domain that
+ * currently serves ratowskyrealestate.com is built from a different
+ * repository; checking it from here would say nothing about this code.
+ * Point it at the Vercel preview for this branch, a local `next start`, or
+ * production once this repository is what deploys there.
  *
  * Fails (exit 1) when any of these is true on the deployed site:
  *   - a city or community page is missing (non-200)
@@ -15,16 +21,22 @@
  *
  * This is the check Justin asked for after merge: "make sure the polygons are
  * correct and the stubs have been merged with content." Polygon *topology*
- * (every island inside the Harbour) is verified here against the deployed
+ * (every island inside the Harbour, vertices and edges, using the same
+ * containment test as geo:check) is verified here against the deployed
  * GeoJSON. Polygon *vertex accuracy* still needs a human pass in geojson.io;
  * see README "Reviewing a polygon".
  */
 import { cities } from "../src/content/cities";
 import { communities } from "../src/content/communities";
 import { geoAreas } from "../src/content/geo";
-import { pointInRing } from "../src/lib/geo";
+import { pointInRing, ringInsideRing } from "../src/lib/geo";
 
-const base = (process.argv[2] ?? "https://ratowskyrealestate.com").replace(/\/$/, "");
+const target = process.argv[2] ?? process.env.SITE_URL;
+if (!target || !/^https?:\/\//.test(target)) {
+  console.error("site:check needs a target URL: `npm run site:check -- https://<deployment>` or SITE_URL=...");
+  process.exit(2);
+}
+const base = target.replace(/\/$/, "");
 const STUB_MARKERS = [/brief in progress/i, /status:\s*stub/i, /name="robots"[^>]*noindex/i, /coming soon\./i];
 
 const errors: string[] = [];
@@ -113,16 +125,27 @@ async function main() {
     if (!parentRing) {
       errors.push("deployed Harbour parent polygon is missing");
     } else {
+      const parentRingT = parentRing.map((v) => [v[0], v[1]] as [number, number]);
       for (const f of fc.features) {
         if (f.id === "huntington-harbour" || !f.geometry) continue;
-        const rings =
+        const rings = (
           f.geometry.type === "Polygon"
             ? [(f.geometry.coordinates as number[][][])[0]]
-            : (f.geometry.coordinates as number[][][][]).map((p) => p[0]);
-        const outside = rings.flat().filter((v) => !pointInRing([v[0], v[1]], parentRing as [number, number][]));
-        if (outside.length > 0) errors.push(`deployed ${f.id} has ${outside.length} vertices outside the Harbour`);
+            : (f.geometry.coordinates as number[][][][]).map((p) => p[0])
+        ).map((ring) => ring.map((v) => [v[0], v[1]] as [number, number]));
+        // Same test as geo:check: every vertex inside AND no edge crossing or
+        // leaving the Harbour outline, which has a concave south side.
+        const outsideVertices = rings.flat().filter((v) => !pointInRing(v, parentRingT)).length;
+        const contained = rings.every((ring) => ringInsideRing(ring, parentRingT));
+        if (!contained) {
+          errors.push(
+            outsideVertices > 0
+              ? `deployed ${f.id} has ${outsideVertices} vertices outside the Harbour`
+              : `deployed ${f.id} has an edge that crosses or leaves the Harbour outline`,
+          );
+        }
       }
-      if (!errors.some((e) => e.includes("outside the Harbour"))) {
+      if (!errors.some((e) => e.includes("outside the Harbour") || e.includes("leaves the Harbour"))) {
         ok.push("deployed Harbour polygon contains all five islands and the Mainland");
       }
     }

@@ -405,9 +405,12 @@ export async function getListingsInArea(
   const {
     status = "Active",
     propertyType = "Residential",
-    top = 48,
+    top: topOption = 48,
     orderBy = "ModificationTimestamp desc",
   } = options;
+  // Defensive normalisation for callers other than the route: a non-finite or
+  // non-positive target would otherwise become `$top=NaN` or an off-by-one stop.
+  const top = Number.isFinite(topOption) && topOption >= 1 ? Math.floor(topOption) : 48;
 
   const filter = [
     `StandardStatus eq ${odataLiteral(status)}`,
@@ -428,7 +431,7 @@ export async function getListingsInArea(
     });
 
   const matched: TrestleListing[] = [];
-  let page = await getListingsPage({ filter, top: Math.min(Math.max(top, 1), AREA_PAGE_SIZE), orderBy });
+  let page = await getListingsPage({ filter, top: Math.min(top, AREA_PAGE_SIZE), orderBy });
   for (let pages = 1; ; pages++) {
     for (const l of page.listings) {
       if (belongs(l)) matched.push(l);
