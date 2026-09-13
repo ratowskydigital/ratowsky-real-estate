@@ -202,11 +202,12 @@ async function main() {
   }
 
   // 4. Every community has a deployed GeoJSON endpoint.
+  const errorsBeforeGeo = errors.length;
   for (const a of geoAreas.filter((x) => x.kind === "community")) {
     const r = await fetchText(`/api/geo/${a.slug}`);
     if (r.status !== 200) errors.push(`/api/geo/${a.slug} returned ${r.status}`);
   }
-  ok.push("every community has a GeoJSON endpoint");
+  if (errors.length === errorsBeforeGeo) ok.push("every community has a GeoJSON endpoint");
 
   console.log(ok.map((l) => `ok    ${l}`).join("\n"));
   if (errors.length > 0) {

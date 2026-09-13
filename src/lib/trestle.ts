@@ -384,22 +384,39 @@ export async function getListing(listingKey: string): Promise<TrestleListing | n
   return raw ? normalise(raw) : null;
 }
 
-/** Trestle page size for the coarse area query (its documented maximum is 200 per page). */
+/** Trestle's maximum page size for the coarse area query. */
 const AREA_PAGE_SIZE = 200;
-/** Hard stop so a very wide coarse filter can never turn into an unbounded crawl. */
-const AREA_MAX_PAGES = 10;
+/** Smallest coarse page worth a round trip; below this the per-request overhead dominates. */
+const AREA_MIN_PAGE_SIZE = 25;
+/** Candidates fetched per match wanted. The padded box and matcher clauses usually reject well under three in four. */
+const AREA_CANDIDATES_PER_MATCH = 4;
+/** Hard stop on candidates examined per request so a sparse area can never turn into an unbounded crawl. */
+const AREA_MAX_CANDIDATES = 600;
+
+/**
+ * Coarse page size for a request wanting `top` matches: a few candidates per
+ * match, never smaller than a useful page and never above Trestle's maximum.
+ * Requesting more than `top` is what keeps the nextLink alive when the first
+ * page's candidates are rejected; requesting the maximum for every call
+ * would pull 200 records plus media for a `top=1` request.
+ */
+function coarsePageSize(top: number): number {
+  return Math.min(AREA_PAGE_SIZE, Math.max(AREA_MIN_PAGE_SIZE, top * AREA_CANDIDATES_PER_MATCH));
+}
 
 export type AreaListingsResult = {
   listings: TrestleListing[];
   /**
-   * True when the page cap was hit while Trestle still had more candidates
-   * and fewer than `top` matches had been found. The listings returned are
-   * correct but may not be the complete set for the area; consumers should
-   * say so rather than present them as everything.
+   * True when the candidate cap was hit while Trestle still had more
+   * candidates and fewer than `top` matches had been found. The listings
+   * returned are correct but may not be the complete set for the area;
+   * consumers should say so rather than present them as everything.
    */
   truncated: boolean;
   /** Number of coarse candidate pages fetched from Trestle. */
   pagesFetched: number;
+  /** Number of coarse candidates examined. */
+  candidatesExamined: number;
 };
 
 /**
@@ -415,10 +432,15 @@ export type AreaListingsResult = {
  * Because the coarse filter is wider than the polygon, a single page of
  * candidates can hold fewer than `top` matches even when more exist. Pages
  * are followed through `@odata.nextLink` until `top` matches are collected
- * or the feed is exhausted. AREA_MAX_PAGES bounds the crawl; when it stops
- * the loop early the result is flagged `truncated` so callers never present
- * an under-filled page as the whole area. Order is preserved, so `orderBy`
- * applies across the whole result, not just the first page.
+ * or the feed is exhausted. The crawl is bounded two ways: the page size
+ * scales with `top` (see coarsePageSize) so a small request stays small,
+ * and AREA_MAX_CANDIDATES caps the records examined per request; when the
+ * cap stops the loop early the result is flagged `truncated` so callers
+ * never present an under-filled page as the whole area. Every page fetch
+ * goes through Next's data cache (revalidate 300s), so repeated dashboard
+ * loads of the same area reuse the same Trestle responses. Order is
+ * preserved, so `orderBy` applies across the whole result, not just the
+ * first page.
  */
 export type PolygonMatchPolicy =
   /** Pin-only matches count for every area, including rings still marked approximate (default). */
@@ -489,18 +511,19 @@ export async function getListingsInArea(
   };
 
   const matched: TrestleListing[] = [];
-  // Always ask for a full coarse page. Requesting only `top` candidates would
-  // let Trestle satisfy the page without a nextLink while rejected candidates
-  // leave the result short and wrongly reported as complete.
-  let page = await getListingsPage({ filter, top: AREA_PAGE_SIZE, orderBy });
+  let page = await getListingsPage({ filter, top: coarsePageSize(top), orderBy });
   let pagesFetched = 1;
+  let candidatesExamined = 0;
   for (;;) {
     for (const l of page.listings) {
+      candidatesExamined++;
       if (belongs(l)) matched.push(l);
-      if (matched.length >= top) return { listings: matched, truncated: false, pagesFetched };
+      if (matched.length >= top) return { listings: matched, truncated: false, pagesFetched, candidatesExamined };
     }
-    if (!page.nextLink) return { listings: matched, truncated: false, pagesFetched };
-    if (pagesFetched >= AREA_MAX_PAGES) return { listings: matched, truncated: true, pagesFetched };
+    if (!page.nextLink) return { listings: matched, truncated: false, pagesFetched, candidatesExamined };
+    if (candidatesExamined >= AREA_MAX_CANDIDATES) {
+      return { listings: matched, truncated: true, pagesFetched, candidatesExamined };
+    }
     const next = await odataFetchUrl<TrestleRawProperty>(page.nextLink);
     page = { listings: next.value.map(normalise), nextLink: next["@odata.nextLink"] ?? null };
     pagesFetched++;

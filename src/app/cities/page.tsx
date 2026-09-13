@@ -20,8 +20,9 @@ export default function CitiesHubPage() {
   const cities = listPublishedCities();
   const primaryCandidate = getPrimaryMarket();
   const primary = primaryCandidate?.status === "published" ? primaryCandidate : undefined;
-  const coastal = cities.filter((c) => !c.isPrimaryMarket && c.isCoastal);
-  const inland = cities.filter((c) => !c.isPrimaryMarket && !c.isCoastal);
+  const others = cities.filter((c) => c.slug !== primary?.slug);
+  const coastal = others.filter((c) => c.isCoastal);
+  const inland = others.filter((c) => !c.isCoastal);
   const publishedCommunitiesIn = (slug: string) =>
     getCommunitiesByCity(slug).filter((k) => k.status === "published");
 
@@ -71,7 +72,9 @@ export default function CitiesHubPage() {
         <div className="max-w-prose mx-auto px-6 lg:px-10 py-section">
           <p className="eyebrow">Cities</p>
           <h1 className="mt-4 font-serif text-2xl tracking-tightest leading-[1.1]">
-            Huntington Beach first. {cities.length - 1} Orange County cities around it.
+            {primary
+              ? `${primary.name} first. ${others.length} Orange County cities around it.`
+              : `${cities.length} Orange County cities we work.`}
           </h1>
           <p className="mt-6 text-md text-ink-soft">
             Huntington Beach is home. It is where Craig has worked since 1977 and where Justin was born

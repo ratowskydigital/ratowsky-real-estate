@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
         configured: true,
         area: { slug: area.slug, name: area.name, kind: area.kind, precision: area.precision },
         listings: result.listings,
-        // True when the candidate crawl hit its page cap before `top` matches
+        // True when the candidate crawl hit its candidate cap before `top` matches
         // were found; the list is correct but may be incomplete for the area.
         truncated: result.truncated,
       });
