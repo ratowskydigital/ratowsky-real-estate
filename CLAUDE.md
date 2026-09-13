@@ -3,14 +3,22 @@
 Next.js site for Ratowsky Group at Compass. See `README.md` for setup and
 `package.json` for the available scripts.
 
+**This repo is a superseded June 2026 snapshot. History only.** The live
+ratowskyrealestate.com source is `Auto-Authority/client-justin-ratowsky`
+(branch `main`), deployed to the `ratowsky-real-estate` Cloudflare Worker.
+This snapshot must never be built or deployed: it has no Cloudflare or Vercel
+deployment configuration, no `cf:*` scripts in `package.json`, and frozen
+dependencies. Do not propose changes here; open them in the canonical
+repository. The code comments that mention Vercel are from the old host.
 
 ## Hosting: Cloudflare, not Vercel (as of September 2026)
 
 Every site in Justin's estate deploys to **Cloudflare Workers** on the
-AutoAuthority Cloudflare account. Vercel is legacy: a rollback target only
-where a runbook says so, otherwise retired. Any document, memory, plan, or
-code comment that says "Vercel" describes the pre-September-2026 state and is
-not deployment instruction.
+AutoAuthority Cloudflare account. Vercel is legacy: it is a rollback target
+only where a repo's migration runbook explicitly says so, and otherwise
+retired. Outside those runbook rollback sections, any document, memory, plan,
+or code comment that says "Vercel" describes the pre-September-2026 state and
+is not deployment instruction.
 
 | Site | Source of truth | Runtime | Status |
 |---|---|---|---|
@@ -20,8 +28,11 @@ not deployment instruction.
 
 Rules that follow:
 
-- A push to GitHub is **not** a deploy. Releases are explicit
-  (`npm run cf:deploy` / `deploy:vinext`) from a clean `main` checkout.
+- A push to GitHub is **not** a deploy. Releases are explicit and happen only
+  from the source-of-truth repos above (`npm run cf:deploy` in
+  `client-justin-ratowsky` and `elevator-insight-io`, `deploy:vinext` in
+  `platform`) from a clean `main` checkout. This snapshot has none of those
+  scripts and is never deployed.
 - Never run `vercel deploy`, `vercel --prod`, or suggest Vercel-only features
   (Vercel Cron, Vercel Analytics, Edge Config, `vercel.json`) for new work.
   Cron is a Worker Cron Trigger; ISR cache is R2 or KV; logs are Worker logs.
