@@ -441,7 +441,8 @@ export async function getListingsInArea(
      * flag polygon matches, and `area.precision` says whether the ring has
      * been reviewed. "verified-only" drops polygon matches on approximate
      * rings for callers that would rather show fewer listings than risk a
-     * boundary miss before the geojson.io review pass.
+     * boundary miss before the geojson.io review pass. Only applies to
+     * community targets; city targets are matcher-routed.
      */
     polygonMatches?: PolygonMatchPolicy;
   } = {},
@@ -478,7 +479,9 @@ export async function getListingsInArea(
       city: l.city,
     });
     if (!ok) return false;
-    if (polygonMatches === "verified-only" && l.communityMatchedBy === "polygon") {
+    // City targets are matcher-routed (resolveCity); a community ring's review
+    // state has no bearing on whether a listing belongs to the city.
+    if (area.kind === "community" && polygonMatches === "verified-only" && l.communityMatchedBy === "polygon") {
       const matched = l.communitySlug ? getGeoArea(l.communitySlug) : undefined;
       return matched?.precision === "verified";
     }

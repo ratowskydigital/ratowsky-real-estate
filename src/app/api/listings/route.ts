@@ -10,7 +10,11 @@
  * GET /api/listings?community=trinidad-island&sort=price   (recent | price | price-asc;
  *     default recent, except harbour=true which defaults to price)
  * GET /api/listings?community=trinidad-island&polygon=verified   (drop pin-only matches on
- *     rings not yet reviewed; default "all". Each listing carries communityMatchedBy.)
+ *     rings not yet reviewed). The default is "all": pin-only listings are routed by the
+ *     ring even while it is marked approximate, because CRMLS SubdivisionName and StreetName
+ *     are checked first and decide most records, and the dashboards need listings now. Each
+ *     listing carries communityMatchedBy and each response carries area.precision, so a
+ *     consumer can flag or hide polygon matches until the ring is reviewed.
  * GET /api/listings?key=<listingKey>
  *
  * Returns { ok: true, listings: TrestleListing[] } or a "coming-soon" stub
@@ -37,7 +41,7 @@ function resolveAreaSlug(value: string | null): string | null {
 
 export const runtime = "nodejs";
 
-/** Largest page a single request may ask for. */
+/** Largest page a single request may ask for; anything above it is rejected with a 400. */
 const MAX_TOP = 100;
 
 /** Sort options exposed on the endpoint. Default is newest first, matching getListings. */
@@ -77,10 +81,10 @@ export async function GET(request: NextRequest) {
     // rather than a NaN forwarded to Trestle.
     const topRaw = searchParams.get("top");
     const top = topRaw === null ? 24 : Number(topRaw);
-    if (!Number.isInteger(top) || top < 1) {
+    if (!Number.isInteger(top) || top < 1 || top > MAX_TOP) {
       return NextResponse.json({ ok: false, error: `invalid-top: ${topRaw} (use an integer from 1 to ${MAX_TOP})` }, { status: 400 });
     }
-    const cappedTop = Math.min(top, MAX_TOP);
+    const cappedTop = top;
 
     const sortKey = searchParams.get("sort");
     // Own-key check: "constructor" or "toString" must not read through the prototype.

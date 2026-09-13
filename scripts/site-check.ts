@@ -30,6 +30,7 @@ import { cities } from "../src/content/cities";
 import { communities } from "../src/content/communities";
 import { geoAreas } from "../src/content/geo";
 import { pointInRing, ringInsideRing } from "../src/lib/geo";
+import { site } from "../src/lib/site";
 
 const target = process.argv[2] ?? process.env.SITE_URL;
 if (!target || !/^https?:\/\//.test(target)) {
@@ -126,8 +127,24 @@ async function main() {
   }
 
   const robots = await fetchText("/robots.txt");
-  if (robots.status !== 200 || !/sitemap:/i.test(robots.text)) errors.push("robots.txt missing or has no Sitemap line");
-  else ok.push("robots.txt points at the sitemap");
+  const sitemapDirectives = [...robots.text.matchAll(/^\s*sitemap:\s*(\S+)/gim)].map((m) => m[1]);
+  if (robots.status !== 200 || sitemapDirectives.length === 0) {
+    errors.push("robots.txt missing or has no Sitemap line");
+  } else {
+    // The directive must name this site's sitemap: /sitemap.xml on either the
+    // deployment being checked or the configured production origin.
+    const allowedOrigins = new Set([new URL(base).origin, new URL(site.url).origin]);
+    const good = sitemapDirectives.some((u) => {
+      try {
+        const parsed = new URL(u);
+        return allowedOrigins.has(parsed.origin) && parsed.pathname === "/sitemap.xml";
+      } catch {
+        return false;
+      }
+    });
+    if (good) ok.push("robots.txt points at this site's /sitemap.xml");
+    else errors.push(`robots.txt Sitemap directive does not point at this site's /sitemap.xml (found: ${sitemapDirectives.join(", ")})`);
+  }
 
   // 3. Deployed geo layer: Harbour covers all five islands + Mainland.
   const harbour = await fetchText("/api/geo/huntington-harbour?children=true");
