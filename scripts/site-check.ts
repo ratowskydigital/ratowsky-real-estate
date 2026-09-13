@@ -127,7 +127,11 @@ async function main() {
     } else {
       const parentRingT = parentRing.map((v) => [v[0], v[1]] as [number, number]);
       for (const f of fc.features) {
-        if (f.id === "huntington-harbour" || !f.geometry) continue;
+        if (f.id === "huntington-harbour") continue;
+        if (!f.geometry) {
+          errors.push(`deployed ${f.id} has no geometry, so it cannot sit inside the Harbour`);
+          continue;
+        }
         const rings = (
           f.geometry.type === "Polygon"
             ? [(f.geometry.coordinates as number[][][])[0]]
@@ -145,7 +149,7 @@ async function main() {
           );
         }
       }
-      if (!errors.some((e) => e.includes("outside the Harbour") || e.includes("leaves the Harbour"))) {
+      if (!errors.some((e) => /outside the Harbour|leaves the Harbour|inside the Harbour|missing/.test(e))) {
         ok.push("deployed Harbour polygon contains all five islands and the Mainland");
       }
     }

@@ -363,15 +363,13 @@ export async function getListing(listingKey: string): Promise<TrestleListing | n
 }
 
 /**
- * Huntington Harbour active waterfront listings.
+ * Huntington Harbour active listings: the five islands plus the Mainland,
+ * resolved through the same coverage layer as the Harbour page. A plain
+ * 92649 query would also return Brightwater and Bolsa Landmark, which are
+ * separate communities with their own pages.
  */
-export async function getHarbourListings(top = 12, orderBy = "ListPrice desc"): Promise<TrestleListing[]> {
-  return getListings({
-    filter:
-      "StandardStatus eq 'Active' and City eq 'Huntington Beach' and PostalCode eq '92649' and PropertyType eq 'Residential'",
-    top,
-    orderBy,
-  });
+export async function getHarbourListings(top = 12, orderBy = "ListPrice desc"): Promise<AreaListingsResult> {
+  return getListingsInArea("huntington-harbour", { status: "Active", propertyType: "Residential", top, orderBy });
 }
 
 /** Trestle page size for the coarse area query (its documented maximum is 200 per page). */

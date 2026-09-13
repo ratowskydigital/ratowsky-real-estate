@@ -2,7 +2,7 @@
  * /api/listings — Trestle MLS listings endpoint
  *
  * GET /api/listings?city=Huntington+Beach&status=Active&top=24
- * GET /api/listings?harbour=true&top=12
+ * GET /api/listings?harbour=true&top=12               (same as community=huntington-harbour, price-first)
  * GET /api/listings?community=trinidad-island&top=24
  * GET /api/listings?community=huntington-harbour   (returns all five islands + Mainland)
  * GET /api/listings?city=newport-coast&top=24      (slug or CRMLS City name both work)
@@ -86,7 +86,8 @@ export async function GET(request: NextRequest) {
     const cappedTop = Math.min(top, MAX_TOP);
 
     const sortKey = searchParams.get("sort");
-    const orderBy = sortKey === null ? null : SORTS[sortKey];
+    // Own-key check: "constructor" or "toString" must not read through the prototype.
+    const orderBy = sortKey !== null && Object.prototype.hasOwnProperty.call(SORTS, sortKey) ? SORTS[sortKey] : null;
     if (sortKey !== null && !orderBy) {
       return NextResponse.json(
         { ok: false, error: `unknown-sort: ${sortKey} (use ${Object.keys(SORTS).join(", ")})` },
@@ -97,8 +98,8 @@ export async function GET(request: NextRequest) {
     // Huntington Harbour shortcut. Its historical default is price-high-first;
     // an explicit sort overrides it like everywhere else.
     if (searchParams.get("harbour") === "true") {
-      const listings = await getHarbourListings(cappedTop, orderBy ?? SORTS.price);
-      return NextResponse.json({ ok: true, configured: true, listings });
+      const result = await getHarbourListings(cappedTop, orderBy ?? SORTS.price);
+      return NextResponse.json({ ok: true, configured: true, listings: result.listings, truncated: result.truncated });
     }
 
     const status = searchParams.get("status") ?? "Active";
