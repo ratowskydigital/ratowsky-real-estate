@@ -16,6 +16,7 @@ function city(args: {
   mlsCity: string;
   postalCodes: string[];
   boundaryNote: string;
+  umbrellaMlsCity?: string;
 }): GeoArea {
   return {
     slug: args.slug,
@@ -23,9 +24,12 @@ function city(args: {
     name: args.name,
     precision: "approximate",
     boundaryNote: args.boundaryNote,
+    // Intentionally no polygon: city pages are matcher-only (CRMLS City +
+    // postal code). /api/geo returns geometry: null and coverage: "matchers".
     polygons: [],
     mlsCity: args.mlsCity,
     postalCodes: args.postalCodes,
+    umbrellaMlsCity: args.umbrellaMlsCity,
   };
 }
 
@@ -34,7 +38,7 @@ export const orangeCountyCityGeo: GeoArea[] = [
     slug: "newport-beach",
     name: "Newport Beach",
     mlsCity: "Newport Beach",
-    postalCodes: ["92660", "92661", "92662", "92663"],
+    postalCodes: ["92658", "92659", "92660", "92661", "92662", "92663"],
     boundaryNote: "CRMLS City = Newport Beach, excluding the 92657 Newport Coast and 92625 Corona del Mar postal codes which have their own pages.",
   }),
   city({
@@ -42,14 +46,16 @@ export const orangeCountyCityGeo: GeoArea[] = [
     name: "Newport Coast",
     mlsCity: "Newport Coast",
     postalCodes: ["92657"],
-    boundaryNote: "CRMLS City = Newport Coast (some listings file under Newport Beach with postal code 92657; the postal gate catches those).",
+    umbrellaMlsCity: "Newport Beach",
+    boundaryNote: "CRMLS City = Newport Coast, or Newport Beach with postal code 92657 (the umbrella mapping catches those).",
   }),
   city({
     slug: "corona-del-mar",
     name: "Corona del Mar",
     mlsCity: "Corona del Mar",
     postalCodes: ["92625"],
-    boundaryNote: "CRMLS City = Corona del Mar, or Newport Beach with postal code 92625.",
+    umbrellaMlsCity: "Newport Beach",
+    boundaryNote: "CRMLS City = Corona del Mar, or Newport Beach with postal code 92625 (the umbrella mapping catches those).",
   }),
   city({
     slug: "seal-beach",
@@ -62,21 +68,21 @@ export const orangeCountyCityGeo: GeoArea[] = [
     slug: "fountain-valley",
     name: "Fountain Valley",
     mlsCity: "Fountain Valley",
-    postalCodes: ["92708"],
+    postalCodes: ["92708", "92728"],
     boundaryNote: "CRMLS City = Fountain Valley.",
   }),
   city({
     slug: "costa-mesa",
     name: "Costa Mesa",
     mlsCity: "Costa Mesa",
-    postalCodes: ["92626", "92627"],
+    postalCodes: ["92626", "92627", "92628"],
     boundaryNote: "CRMLS City = Costa Mesa.",
   }),
   city({
     slug: "irvine",
     name: "Irvine",
     mlsCity: "Irvine",
-    postalCodes: ["92602", "92603", "92604", "92606", "92612", "92614", "92617", "92618", "92620"],
+    postalCodes: ["92602", "92603", "92604", "92606", "92612", "92614", "92617", "92618", "92619", "92620", "92623"],
     boundaryNote: "CRMLS City = Irvine.",
   }),
   city({
@@ -111,7 +117,7 @@ export const orangeCountyCityGeo: GeoArea[] = [
     slug: "san-juan-capistrano",
     name: "San Juan Capistrano",
     mlsCity: "San Juan Capistrano",
-    postalCodes: ["92675"],
+    postalCodes: ["92675", "92693"],
     boundaryNote: "CRMLS City = San Juan Capistrano.",
   }),
 ];

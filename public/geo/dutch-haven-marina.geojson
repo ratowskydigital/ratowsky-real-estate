@@ -22,6 +22,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.96239997939466,
           33.652249994135616

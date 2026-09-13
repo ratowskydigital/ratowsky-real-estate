@@ -15,10 +15,13 @@
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
-          "92708"
+          "92708",
+          "92728"
         ],
         "mlsCity": "Fountain Valley",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/fountain-valley"
       },

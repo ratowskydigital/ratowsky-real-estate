@@ -24,7 +24,7 @@
 // ---------------------------------------------------------------------------
 
 import { getGeoArea } from "@/content/geo";
-import { listingBelongsTo, odataFilterForArea, resolveCommunity } from "@/lib/geo";
+import { listingBelongsTo, odataFilterForArea, odataLiteral, resolveCommunity } from "@/lib/geo";
 import type { GeoMatch } from "@/lib/geo";
 
 const TRESTLE_TOKEN_URL = "https://api.trestle.io/connect/token";
@@ -375,8 +375,8 @@ export async function getListingsInArea(
   const { status = "Active", propertyType = "Residential", top = 48, orderBy = "ListPrice desc" } = options;
 
   const filter = [
-    `StandardStatus eq '${status}'`,
-    `PropertyType eq '${propertyType}'`,
+    `StandardStatus eq ${odataLiteral(status)}`,
+    `PropertyType eq ${odataLiteral(propertyType)}`,
     odataFilterForArea(area),
   ]
     .filter(Boolean)

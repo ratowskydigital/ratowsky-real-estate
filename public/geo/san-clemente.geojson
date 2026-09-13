@@ -20,6 +20,8 @@
         ],
         "mlsCity": "San Clemente",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/san-clemente"
       },

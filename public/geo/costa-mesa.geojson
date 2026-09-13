@@ -16,10 +16,13 @@
         "streetNames": [],
         "postalCodes": [
           "92626",
-          "92627"
+          "92627",
+          "92628"
         ],
         "mlsCity": "Costa Mesa",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/costa-mesa"
       },

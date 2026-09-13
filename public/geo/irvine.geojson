@@ -23,10 +23,14 @@
           "92614",
           "92617",
           "92618",
-          "92620"
+          "92619",
+          "92620",
+          "92623"
         ],
         "mlsCity": "Irvine",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/irvine"
       },

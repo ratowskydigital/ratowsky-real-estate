@@ -19,6 +19,8 @@
         ],
         "mlsCity": "Westminster",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/westminster"
       },

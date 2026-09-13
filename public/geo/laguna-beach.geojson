@@ -20,6 +20,8 @@
         ],
         "mlsCity": "Laguna Beach",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/laguna-beach"
       },

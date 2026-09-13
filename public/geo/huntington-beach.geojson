@@ -16,6 +16,8 @@
         "streetNames": [],
         "postalCodes": [
           "90742",
+          "92605",
+          "92615",
           "92646",
           "92647",
           "92648",
@@ -26,6 +28,8 @@
           "Sunset Beach",
           "Huntington Harbour"
         ],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.99797117183358,
           33.6906364684464

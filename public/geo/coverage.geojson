@@ -16,6 +16,8 @@
         "streetNames": [],
         "postalCodes": [
           "90742",
+          "92605",
+          "92615",
           "92646",
           "92647",
           "92648",
@@ -26,6 +28,8 @@
           "Sunset Beach",
           "Huntington Harbour"
         ],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.99797117183358,
           33.6906364684464
@@ -112,6 +116,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.05667958050446,
           33.72257462131525
@@ -185,6 +191,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.05869980114757,
           33.72269994310159
@@ -242,9 +250,11 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
-          -118.05474956039,
-          33.717149874449085
+          -118.05364999515787,
+          33.71714999868305
         ],
         "pageUrl": "/communities/davenport-island"
       },
@@ -253,7 +263,7 @@
         "coordinates": [
           [
             [
-              -118.058,
+              -118.0558,
               33.7145
             ],
             [
@@ -265,11 +275,11 @@
               33.7198
             ],
             [
-              -118.058,
+              -118.0558,
               33.7198
             ],
             [
-              -118.058,
+              -118.0558,
               33.7145
             ]
           ]
@@ -299,6 +309,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.05365061651177,
           33.723850176116215
@@ -356,6 +368,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.06470047217657,
           33.719400134892
@@ -413,6 +427,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.06952259412267,
           33.720509052907005
@@ -478,6 +494,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.04549989742793,
           33.72084997069973
@@ -575,11 +593,11 @@
               ],
               [
                 -118.0585,
-                33.7168
+                33.7158
               ],
               [
-                -118.0688,
-                33.7168
+                -118.068,
+                33.7158
               ],
               [
                 -118.0655,
@@ -611,6 +629,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.07516762081337,
           33.71784789395516
@@ -669,6 +689,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.04535005126044,
           33.711500014655265
@@ -724,6 +746,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.03534998718342,
           33.70874999633906
@@ -780,6 +804,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.01895007733853,
           33.68900002206657
@@ -840,6 +866,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.02287018880551,
           33.678886642534515
@@ -904,6 +932,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.02325563457435,
           33.68479440027892
@@ -972,6 +1002,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.99994109871805,
           33.66536442860772
@@ -1027,6 +1059,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.96239997939466,
           33.652249994135616
@@ -1075,6 +1109,8 @@
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
+          "92658",
+          "92659",
           "92660",
           "92661",
           "92662",
@@ -1082,6 +1118,8 @@
         ],
         "mlsCity": "Newport Beach",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/newport-beach"
       },
@@ -1097,7 +1135,7 @@
         "parentSlug": null,
         "precision": "approximate",
         "reviewedOn": null,
-        "boundaryNote": "CRMLS City = Newport Coast (some listings file under Newport Beach with postal code 92657; the postal gate catches those).",
+        "boundaryNote": "CRMLS City = Newport Coast, or Newport Beach with postal code 92657 (the umbrella mapping catches those).",
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
@@ -1105,6 +1143,8 @@
         ],
         "mlsCity": "Newport Coast",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": "Newport Beach",
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/newport-coast"
       },
@@ -1120,7 +1160,7 @@
         "parentSlug": null,
         "precision": "approximate",
         "reviewedOn": null,
-        "boundaryNote": "CRMLS City = Corona del Mar, or Newport Beach with postal code 92625.",
+        "boundaryNote": "CRMLS City = Corona del Mar, or Newport Beach with postal code 92625 (the umbrella mapping catches those).",
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
@@ -1128,6 +1168,8 @@
         ],
         "mlsCity": "Corona del Mar",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": "Newport Beach",
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/corona-del-mar"
       },
@@ -1151,6 +1193,8 @@
         ],
         "mlsCity": "Seal Beach",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/seal-beach"
       },
@@ -1170,10 +1214,13 @@
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
-          "92708"
+          "92708",
+          "92728"
         ],
         "mlsCity": "Fountain Valley",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/fountain-valley"
       },
@@ -1194,10 +1241,13 @@
         "streetNames": [],
         "postalCodes": [
           "92626",
-          "92627"
+          "92627",
+          "92628"
         ],
         "mlsCity": "Costa Mesa",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/costa-mesa"
       },
@@ -1225,10 +1275,14 @@
           "92614",
           "92617",
           "92618",
-          "92620"
+          "92619",
+          "92620",
+          "92623"
         ],
         "mlsCity": "Irvine",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/irvine"
       },
@@ -1252,6 +1306,8 @@
         ],
         "mlsCity": "Westminster",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/westminster"
       },
@@ -1276,6 +1332,8 @@
         ],
         "mlsCity": "Dana Point",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/dana-point"
       },
@@ -1300,6 +1358,8 @@
         ],
         "mlsCity": "San Clemente",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/san-clemente"
       },
@@ -1324,6 +1384,8 @@
         ],
         "mlsCity": "Laguna Beach",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/laguna-beach"
       },
@@ -1343,10 +1405,13 @@
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
-          "92675"
+          "92675",
+          "92693"
         ],
         "mlsCity": "San Juan Capistrano",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/san-juan-capistrano"
       },

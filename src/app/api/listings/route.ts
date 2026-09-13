@@ -20,7 +20,21 @@ import {
   getHarbourListings,
   getListingsInArea,
 } from "@/lib/trestle";
-import { getGeoArea } from "@/content/geo";
+import { geoAreas, getGeoArea } from "@/content/geo";
+import { odataLiteral } from "@/lib/geo";
+
+/** Accept a page slug, a CRMLS City value, or an alias, and return the area slug. */
+function resolveAreaSlug(value: string | null): string | null {
+  if (!value) return null;
+  if (getGeoArea(value)) return value;
+  const wanted = value.trim().toLowerCase();
+  const byName = geoAreas.find(
+    (a) =>
+      a.kind === "city" &&
+      (a.mlsCity?.toLowerCase() === wanted || a.mlsCityAliases?.some((alias) => alias.toLowerCase() === wanted)),
+  );
+  return byName?.slug ?? null;
+}
 
 export const runtime = "nodejs";
 
@@ -63,7 +77,7 @@ export async function GET(request: NextRequest) {
     // Community / city coverage area (polygon + subdivision matched)
     const community = searchParams.get("community");
     const cityParam = searchParams.get("city") ?? "Huntington Beach";
-    const areaSlug = community ?? (getGeoArea(cityParam) ? cityParam : null);
+    const areaSlug = community ?? resolveAreaSlug(cityParam);
     if (areaSlug) {
       const area = getGeoArea(areaSlug);
       if (!area) {
@@ -78,13 +92,11 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // General query by CRMLS City name
-    const city = cityParam;
-
+    // General query by a CRMLS City name we have no coverage page for.
     const filter = [
-      `StandardStatus eq '${status}'`,
-      `City eq '${city}'`,
-      `PropertyType eq '${propertyType}'`,
+      `StandardStatus eq ${odataLiteral(status)}`,
+      `City eq ${odataLiteral(cityParam)}`,
+      `PropertyType eq ${odataLiteral(propertyType)}`,
     ].join(" and ");
 
     const listings = await getListings({ filter, top });

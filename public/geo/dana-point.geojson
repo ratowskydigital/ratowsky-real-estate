@@ -20,6 +20,8 @@
         ],
         "mlsCity": "Dana Point",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/dana-point"
       },

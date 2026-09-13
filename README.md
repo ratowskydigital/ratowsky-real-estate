@@ -7,9 +7,11 @@ Every city (`src/content/cities/`) and community (`src/content/communities/`) pa
 
 ## Geo coverage layer (Trestle IDX)
 
-`src/content/geo/` holds one `GeoArea` per city and community page: a polygon (or several) plus the CRMLS matchers (`subdivisionNames`, `streetNames`, `postalCodes`, `mlsCity`). This is the single source of truth for "which listings belong on which page."
+`src/content/geo/` holds one `GeoArea` per city and community page. Community areas carry a polygon (or several) plus CRMLS matchers (`subdivisionNames`, `streetNames`, `postalCodes`). City areas are matcher-only: they route by the CRMLS `City` value, its aliases, and postal codes, and their GeoJSON features have `geometry: null` and `coverage: "matchers"`. The one exception is Huntington Beach, which also carries a coarse outline so the validator can confirm every HB community sits inside it. This is the single source of truth for "which listings belong on which page."
 
-- `npm run geo:check` — fails if any page lacks coverage, any child polygon (an island) is not fully inside its parent (Huntington Harbour), or sibling polygons overlap. Runs automatically before `next build`.
+Resolution order for a listing: CRMLS `SubdivisionName`, then street name, then polygon, deepest area first, each gated by postal code. For cities the `City` field is authoritative; a postal code only changes the answer inside the explicit umbrella mapping (Newport Beach with a 92657 or 92625 zip routes to Newport Coast or Corona del Mar, and the reverse).
+
+- `npm run geo:check` — fails if any page lacks coverage, any child polygon (an island) is not fully inside its parent (Huntington Harbour), or any two unrelated polygons share interior area (edge crossing or a vertex strictly inside the other; touching along a shared boundary is fine). Runs automatically before `next build`.
 - `npm run geo:smoke` — feeds sample CRMLS-shaped records through the resolver and asserts each lands on the right page.
 - `npm run geo:export` — writes `public/geo/*.geojson` (one file per area plus `coverage.geojson` and `communities.geojson`).
 - `GET /api/geo`, `GET /api/geo/[slug]?children=true` — the same polygons as GeoJSON for dashboards and the IDX map layer.

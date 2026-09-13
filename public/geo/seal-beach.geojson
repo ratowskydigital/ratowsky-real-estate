@@ -19,6 +19,8 @@
         ],
         "mlsCity": "Seal Beach",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/seal-beach"
       },

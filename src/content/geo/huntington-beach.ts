@@ -70,11 +70,11 @@ const HUMBOLDT: Ring = [
 ];
 
 const DAVENPORT: Ring = [
-  [-118.0580, 33.7145],
+  [-118.0558, 33.7145],
   [-118.0515, 33.7145],
   [-118.0515, 33.7198],
-  [-118.0580, 33.7198],
-  [-118.0580, 33.7145],
+  [-118.0558, 33.7198],
+  [-118.0558, 33.7145],
 ];
 
 // Mainland block A — east of Saybrook Lane, Warner to Edinger (Seagate,
@@ -112,8 +112,8 @@ const MAINLAND_WEST: Ring = [
   [-118.0655, 33.7127],
   [-118.0512, 33.7140],
   [-118.0585, 33.7143],
-  [-118.0585, 33.7168],
-  [-118.0688, 33.7168],
+  [-118.0585, 33.7158],
+  [-118.0680, 33.7158],
   [-118.0655, 33.7127],
 ];
 
@@ -219,7 +219,7 @@ export const huntingtonBeachGeo: GeoArea[] = [
     polygons: [HUNTINGTON_BEACH_CITY],
     mlsCity: "Huntington Beach",
     mlsCityAliases: ["Sunset Beach", "Huntington Harbour"],
-    postalCodes: ["90742", "92646", "92647", "92648", "92649"],
+    postalCodes: ["90742", "92605", "92615", "92646", "92647", "92648", "92649"],
   },
 
   // ---- Harbour -------------------------------------------------------------

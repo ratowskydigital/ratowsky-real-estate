@@ -37,6 +37,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.05667958050446,
           33.72257462131525
@@ -110,6 +112,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.05869980114757,
           33.72269994310159
@@ -167,9 +171,11 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
-          -118.05474956039,
-          33.717149874449085
+          -118.05364999515787,
+          33.71714999868305
         ],
         "pageUrl": "/communities/davenport-island"
       },
@@ -178,7 +184,7 @@
         "coordinates": [
           [
             [
-              -118.058,
+              -118.0558,
               33.7145
             ],
             [
@@ -190,11 +196,11 @@
               33.7198
             ],
             [
-              -118.058,
+              -118.0558,
               33.7198
             ],
             [
-              -118.058,
+              -118.0558,
               33.7145
             ]
           ]
@@ -224,6 +230,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.05365061651177,
           33.723850176116215
@@ -281,6 +289,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.06470047217657,
           33.719400134892
@@ -338,6 +348,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.06952259412267,
           33.720509052907005
@@ -403,6 +415,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.04549989742793,
           33.72084997069973
@@ -500,11 +514,11 @@
               ],
               [
                 -118.0585,
-                33.7168
+                33.7158
               ],
               [
-                -118.0688,
-                33.7168
+                -118.068,
+                33.7158
               ],
               [
                 -118.0655,
@@ -536,6 +550,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.07516762081337,
           33.71784789395516
@@ -594,6 +610,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.04535005126044,
           33.711500014655265
@@ -649,6 +667,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.03534998718342,
           33.70874999633906
@@ -705,6 +725,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.01895007733853,
           33.68900002206657
@@ -765,6 +787,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.02287018880551,
           33.678886642534515
@@ -829,6 +853,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -118.02325563457435,
           33.68479440027892
@@ -897,6 +923,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.99994109871805,
           33.66536442860772
@@ -952,6 +980,8 @@
         ],
         "mlsCity": null,
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "polygon",
         "centroid": [
           -117.96239997939466,
           33.652249994135616

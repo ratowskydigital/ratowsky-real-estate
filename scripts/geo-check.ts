@@ -8,15 +8,16 @@
  *   - a GeoArea points at a slug with no page
  *   - a child area is not fully inside its parent (e.g. an island outside the Harbour)
  *   - a ring is degenerate (fewer than 3 vertices or zero area)
- *   - sibling community polygons overlap each other's centroids
+ *   - sibling community polygons share interior area (edge crossing or a vertex
+ *     strictly inside the other); touching along a shared boundary is allowed
  *   - the community's declared parentCommunitySlug disagrees with the geo parentSlug
  */
 import { communities } from "../src/content/communities";
 import { cities } from "../src/content/cities";
 import { geoAreas, getGeoArea } from "../src/content/geo";
 import {
-  areaCentroid,
   areaContains,
+  areasOverlap,
   pointInArea,
   ringSignedArea,
   descendantSlugs,
@@ -82,17 +83,21 @@ for (const g of geoAreas) {
   }
 }
 
-// 4. Sibling overlap — no community centroid should fall inside a sibling.
+// 4. Overlap — siblings may touch along a boundary but never share area, and a
+//    community may only overlap its own ancestors or descendants. Order-dependent
+//    routing is exactly the bug this prevents: a pin in a shared region would be
+//    assigned by array order rather than by geography.
 const bySlug = new Map(geoAreas.map((g) => [g.slug, g] as const));
-for (const g of geoAreas) {
-  if (g.kind !== "community") continue;
-  const c = areaCentroid(g);
-  if (!c) continue;
-  for (const other of geoAreas) {
-    if (other.slug === g.slug || other.kind !== "community") continue;
-    if (other.parentSlug !== g.parentSlug) continue;
-    if (pointInArea(c, other)) {
-      errors.push(`centroid of "${g.slug}" falls inside sibling "${other.slug}" — polygons overlap`);
+const communitiesOnly = geoAreas.filter((g) => g.kind === "community");
+const related = (a: string, b: string) => a === b || descendantSlugs(a).includes(b) || descendantSlugs(b).includes(a);
+for (let i = 0; i < communitiesOnly.length; i++) {
+  for (let j = i + 1; j < communitiesOnly.length; j++) {
+    const a = communitiesOnly[i];
+    const b = communitiesOnly[j];
+    if (related(a.slug, b.slug)) continue;
+    if (areasOverlap(a, b)) {
+      const kind = a.parentSlug === b.parentSlug ? "sibling" : "unrelated";
+      errors.push(`"${a.slug}" and "${b.slug}" share interior area — ${kind} polygons must be disjoint`);
     }
   }
 }

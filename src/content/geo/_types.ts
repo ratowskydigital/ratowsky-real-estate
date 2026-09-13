@@ -62,4 +62,12 @@ export type GeoArea = {
   mlsCity?: string;
   /** Other CRMLS City values that belong on this page (e.g. "Sunset Beach" under HB). */
   mlsCityAliases?: string[];
+  /**
+   * For a city page that is legally part of a larger city (Newport Coast and
+   * Corona del Mar inside Newport Beach): the umbrella's CRMLS City value.
+   * Listings filed under the umbrella with this area's postal code route here,
+   * and listings filed under this area with an umbrella postal code route back
+   * to the umbrella. Postal-code overrides never happen outside this mapping.
+   */
+  umbrellaMlsCity?: string;
 };

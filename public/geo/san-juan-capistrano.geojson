@@ -15,10 +15,13 @@
         "subdivisionNames": [],
         "streetNames": [],
         "postalCodes": [
-          "92675"
+          "92675",
+          "92693"
         ],
         "mlsCity": "San Juan Capistrano",
         "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
         "centroid": null,
         "pageUrl": "/cities/san-juan-capistrano"
       },
