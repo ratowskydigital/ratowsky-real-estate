@@ -344,22 +344,63 @@ export type ListingsQueryOptions = {
 /** One page of listings plus the link to the next page, when Trestle has more. */
 type ListingsPage = { listings: TrestleListing[]; nextLink: string | null };
 
-async function getListingsPage(options: ListingsQueryOptions = {}): Promise<ListingsPage> {
+const MEDIA_EXPAND = "Media($select=MediaURL,Order;$orderby=Order asc;$top=10)";
+/** $select for a coarse candidate page: everything but Media. */
+const COARSE_SELECT = BASE_SELECT.split(",").filter((f) => f !== "Media").join(",");
+
+async function getListingsPage(
+  options: ListingsQueryOptions & { withMedia?: boolean } = {},
+): Promise<ListingsPage> {
   const {
     filter = "StandardStatus eq 'Active' and City eq 'Huntington Beach' and PropertyType eq 'Residential'",
     top = 24,
     orderBy = "ModificationTimestamp desc",
+    withMedia = true,
   } = options;
 
   const data = await odataFetch<TrestleRawProperty>("Property", {
     $filter: filter,
     $top: String(top),
     $orderby: orderBy,
-    $select: BASE_SELECT,
-    $expand: "Media($select=MediaURL,Order;$orderby=Order asc;$top=10)",
+    $select: withMedia ? BASE_SELECT : COARSE_SELECT,
+    ...(withMedia ? { $expand: MEDIA_EXPAND } : {}),
   });
 
   return { listings: data.value.map(normalise), nextLink: data["@odata.nextLink"] ?? null };
+}
+
+/** Largest number of ListingKeys sent in one media lookup. */
+const MEDIA_BATCH = 50;
+
+/**
+ * Attach photos to listings fetched without the Media expansion. One request
+ * per MEDIA_BATCH survivors, so the coarse crawl never downloads photo rows
+ * for candidates that the precise filter throws away.
+ */
+async function attachMedia(listings: TrestleListing[]): Promise<TrestleListing[]> {
+  const keys = listings.map((l) => l.listingKey).filter(Boolean);
+  if (keys.length === 0) return listings;
+  const photosByKey = new Map<string, string[]>();
+  for (let i = 0; i < keys.length; i += MEDIA_BATCH) {
+    const batch = keys.slice(i, i + MEDIA_BATCH);
+    const data = await odataFetch<Pick<TrestleRawProperty, "ListingKey" | "Media">>("Property", {
+      $filter: batch.map((k) => `ListingKey eq ${odataLiteral(k)}`).join(" or "),
+      $top: String(batch.length),
+      $select: "ListingKey",
+      $expand: MEDIA_EXPAND,
+    });
+    for (const raw of data.value) {
+      if (!raw.ListingKey) continue;
+      photosByKey.set(
+        raw.ListingKey,
+        (raw.Media ?? [])
+          .sort((a, b) => (a.Order ?? 0) - (b.Order ?? 0))
+          .map((m) => m.MediaURL ?? "")
+          .filter(Boolean),
+      );
+    }
+  }
+  return listings.map((l) => ({ ...l, photos: photosByKey.get(l.listingKey) ?? l.photos }));
 }
 
 /**
@@ -434,9 +475,12 @@ export type AreaListingsResult = {
  * are followed through `@odata.nextLink` until `top` matches are collected
  * or the feed is exhausted. The crawl is bounded two ways: the page size
  * scales with `top` (see coarsePageSize) so a small request stays small,
- * and AREA_MAX_CANDIDATES caps the records examined per request; when the
- * cap stops the loop early the result is flagged `truncated` so callers
- * never present an under-filled page as the whole area. Every page fetch
+ * and AREA_MAX_CANDIDATES caps the records examined per request, enforced
+ * per candidate so a page straddling the cap is never fully processed; when
+ * the cap stops the loop early the result is flagged `truncated` so callers
+ * never present an under-filled page as the whole area. Candidate pages are
+ * fetched without the Media expansion and photos are attached only to the
+ * survivors, so rejected candidates cost no photo rows. Every page fetch
  * goes through Next's data cache (revalidate 300s), so repeated dashboard
  * loads of the same area reuse the same Trestle responses. Order is
  * preserved, so `orderBy` applies across the whole result, not just the
@@ -510,20 +554,35 @@ export async function getListingsInArea(
     return true;
   };
 
+  // Candidates are fetched without Media; photos are attached only to the
+  // listings that survive the precise filter (see attachMedia).
   const matched: TrestleListing[] = [];
-  let page = await getListingsPage({ filter, top: coarsePageSize(top), orderBy });
   let pagesFetched = 1;
   let candidatesExamined = 0;
+  const finish = async (truncated: boolean): Promise<AreaListingsResult> => ({
+    listings: await attachMedia(matched),
+    truncated,
+    pagesFetched,
+    candidatesExamined,
+  });
+
+  let page = await getListingsPage({
+    filter,
+    top: Math.min(coarsePageSize(top), AREA_MAX_CANDIDATES),
+    orderBy,
+    withMedia: false,
+  });
   for (;;) {
     for (const l of page.listings) {
+      // The cap is enforced per candidate, not per page: a page that straddles
+      // it is left partly unexamined and the result says so.
+      if (candidatesExamined >= AREA_MAX_CANDIDATES) return finish(true);
       candidatesExamined++;
       if (belongs(l)) matched.push(l);
-      if (matched.length >= top) return { listings: matched, truncated: false, pagesFetched, candidatesExamined };
+      if (matched.length >= top) return finish(false);
     }
-    if (!page.nextLink) return { listings: matched, truncated: false, pagesFetched, candidatesExamined };
-    if (candidatesExamined >= AREA_MAX_CANDIDATES) {
-      return { listings: matched, truncated: true, pagesFetched, candidatesExamined };
-    }
+    if (!page.nextLink) return finish(false);
+    if (candidatesExamined >= AREA_MAX_CANDIDATES) return finish(true);
     const next = await odataFetchUrl<TrestleRawProperty>(page.nextLink);
     page = { listings: next.value.map(normalise), nextLink: next["@odata.nextLink"] ?? null };
     pagesFetched++;
