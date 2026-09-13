@@ -467,7 +467,11 @@ function matcherClauses(area: GeoArea): string {
   }
   const clauses = [
     ...[...subs].map((n) => `contains(tolower(SubdivisionName), ${odataLiteral(n)})`),
-    ...[...streets].map((n) => `tolower(StreetName) eq ${odataLiteral(n)}`),
+    // Mirrors the resolver: the bare street name, or the name followed by a
+    // suffix ("Davenport" and "Davenport Drive"), never "Davenporter".
+    ...[...streets].map(
+      (n) => `(tolower(StreetName) eq ${odataLiteral(n)} or startswith(tolower(StreetName), ${odataLiteral(n + " ")}))`,
+    ),
   ];
   return clauses.length > 0 ? " or " + clauses.join(" or ") : "";
 }
@@ -478,8 +482,8 @@ function matcherClauses(area: GeoArea): string {
  * accepts: every record `resolveCity` / `resolveCommunity` could route to
  * the page must pass it, and `listingBelongsTo` then does the precise cut.
  *
- * City areas: `City eq <name or alias>` OR `PostalCode eq <any of the area's
- * zips>`. The postal clauses are what make the resolver's two postal paths
+ * City areas: `City eq <name or alias>` OR `startswith(PostalCode, <any of
+ * the area's zips>)`. The postal clauses are what make the resolver's two postal paths
  * reachable from the feed: umbrella-filed child listings (City "Newport
  * Beach" + a Newport Coast zip) and records whose City value we do not
  * recognise at all ("Huntington Bch"), which resolve by postal code alone.
@@ -495,7 +499,9 @@ function matcherClauses(area: GeoArea): string {
  */
 export function odataFilterForArea(area: GeoArea): string {
   const parts: string[] = [];
-  const postalClauses = (area.postalCodes ?? []).map((p) => `PostalCode eq ${odataLiteral(p)}`);
+  // startswith, not eq: the resolver compares the first five digits, so a
+  // ZIP+4 value such as 92649-1234 must pass the coarse filter too.
+  const postalClauses = (area.postalCodes ?? []).map((p) => `startswith(PostalCode, ${odataLiteral(p)})`);
 
   if (area.kind === "city" && area.mlsCity) {
     const names = [area.mlsCity, ...(area.mlsCityAliases ?? [])];

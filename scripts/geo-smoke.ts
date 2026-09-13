@@ -55,6 +55,11 @@ const cases: Case[] = [
     expect: "davenport-island",
   },
   {
+    name: "Davenport Drive with a ZIP+4 postal code",
+    hints: { streetName: "Davenport Drive", postalCode: "92649-1234" },
+    expect: "davenport-island",
+  },
+  {
     name: "Pin only, no subdivision — Harbour Mainland east block",
     hints: { latitude: 33.72, longitude: -118.045, postalCode: "92649" },
     expect: "harbour-mainland",
@@ -200,12 +205,13 @@ const cityCases: { hints: ListingLocationHints; expect: string | null }[] = [
   const checks: [string, boolean][] = [
     ["city filter matches on the CRMLS City value", cityFilter.includes("City eq 'Huntington Beach'")],
     ["city filter matches on aliases", cityFilter.includes("City eq 'Sunset Beach'")],
-    ["city filter includes postal codes so unrecognised City values still reach the resolver", cityFilter.includes("PostalCode eq '92648'")],
-    ["child city filter reaches umbrella-filed listings by postal code", coast.includes("PostalCode eq '92657'")],
+    ["city filter includes postal codes so unrecognised City values still reach the resolver", cityFilter.includes("startswith(PostalCode, '92648')")],
+    ["child city filter reaches umbrella-filed listings by postal code", coast.includes("startswith(PostalCode, '92657')")],
+    ["postal clauses are prefix matches so ZIP+4 values pass like the resolver's five-digit compare", !trinidadFilter.includes("PostalCode eq '92649'") && trinidadFilter.includes("startswith(PostalCode, '92649')")],
     ["community filter is gated by the padded bounding box", /Latitude ge .* and Longitude ge /.test(trinidadFilter)],
     ["community filter keeps pinless records so subdivision/street matchers can claim them", trinidadFilter.includes("or Latitude eq null or Longitude eq null")],
     ["community filter keeps records matched by CRMLS subdivision even when the pin is outside the box", trinidadFilter.includes("contains(tolower(SubdivisionName), 'trinidad island')")],
-    ["community filter keeps records matched by street name", trinidadFilter.includes("tolower(StreetName) eq 'trinidad'")],
+    ["community filter keeps records matched by street name, bare or with a suffix", trinidadFilter.includes("(tolower(StreetName) eq 'trinidad' or startswith(tolower(StreetName), 'trinidad '))")],
     ["parent filter carries every descendant's matchers", odataFilterForArea(getGeoArea("huntington-harbour")!).includes("contains(tolower(SubdivisionName), 'coral cay')") && odataFilterForArea(getGeoArea("huntington-harbour")!).includes("tolower(StreetName) eq 'davenport'")],
     ["community filter lets records with no postal code through", trinidadFilter.includes("PostalCode eq null")],
   ];
