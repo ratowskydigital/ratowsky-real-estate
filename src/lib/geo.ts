@@ -294,6 +294,10 @@ function postalOk(area: GeoArea, postalCode: string | null | undefined): boolean
  * Order of evidence:
  *   1. CRMLS SubdivisionName contains one of the area's subdivisionNames
  *      (deepest area wins — "Trinidad Island" beats "Huntington Harbour").
+ *      When the match is a generic ancestor name ("Huntington Harbour")
+ *      the record is refined to a descendant that its street name or pin
+ *      places it in, so a Harbour-filed listing pinned on Trinidad lands
+ *      on the Trinidad page; the ancestor stays the answer otherwise.
  *   2. StreetName matches an area's exclusive street list.
  *   3. Lat/Lng falls inside the area polygon (deepest area wins).
  * Every step is gated by postal code when the area declares one.
@@ -311,40 +315,51 @@ export function resolveCommunity(hints: ListingLocationHints): GeoMatch | null {
   };
   const byDepth = [...communities].sort((a, b) => depth(b) - depth(a));
 
-  const sub = norm(hints.subdivisionName);
-  if (sub) {
-    for (const area of byDepth) {
-      if (!postalOk(area, hints.postalCode)) continue;
-      if (area.subdivisionNames?.some((n) => sub.includes(norm(n)))) {
-        return { area, matchedBy: "subdivision" };
-      }
-    }
-  }
-
   const street = norm(hints.streetName);
-  if (street) {
-    for (const area of byDepth) {
+  const byStreet = (candidates: GeoArea[]): GeoMatch | null => {
+    if (!street) return null;
+    for (const area of candidates) {
       if (!postalOk(area, hints.postalCode)) continue;
       if (area.streetNames?.some((n) => street === norm(n) || street.startsWith(norm(n) + " "))) {
         return { area, matchedBy: "street" };
       }
     }
-  }
+    return null;
+  };
 
-  if (
+  const hasPin =
     typeof hints.latitude === "number" &&
     typeof hints.longitude === "number" &&
     Number.isFinite(hints.latitude) &&
-    Number.isFinite(hints.longitude)
-  ) {
-    const pt: LngLat = [hints.longitude, hints.latitude];
-    for (const area of byDepth) {
+    Number.isFinite(hints.longitude);
+  const byPolygon = (candidates: GeoArea[]): GeoMatch | null => {
+    if (!hasPin) return null;
+    const pt: LngLat = [hints.longitude as number, hints.latitude as number];
+    for (const area of candidates) {
       if (!postalOk(area, hints.postalCode)) continue;
       if (pointInArea(pt, area)) return { area, matchedBy: "polygon" };
     }
+    return null;
+  };
+
+  const sub = norm(hints.subdivisionName);
+  if (sub) {
+    for (const area of byDepth) {
+      if (!postalOk(area, hints.postalCode)) continue;
+      if (area.subdivisionNames?.some((n) => sub.includes(norm(n)))) {
+        // Refine a generic ancestor match to the descendant the record sits in.
+        const kids = new Set(descendantSlugs(area.slug));
+        const within = byDepth.filter((a) => kids.has(a.slug));
+        if (within.length > 0) {
+          const refined = byStreet(within) ?? byPolygon(within);
+          if (refined) return refined;
+        }
+        return { area, matchedBy: "subdivision" };
+      }
+    }
   }
 
-  return null;
+  return byStreet(byDepth) ?? byPolygon(byDepth);
 }
 
 /**

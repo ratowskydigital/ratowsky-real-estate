@@ -44,14 +44,32 @@ const ok: string[] = [];
 
 async function fetchText(path: string): Promise<{ status: number; text: string }> {
   try {
-    const res = await fetch(`${base}${path}`, { redirect: "follow", headers: { "User-Agent": "ratowsky-site-check/1.0" } });
+    // No redirect following: a page that is only reachable through a redirect
+    // (or a catch-all rewrite) is not the page the sitemap advertises.
+    const res = await fetch(`${base}${path}`, { redirect: "manual", headers: { "User-Agent": "ratowsky-site-check/1.0" } });
     return { status: res.status, text: await res.text() };
   } catch (err) {
     return { status: 0, text: String(err) };
   }
 }
 
-async function checkPage(path: string, label: string) {
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&#39;|&rsquo;|&#8217;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/g, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * The page must be the one requested, not a fallback document served for
+ * every path: its canonical link must point at this path and its H1 must
+ * name the expected place.
+ */
+async function checkPage(path: string, label: string, expectName?: string) {
   const { status, text } = await fetchText(path);
   if (status !== 200) {
     errors.push(`${label}: ${path} returned ${status || "no response"}`);
@@ -62,8 +80,19 @@ async function checkPage(path: string, label: string) {
     errors.push(`${label}: ${path} still looks like a stub (matched ${hit})`);
     return;
   }
-  if (!/<h1[\s>]/i.test(text) || text.length < 8000) {
+  const h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(text);
+  if (!h1 || text.length < 8000) {
     errors.push(`${label}: ${path} rendered thin content (${text.length} bytes)`);
+    return;
+  }
+  const canonical = /<link[^>]+rel="canonical"[^>]+href="([^"]+)"/i.exec(text)?.[1];
+  const canonicalPath = canonical ? new URL(canonical, base).pathname.replace(/\/$/, "") || "/" : null;
+  if (canonicalPath !== path.replace(/\/$/, "")) {
+    errors.push(`${label}: ${path} serves a page whose canonical is ${canonical ?? "missing"} (fallback or misroute?)`);
+    return;
+  }
+  if (expectName && !decodeEntities(h1[1]).toLowerCase().includes(expectName.toLowerCase())) {
+    errors.push(`${label}: ${path} H1 "${decodeEntities(h1[1])}" does not name ${expectName}`);
     return;
   }
   ok.push(`${label}: ${path}`);
@@ -74,10 +103,10 @@ async function main() {
 
   // 1. Every published city and community page renders as full content.
   for (const c of cities.filter((x) => x.status === "published")) {
-    await checkPage(`/cities/${c.slug}`, `city ${c.name}`);
+    await checkPage(`/cities/${c.slug}`, `city ${c.name}`, c.name);
   }
   for (const c of communities.filter((x) => x.status === "published")) {
-    await checkPage(`/communities/${c.slug}`, `community ${c.name}`);
+    await checkPage(`/communities/${c.slug}`, `community ${c.name}`, c.name);
   }
   await checkPage("/cities", "cities hub");
   await checkPage("/communities", "communities hub");

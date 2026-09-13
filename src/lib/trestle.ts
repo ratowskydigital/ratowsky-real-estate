@@ -154,8 +154,10 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!res.ok) {
+    // Provider body stays in the server log; the public route echoes error messages.
     const body = await res.text();
-    throw new Error(`Trestle token request failed: ${res.status} ${body}`);
+    console.error(`[trestle] token request failed ${res.status}: ${body}`);
+    throw new Error(`Trestle token request failed with status ${res.status}.`);
   }
 
   const data = (await res.json()) as {
@@ -418,9 +420,31 @@ export type AreaListingsResult = {
  * an under-filled page as the whole area. Order is preserved, so `orderBy`
  * applies across the whole result, not just the first page.
  */
+export type PolygonMatchPolicy =
+  /** Pin-only matches count for every area, including rings still marked approximate (default). */
+  | "all"
+  /** Pin-only matches count only for areas whose ring has been reviewed (`precision: "verified"`). */
+  | "verified-only";
+
 export async function getListingsInArea(
   slug: string,
-  options: { status?: string; propertyType?: string; top?: number; orderBy?: string } = {},
+  options: {
+    status?: string;
+    propertyType?: string;
+    top?: number;
+    orderBy?: string;
+    /**
+     * How to treat listings that reach a page only through the polygon (no
+     * CRMLS subdivision or street match). Matchers are checked first and
+     * decide most CRMLS records; the polygon is the fallback for pin-only
+     * records. Every listing carries `communityMatchedBy` so a dashboard can
+     * flag polygon matches, and `area.precision` says whether the ring has
+     * been reviewed. "verified-only" drops polygon matches on approximate
+     * rings for callers that would rather show fewer listings than risk a
+     * boundary miss before the geojson.io review pass.
+     */
+    polygonMatches?: PolygonMatchPolicy;
+  } = {},
 ): Promise<AreaListingsResult> {
   const area = getGeoArea(slug);
   if (!area) throw new Error(`Unknown coverage area: ${slug}`);
@@ -430,6 +454,7 @@ export async function getListingsInArea(
     propertyType = "Residential",
     top: topOption = 48,
     orderBy = "ModificationTimestamp desc",
+    polygonMatches = "all",
   } = options;
   // Defensive normalisation for callers other than the route: a non-finite or
   // non-positive target would otherwise become `$top=NaN` or an off-by-one stop.
@@ -443,8 +468,8 @@ export async function getListingsInArea(
     .filter(Boolean)
     .join(" and ");
 
-  const belongs = (l: TrestleListing) =>
-    listingBelongsTo(slug, {
+  const belongs = (l: TrestleListing) => {
+    const ok = listingBelongsTo(slug, {
       latitude: l.latitude,
       longitude: l.longitude,
       subdivisionName: l.subdivisionName,
@@ -452,6 +477,13 @@ export async function getListingsInArea(
       postalCode: l.postalCode,
       city: l.city,
     });
+    if (!ok) return false;
+    if (polygonMatches === "verified-only" && l.communityMatchedBy === "polygon") {
+      const matched = l.communitySlug ? getGeoArea(l.communitySlug) : undefined;
+      return matched?.precision === "verified";
+    }
+    return true;
+  };
 
   const matched: TrestleListing[] = [];
   // Always ask for a full coarse page. Requesting only `top` candidates would

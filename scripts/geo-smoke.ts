@@ -35,6 +35,21 @@ const cases: Case[] = [
     expect: "huntington-harbour",
   },
   {
+    name: "Generic Harbour subdivision with a pin on Trinidad refines to Trinidad",
+    hints: { subdivisionName: "Huntington Harbour (HHAR)", latitude: 33.7227, longitude: -118.0587, postalCode: "92649" },
+    expect: "trinidad-island",
+  },
+  {
+    name: "Generic Harbour subdivision with a Davenport street refines to Davenport",
+    hints: { subdivisionName: "Huntington Harbour", streetName: "Davenport Drive", postalCode: "92649" },
+    expect: "davenport-island",
+  },
+  {
+    name: "Generic Harbour subdivision with a pin on the Mainland east block refines to Mainland",
+    hints: { subdivisionName: "Huntington Harbour", latitude: 33.7200, longitude: -118.0450, postalCode: "92649" },
+    expect: "harbour-mainland",
+  },
+  {
     name: "Coral Cay is Mainland",
     hints: { subdivisionName: "Coral Cay (HCC)", postalCode: "92649" },
     expect: "harbour-mainland",

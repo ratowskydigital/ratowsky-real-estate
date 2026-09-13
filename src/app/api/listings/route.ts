@@ -9,6 +9,8 @@
  * GET /api/listings?city=newport-coast&top=24      (slug or CRMLS City name both work)
  * GET /api/listings?community=trinidad-island&sort=price   (recent | price | price-asc;
  *     default recent, except harbour=true which defaults to price)
+ * GET /api/listings?community=trinidad-island&polygon=verified   (drop pin-only matches on
+ *     rings not yet reviewed; default "all". Each listing carries communityMatchedBy.)
  * GET /api/listings?key=<listingKey>
  *
  * Returns { ok: true, listings: TrestleListing[] } or a "coming-soon" stub
@@ -98,6 +100,11 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status") ?? "Active";
     const propertyType = searchParams.get("type") ?? "Residential";
     const areaOrderBy = orderBy ?? (harbourAlias ? SORTS.price : SORTS.recent);
+    const polygonParam = searchParams.get("polygon") ?? "all";
+    if (polygonParam !== "all" && polygonParam !== "verified") {
+      return NextResponse.json({ ok: false, error: `unknown-polygon: ${polygonParam} (use all, verified)` }, { status: 400 });
+    }
+    const polygonMatches = polygonParam === "verified" ? "verified-only" : "all";
 
     // Community / city coverage area (polygon + subdivision matched)
     const community = harbourAlias ? "huntington-harbour" : searchParams.get("community");
@@ -113,6 +120,7 @@ export async function GET(request: NextRequest) {
         propertyType,
         top: cappedTop,
         orderBy: areaOrderBy,
+        polygonMatches,
       });
       return NextResponse.json({
         ok: true,
