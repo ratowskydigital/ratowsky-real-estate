@@ -15,7 +15,7 @@ Resolution order for a listing: CRMLS `SubdivisionName`, then street name, then 
 - `npm run geo:smoke` — feeds sample CRMLS-shaped records through the resolver and asserts each lands on the right page.
 - `npm run geo:export` — writes `public/geo/*.geojson` (one file per area plus `coverage.geojson` and `communities.geojson`).
 - `GET /api/geo`, `GET /api/geo/[slug]?children=true` — the same polygons as GeoJSON for dashboards and the IDX map layer.
-- `GET /api/listings?community=<slug>` — Trestle listings filtered to that page's coverage. A parent (`huntington-harbour`) returns every island plus the Mainland. Pages of candidates are followed through `@odata.nextLink` until `top` matches are found. Default sort is newest first; add `sort=price` or `sort=price-asc`.
+- `GET /api/listings?community=<slug>` — Trestle listings filtered to that page's coverage. A parent (`huntington-harbour`) returns every island plus the Mainland. Pages of candidates are followed through `@odata.nextLink` until `top` matches are found; the response carries `truncated: true` if the crawl hit its page cap first. Default sort is newest first; add `sort=price` or `sort=price-asc`.
 
 ### Reviewing a polygon
 

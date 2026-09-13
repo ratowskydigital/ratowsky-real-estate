@@ -203,6 +203,7 @@ const cityCases: { hints: ListingLocationHints; expect: string | null }[] = [
     ["city filter includes postal codes so unrecognised City values still reach the resolver", cityFilter.includes("PostalCode eq '92648'")],
     ["child city filter reaches umbrella-filed listings by postal code", coast.includes("PostalCode eq '92657'")],
     ["community filter is gated by the padded bounding box", /Latitude ge .* and Longitude ge /.test(trinidadFilter)],
+    ["community filter keeps pinless records so subdivision/street matchers can claim them", trinidadFilter.includes("or Latitude eq null or Longitude eq null")],
     ["community filter lets records with no postal code through", trinidadFilter.includes("PostalCode eq null")],
   ];
   for (const [name, ok] of checks) {

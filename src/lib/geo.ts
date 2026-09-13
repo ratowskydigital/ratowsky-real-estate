@@ -462,9 +462,12 @@ export const COARSE_QUERY_PAD_DEG = 0.006;
  * Beach" + a Newport Coast zip) and records whose City value we do not
  * recognise at all ("Huntington Bch"), which resolve by postal code alone.
  *
- * Community areas: padded bounding box AND (postal code in the area's list OR
- * postal code missing). `postalOk` lets a record with no postal code through,
- * so the coarse filter must too.
+ * Community areas: (padded bounding box OR no coordinates) AND (postal code
+ * in the area's list OR postal code missing). A record with no pin can still
+ * be claimed by the CRMLS SubdivisionName or StreetName matchers, which the
+ * resolver checks before the polygon, so it must reach the resolver. And
+ * `postalOk` lets a record with no postal code through, so the coarse filter
+ * must too. Both gaps are bounded by the other clause.
  */
 export function odataFilterForArea(area: GeoArea): string {
   const parts: string[] = [];
@@ -480,10 +483,11 @@ export function odataFilterForArea(area: GeoArea): string {
   const box = areaBBox(area);
   if (box) {
     const pad = COARSE_QUERY_PAD_DEG;
-    parts.push(
+    const inBox = [
       `Latitude ge ${(box.south - pad).toFixed(5)} and Latitude le ${(box.north + pad).toFixed(5)}`,
       `Longitude ge ${(box.west - pad).toFixed(5)} and Longitude le ${(box.east + pad).toFixed(5)}`,
-    );
+    ].join(" and ");
+    parts.push(`((${inBox}) or Latitude eq null or Longitude eq null)`);
   }
   if (postalClauses.length > 0) {
     parts.push("(" + [...postalClauses, "PostalCode eq null"].join(" or ") + ")");

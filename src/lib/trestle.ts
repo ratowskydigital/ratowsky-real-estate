@@ -365,12 +365,12 @@ export async function getListing(listingKey: string): Promise<TrestleListing | n
 /**
  * Huntington Harbour active waterfront listings.
  */
-export async function getHarbourListings(top = 12): Promise<TrestleListing[]> {
+export async function getHarbourListings(top = 12, orderBy = "ListPrice desc"): Promise<TrestleListing[]> {
   return getListings({
     filter:
       "StandardStatus eq 'Active' and City eq 'Huntington Beach' and PostalCode eq '92649' and PropertyType eq 'Residential'",
     top,
-    orderBy: "ListPrice desc",
+    orderBy,
   });
 }
 
@@ -378,6 +378,19 @@ export async function getHarbourListings(top = 12): Promise<TrestleListing[]> {
 const AREA_PAGE_SIZE = 200;
 /** Hard stop so a very wide coarse filter can never turn into an unbounded crawl. */
 const AREA_MAX_PAGES = 10;
+
+export type AreaListingsResult = {
+  listings: TrestleListing[];
+  /**
+   * True when the page cap was hit while Trestle still had more candidates
+   * and fewer than `top` matches had been found. The listings returned are
+   * correct but may not be the complete set for the area; consumers should
+   * say so rather than present them as everything.
+   */
+  truncated: boolean;
+  /** Number of coarse candidate pages fetched from Trestle. */
+  pagesFetched: number;
+};
 
 /**
  * Listings inside a community or city coverage area.
@@ -391,14 +404,16 @@ const AREA_MAX_PAGES = 10;
  *
  * Because the coarse filter is wider than the polygon, a single page of
  * candidates can hold fewer than `top` matches even when more exist. Pages
- * are followed through `@odata.nextLink` until `top` matches are collected,
- * the feed is exhausted, or AREA_MAX_PAGES is hit. Order is preserved, so
- * `orderBy` applies across the whole result, not just the first page.
+ * are followed through `@odata.nextLink` until `top` matches are collected
+ * or the feed is exhausted. AREA_MAX_PAGES bounds the crawl; when it stops
+ * the loop early the result is flagged `truncated` so callers never present
+ * an under-filled page as the whole area. Order is preserved, so `orderBy`
+ * applies across the whole result, not just the first page.
  */
 export async function getListingsInArea(
   slug: string,
   options: { status?: string; propertyType?: string; top?: number; orderBy?: string } = {},
-): Promise<TrestleListing[]> {
+): Promise<AreaListingsResult> {
   const area = getGeoArea(slug);
   if (!area) throw new Error(`Unknown coverage area: ${slug}`);
 
@@ -432,16 +447,18 @@ export async function getListingsInArea(
 
   const matched: TrestleListing[] = [];
   let page = await getListingsPage({ filter, top: Math.min(top, AREA_PAGE_SIZE), orderBy });
-  for (let pages = 1; ; pages++) {
+  let pagesFetched = 1;
+  for (;;) {
     for (const l of page.listings) {
       if (belongs(l)) matched.push(l);
-      if (matched.length >= top) return matched;
+      if (matched.length >= top) return { listings: matched, truncated: false, pagesFetched };
     }
-    if (!page.nextLink || pages >= AREA_MAX_PAGES) break;
+    if (!page.nextLink) return { listings: matched, truncated: false, pagesFetched };
+    if (pagesFetched >= AREA_MAX_PAGES) return { listings: matched, truncated: true, pagesFetched };
     const next = await odataFetchUrl<TrestleRawProperty>(page.nextLink);
     page = { listings: next.value.map(normalise), nextLink: next["@odata.nextLink"] ?? null };
+    pagesFetched++;
   }
-  return matched;
 }
 
 /**

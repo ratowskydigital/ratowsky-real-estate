@@ -6,7 +6,8 @@
  * GET /api/listings?community=trinidad-island&top=24
  * GET /api/listings?community=huntington-harbour   (returns all five islands + Mainland)
  * GET /api/listings?city=newport-coast&top=24      (slug or CRMLS City name both work)
- * GET /api/listings?community=trinidad-island&sort=price   (recent | price | price-asc)
+ * GET /api/listings?community=trinidad-island&sort=price   (recent | price | price-asc;
+ *     default recent, except harbour=true which defaults to price)
  * GET /api/listings?key=<listingKey>
  *
  * Returns { ok: true, listings: TrestleListing[] } or a "coming-soon" stub
@@ -84,22 +85,25 @@ export async function GET(request: NextRequest) {
     }
     const cappedTop = Math.min(top, MAX_TOP);
 
-    // Huntington Harbour shortcut
-    if (searchParams.get("harbour") === "true") {
-      const listings = await getHarbourListings(cappedTop);
-      return NextResponse.json({ ok: true, configured: true, listings });
-    }
-
-    const status = searchParams.get("status") ?? "Active";
-    const propertyType = searchParams.get("type") ?? "Residential";
-    const sortKey = searchParams.get("sort") ?? "recent";
-    const orderBy = SORTS[sortKey];
-    if (!orderBy) {
+    const sortKey = searchParams.get("sort");
+    const orderBy = sortKey === null ? null : SORTS[sortKey];
+    if (sortKey !== null && !orderBy) {
       return NextResponse.json(
         { ok: false, error: `unknown-sort: ${sortKey} (use ${Object.keys(SORTS).join(", ")})` },
         { status: 400 },
       );
     }
+
+    // Huntington Harbour shortcut. Its historical default is price-high-first;
+    // an explicit sort overrides it like everywhere else.
+    if (searchParams.get("harbour") === "true") {
+      const listings = await getHarbourListings(cappedTop, orderBy ?? SORTS.price);
+      return NextResponse.json({ ok: true, configured: true, listings });
+    }
+
+    const status = searchParams.get("status") ?? "Active";
+    const propertyType = searchParams.get("type") ?? "Residential";
+    const areaOrderBy = orderBy ?? SORTS.recent;
 
     // Community / city coverage area (polygon + subdivision matched)
     const community = searchParams.get("community");
@@ -110,12 +114,20 @@ export async function GET(request: NextRequest) {
       if (!area) {
         return NextResponse.json({ ok: false, error: `unknown-area: ${areaSlug}` }, { status: 404 });
       }
-      const listings = await getListingsInArea(areaSlug, { status, propertyType, top: cappedTop, orderBy });
+      const result = await getListingsInArea(areaSlug, {
+        status,
+        propertyType,
+        top: cappedTop,
+        orderBy: areaOrderBy,
+      });
       return NextResponse.json({
         ok: true,
         configured: true,
         area: { slug: area.slug, name: area.name, kind: area.kind, precision: area.precision },
-        listings,
+        listings: result.listings,
+        // True when the candidate crawl hit its page cap before `top` matches
+        // were found; the list is correct but may be incomplete for the area.
+        truncated: result.truncated,
       });
     }
 
@@ -126,7 +138,7 @@ export async function GET(request: NextRequest) {
       `PropertyType eq ${odataLiteral(propertyType)}`,
     ].join(" and ");
 
-    const listings = await getListings({ filter, top: cappedTop, orderBy });
+    const listings = await getListings({ filter, top: cappedTop, orderBy: areaOrderBy });
     return NextResponse.json({ ok: true, configured: true, listings });
   } catch (err) {
     console.error("[listings] Error:", err);
