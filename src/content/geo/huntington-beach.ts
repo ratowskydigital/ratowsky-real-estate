@@ -19,7 +19,8 @@ import type { GeoArea, Ring } from "./_types";
 // -----------------------------------------------------------------------------
 
 // ---- Huntington Harbour ------------------------------------------------------
-// The Harbour reads as five islands plus three Mainland blocks. The parent ring
+// The Harbour reads as five islands plus four Mainland blocks (east, north,
+// south, west; see MAINLAND_* below). The parent ring
 // deliberately covers everything from PCH to Bolsa Chica Street and from the
 // Naval Weapons Station boundary down past Warner to the Sea Bridge / Bay Club
 // streets, so any listing on any island or Mainland street resolves to the
@@ -230,7 +231,7 @@ export const huntingtonBeachGeo: GeoArea[] = [
     parentSlug: "huntington-beach",
     precision: "approximate",
     boundaryNote:
-      "PCH on the west, the Naval Weapons Station on the north, Bolsa Chica Street on the east, and the Sea Bridge / Bay Club streets south of Warner on the south. Covers all five islands (Trinidad, Davenport, Humboldt, Gilbert, Admiralty) and every Mainland block (Coral Cay, Weatherly Bay, Broadmoor, Seagate, Huntington Bay, the Cape, Sea Bridge, Peter's Landing).",
+      "PCH on the west, the Naval Weapons Station on the north, Bolsa Chica Street on the east, and the Sea Bridge / Bay Club streets south of Warner on the south. Covers all five islands (Trinidad, Davenport, Humboldt, Gilbert, Admiralty) and every Mainland block (Coral Cay, Weatherly Bay, Broadmoor, Seagate, Huntington Bay, the Cape, Sea Bridge, Bay Club, Peter's Landing, Portofino Cove).",
     polygons: [HARBOUR_PARENT],
     subdivisionNames: [
       "Huntington Harbour",

@@ -451,6 +451,28 @@ export function odataLiteral(value: string): string {
 export const COARSE_QUERY_PAD_DEG = 0.006;
 
 /**
+ * OData predicates mirroring the resolver's CRMLS matchers for `area` and
+ * every descendant (a Harbour query must keep a "Trinidad Island" record).
+ * Lower-cased on both sides to match the resolver's case-insensitive test.
+ * Returned with a leading " or " so it can be appended to a clause list, or
+ * empty when the area tree declares no matchers.
+ */
+function matcherClauses(area: GeoArea): string {
+  const areas = [area, ...descendantSlugs(area.slug).map((s) => getGeoArea(s)).filter((a): a is GeoArea => Boolean(a))];
+  const subs = new Set<string>();
+  const streets = new Set<string>();
+  for (const a of areas) {
+    for (const n of a.subdivisionNames ?? []) subs.add(norm(n));
+    for (const n of a.streetNames ?? []) streets.add(norm(n));
+  }
+  const clauses = [
+    ...[...subs].map((n) => `contains(tolower(SubdivisionName), ${odataLiteral(n)})`),
+    ...[...streets].map((n) => `tolower(StreetName) eq ${odataLiteral(n)}`),
+  ];
+  return clauses.length > 0 ? " or " + clauses.join(" or ") : "";
+}
+
+/**
  * Build the coarse OData filter for an area so Trestle only sends back
  * candidates. The filter is deliberately a superset of what the resolver
  * accepts: every record `resolveCity` / `resolveCommunity` could route to
@@ -462,12 +484,14 @@ export const COARSE_QUERY_PAD_DEG = 0.006;
  * Beach" + a Newport Coast zip) and records whose City value we do not
  * recognise at all ("Huntington Bch"), which resolve by postal code alone.
  *
- * Community areas: (padded bounding box OR no coordinates) AND (postal code
- * in the area's list OR postal code missing). A record with no pin can still
- * be claimed by the CRMLS SubdivisionName or StreetName matchers, which the
- * resolver checks before the polygon, so it must reach the resolver. And
- * `postalOk` lets a record with no postal code through, so the coarse filter
- * must too. Both gaps are bounded by the other clause.
+ * Community areas: (padded bounding box OR no coordinates OR a CRMLS
+ * SubdivisionName / StreetName matcher of the area or any descendant) AND
+ * (postal code in the area's list OR postal code missing). The resolver
+ * checks the CRMLS matchers before the polygon, so a correctly filed listing
+ * must reach it even when its pin is missing or sits outside the approximate
+ * ring; the matcher clauses are what keep that guarantee at the feed. Postal
+ * gating still bounds every branch, and `postalOk` lets a record with no
+ * postal code through, so the coarse filter does too.
  */
 export function odataFilterForArea(area: GeoArea): string {
   const parts: string[] = [];
@@ -487,7 +511,7 @@ export function odataFilterForArea(area: GeoArea): string {
       `Latitude ge ${(box.south - pad).toFixed(5)} and Latitude le ${(box.north + pad).toFixed(5)}`,
       `Longitude ge ${(box.west - pad).toFixed(5)} and Longitude le ${(box.east + pad).toFixed(5)}`,
     ].join(" and ");
-    parts.push(`((${inBox}) or Latitude eq null or Longitude eq null)`);
+    parts.push(`((${inBox}) or Latitude eq null or Longitude eq null${matcherClauses(area)})`);
   }
   if (postalClauses.length > 0) {
     parts.push("(" + [...postalClauses, "PostalCode eq null"].join(" or ") + ")");

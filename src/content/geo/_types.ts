@@ -17,7 +17,7 @@ export type Ring = [number, number][];
 /**
  * One polygon = one outer ring (holes are not needed for our neighborhoods).
  * A GeoArea may carry several polygons (for example the Harbour Mainland is
- * three separate blocks of land around the islands).
+ * several separate blocks of land around the islands).
  */
 export type GeoPrecision =
   /** Vertices traced against parcel or street data and reviewed on a map. */

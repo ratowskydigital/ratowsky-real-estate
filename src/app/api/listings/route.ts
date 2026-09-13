@@ -2,7 +2,8 @@
  * /api/listings — Trestle MLS listings endpoint
  *
  * GET /api/listings?city=Huntington+Beach&status=Active&top=24
- * GET /api/listings?harbour=true&top=12               (same as community=huntington-harbour, price-first)
+ * GET /api/listings?harbour=true&top=12               (alias of community=huntington-harbour; only
+ *     difference is the default sort, price-first; status/type/top/sort all apply)
  * GET /api/listings?community=trinidad-island&top=24
  * GET /api/listings?community=huntington-harbour   (returns all five islands + Mainland)
  * GET /api/listings?city=newport-coast&top=24      (slug or CRMLS City name both work)
@@ -15,13 +16,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import {
-  isTrestleConfigured,
-  getListings,
-  getListing,
-  getHarbourListings,
-  getListingsInArea,
-} from "@/lib/trestle";
+import { isTrestleConfigured, getListings, getListing, getListingsInArea } from "@/lib/trestle";
 import { geoAreas, getGeoArea } from "@/content/geo";
 import { odataLiteral } from "@/lib/geo";
 
@@ -95,19 +90,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Huntington Harbour shortcut. Its historical default is price-high-first;
-    // an explicit sort overrides it like everywhere else.
-    if (searchParams.get("harbour") === "true") {
-      const result = await getHarbourListings(cappedTop, orderBy ?? SORTS.price);
-      return NextResponse.json({ ok: true, configured: true, listings: result.listings, truncated: result.truncated });
-    }
+    // `harbour=true` is an alias for community=huntington-harbour that keeps
+    // its historical price-high-first default. Everything else (status, type,
+    // top, explicit sort, response shape) is the shared area path below.
+    const harbourAlias = searchParams.get("harbour") === "true";
 
     const status = searchParams.get("status") ?? "Active";
     const propertyType = searchParams.get("type") ?? "Residential";
-    const areaOrderBy = orderBy ?? SORTS.recent;
+    const areaOrderBy = orderBy ?? (harbourAlias ? SORTS.price : SORTS.recent);
 
     // Community / city coverage area (polygon + subdivision matched)
-    const community = searchParams.get("community");
+    const community = harbourAlias ? "huntington-harbour" : searchParams.get("community");
     const cityParam = searchParams.get("city") ?? "Huntington Beach";
     const areaSlug = community ?? resolveAreaSlug(cityParam);
     if (areaSlug) {

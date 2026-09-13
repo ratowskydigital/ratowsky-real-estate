@@ -204,6 +204,9 @@ const cityCases: { hints: ListingLocationHints; expect: string | null }[] = [
     ["child city filter reaches umbrella-filed listings by postal code", coast.includes("PostalCode eq '92657'")],
     ["community filter is gated by the padded bounding box", /Latitude ge .* and Longitude ge /.test(trinidadFilter)],
     ["community filter keeps pinless records so subdivision/street matchers can claim them", trinidadFilter.includes("or Latitude eq null or Longitude eq null")],
+    ["community filter keeps records matched by CRMLS subdivision even when the pin is outside the box", trinidadFilter.includes("contains(tolower(SubdivisionName), 'trinidad island')")],
+    ["community filter keeps records matched by street name", trinidadFilter.includes("tolower(StreetName) eq 'trinidad'")],
+    ["parent filter carries every descendant's matchers", odataFilterForArea(getGeoArea("huntington-harbour")!).includes("contains(tolower(SubdivisionName), 'coral cay')") && odataFilterForArea(getGeoArea("huntington-harbour")!).includes("tolower(StreetName) eq 'davenport'")],
     ["community filter lets records with no postal code through", trinidadFilter.includes("PostalCode eq null")],
   ];
   for (const [name, ok] of checks) {
