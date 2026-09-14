@@ -15,7 +15,7 @@ export type CommunitySection = {
   id: string;
   eyebrow?: string;
   heading: string;
-  paragraphs: string[];
+  paragraphs?: string[];              // optional — a section may be bullets-only
   bullets?: { title?: string; items: string[] };
   callout?: { title?: string; body: string };
 };
@@ -60,6 +60,16 @@ export type City = {
   status: "published" | "draft" | "stub";
   lastUpdated: string;                 // ISO date
   isPrimaryMarket?: boolean;           // true for HB — gets featured treatment
+  isCoastal?: boolean;                 // groups the /cities hub (coastal vs inland)
+  /**
+   * schema.org type for the page. "City" (default) for an incorporated
+   * municipality. "Place" for a market that gets a city-level page but is
+   * legally part of another city (Newport Coast and Corona del Mar sit inside
+   * the City of Newport Beach). Drives the Place and areaServed JSON-LD.
+   */
+  placeType?: "City" | "Place";
+  /** Municipality this place sits inside, required when placeType is "Place". */
+  containedInCity?: string;
   sections?: CommunitySection[];       // optional long-form content
   faqs?: CommunityFaq[];
   sources?: CommunitySource[];

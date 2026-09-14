@@ -23,6 +23,10 @@
 // Constants
 // ---------------------------------------------------------------------------
 
+import { getGeoArea } from "@/content/geo";
+import { listingBelongsTo, odataFilterForArea, odataLiteral, resolveCommunity } from "@/lib/geo";
+import type { GeoMatch } from "@/lib/geo";
+
 const TRESTLE_TOKEN_URL = "https://api.trestle.io/connect/token";
 const TRESTLE_ODATA_BASE = "https://api.trestle.io/reso/odata";
 
@@ -63,6 +67,14 @@ export type TrestleListing = {
   waterfrontFeatures: string[];
   dockFeatures: string[];
   communityFeatures: string[];
+  /** CRMLS subdivision / tract name, e.g. "Trinidad Island (HTRI)". */
+  subdivisionName: string | null;
+  /** CRMLS area, e.g. "17 - Northwest Huntington Beach". */
+  mlsAreaMajor: string | null;
+  /** Community page slug resolved from the coverage layer, if any. */
+  communitySlug: string | null;
+  /** Which signal resolved the community: subdivision, street, or polygon. */
+  communityMatchedBy: GeoMatch["matchedBy"] | null;
 };
 
 /** Raw Trestle Property record (partial — only fields we map). */
@@ -97,6 +109,8 @@ type TrestleRawProperty = {
   WaterfrontFeatures?: string[];
   DockFeatures?: string[];
   CommunityFeatures?: string[];
+  SubdivisionName?: string;
+  MLSAreaMajor?: string;
   Media?: { MediaURL?: string; Order?: number }[];
 };
 
@@ -140,8 +154,10 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!res.ok) {
+    // Provider body stays in the server log; the public route echoes error messages.
     const body = await res.text();
-    throw new Error(`Trestle token request failed: ${res.status} ${body}`);
+    console.error(`[trestle] token request failed ${res.status}: ${body}`);
+    throw new Error(`Trestle token request failed with status ${res.status}.`);
   }
 
   const data = (await res.json()) as {
@@ -162,13 +178,27 @@ async function getAccessToken(): Promise<string> {
 // ---------------------------------------------------------------------------
 
 async function odataFetch<T>(path: string, params: Record<string, string> = {}): Promise<ODataResponse<T>> {
-  const token = await getAccessToken();
   const url = new URL(`${TRESTLE_ODATA_BASE}/${path}`);
   for (const [key, val] of Object.entries(params)) {
     url.searchParams.set(key, val);
   }
+  return odataFetchUrl<T>(url.toString());
+}
 
-  const res = await fetch(url.toString(), {
+/**
+ * Fetch an absolute OData URL. Used for the first page (built by odataFetch)
+ * and for every `@odata.nextLink` Trestle hands back, which is already a
+ * complete URL carrying the original $filter/$select/$skiptoken.
+ */
+async function odataFetchUrl<T>(url: string): Promise<ODataResponse<T>> {
+  if (!isTrestleOdataUrl(url)) {
+    // Never send the bearer token anywhere but Trestle, whatever a nextLink says.
+    console.error("[trestle] refusing to follow a link outside the OData base:", url);
+    throw new Error("Trestle returned a continuation link outside its API; request aborted.");
+  }
+  const token = await getAccessToken();
+
+  const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
@@ -178,11 +208,29 @@ async function odataFetch<T>(path: string, params: Record<string, string> = {}):
   });
 
   if (!res.ok) {
+    // Full URL (with $skiptoken) and body stay in the server log; the thrown
+    // message is what the public route echoes back, so it carries only the status.
     const body = await res.text();
-    throw new Error(`Trestle OData request failed [${path}]: ${res.status} ${body}`);
+    console.error(`[trestle] OData request failed ${res.status} [${url}]: ${body}`);
+    throw new Error(`Trestle OData request failed with status ${res.status}.`);
   }
 
   return (await res.json()) as ODataResponse<T>;
+}
+
+/** True only for URLs on Trestle's origin whose path is the OData base or a resource under it. */
+function isTrestleOdataUrl(url: string): boolean {
+  let parsed: URL;
+  let base: URL;
+  try {
+    parsed = new URL(url);
+    base = new URL(TRESTLE_ODATA_BASE);
+  } catch {
+    return false;
+  }
+  if (parsed.origin !== base.origin) return false;
+  const basePath = base.pathname.replace(/\/$/, "");
+  return parsed.pathname === basePath || parsed.pathname.startsWith(basePath + "/");
 }
 
 // ---------------------------------------------------------------------------
@@ -194,6 +242,15 @@ function normalise(raw: TrestleRawProperty): TrestleListing {
     .sort((a, b) => (a.Order ?? 0) - (b.Order ?? 0))
     .map((m) => m.MediaURL ?? "")
     .filter(Boolean);
+
+  const match = resolveCommunity({
+    latitude: raw.Latitude ?? null,
+    longitude: raw.Longitude ?? null,
+    subdivisionName: raw.SubdivisionName ?? null,
+    streetName: raw.StreetName ?? null,
+    postalCode: raw.PostalCode ?? null,
+    city: raw.City ?? null,
+  });
 
   return {
     listingKey: raw.ListingKey ?? "",
@@ -226,6 +283,10 @@ function normalise(raw: TrestleRawProperty): TrestleListing {
     waterfrontFeatures: raw.WaterfrontFeatures ?? [],
     dockFeatures: raw.DockFeatures ?? [],
     communityFeatures: raw.CommunityFeatures ?? [],
+    subdivisionName: raw.SubdivisionName ?? null,
+    mlsAreaMajor: raw.MLSAreaMajor ?? null,
+    communitySlug: match?.area.slug ?? null,
+    communityMatchedBy: match?.matchedBy ?? null,
     photos,
   };
 }
@@ -266,6 +327,8 @@ const BASE_SELECT = [
   "WaterfrontFeatures",
   "DockFeatures",
   "CommunityFeatures",
+  "SubdivisionName",
+  "MLSAreaMajor",
   "Media",
 ].join(",");
 
@@ -278,26 +341,74 @@ export type ListingsQueryOptions = {
   orderBy?: string;
 };
 
-/**
- * Fetch listings from Trestle.
- * Throws if Trestle credentials are not configured.
- */
-export async function getListings(options: ListingsQueryOptions = {}): Promise<TrestleListing[]> {
+/** One page of listings plus the link to the next page, when Trestle has more. */
+type ListingsPage = { listings: TrestleListing[]; nextLink: string | null };
+
+const MEDIA_EXPAND = "Media($select=MediaURL,Order;$orderby=Order asc;$top=10)";
+/** $select for a coarse candidate page: everything but Media. */
+const COARSE_SELECT = BASE_SELECT.split(",").filter((f) => f !== "Media").join(",");
+
+async function getListingsPage(
+  options: ListingsQueryOptions & { withMedia?: boolean } = {},
+): Promise<ListingsPage> {
   const {
     filter = "StandardStatus eq 'Active' and City eq 'Huntington Beach' and PropertyType eq 'Residential'",
     top = 24,
     orderBy = "ModificationTimestamp desc",
+    withMedia = true,
   } = options;
 
   const data = await odataFetch<TrestleRawProperty>("Property", {
     $filter: filter,
     $top: String(top),
     $orderby: orderBy,
-    $select: BASE_SELECT,
-    $expand: "Media($select=MediaURL,Order;$orderby=Order asc;$top=10)",
+    $select: withMedia ? BASE_SELECT : COARSE_SELECT,
+    ...(withMedia ? { $expand: MEDIA_EXPAND } : {}),
   });
 
-  return data.value.map(normalise);
+  return { listings: data.value.map(normalise), nextLink: data["@odata.nextLink"] ?? null };
+}
+
+/** Largest number of ListingKeys sent in one media lookup. */
+const MEDIA_BATCH = 50;
+
+/**
+ * Attach photos to listings fetched without the Media expansion. One request
+ * per MEDIA_BATCH survivors, so the coarse crawl never downloads photo rows
+ * for candidates that the precise filter throws away.
+ */
+async function attachMedia(listings: TrestleListing[]): Promise<TrestleListing[]> {
+  const keys = listings.map((l) => l.listingKey).filter(Boolean);
+  if (keys.length === 0) return listings;
+  const photosByKey = new Map<string, string[]>();
+  for (let i = 0; i < keys.length; i += MEDIA_BATCH) {
+    const batch = keys.slice(i, i + MEDIA_BATCH);
+    const data = await odataFetch<Pick<TrestleRawProperty, "ListingKey" | "Media">>("Property", {
+      $filter: batch.map((k) => `ListingKey eq ${odataLiteral(k)}`).join(" or "),
+      $top: String(batch.length),
+      $select: "ListingKey",
+      $expand: MEDIA_EXPAND,
+    });
+    for (const raw of data.value) {
+      if (!raw.ListingKey) continue;
+      photosByKey.set(
+        raw.ListingKey,
+        (raw.Media ?? [])
+          .sort((a, b) => (a.Order ?? 0) - (b.Order ?? 0))
+          .map((m) => m.MediaURL ?? "")
+          .filter(Boolean),
+      );
+    }
+  }
+  return listings.map((l) => ({ ...l, photos: photosByKey.get(l.listingKey) ?? l.photos }));
+}
+
+/**
+ * Fetch listings from Trestle.
+ * Throws if Trestle credentials are not configured.
+ */
+export async function getListings(options: ListingsQueryOptions = {}): Promise<TrestleListing[]> {
+  return (await getListingsPage(options)).listings;
 }
 
 /**
@@ -314,16 +425,168 @@ export async function getListing(listingKey: string): Promise<TrestleListing | n
   return raw ? normalise(raw) : null;
 }
 
+/** Trestle's maximum page size for the coarse area query. */
+const AREA_PAGE_SIZE = 200;
+/** Smallest coarse page worth a round trip; below this the per-request overhead dominates. */
+const AREA_MIN_PAGE_SIZE = 25;
+/** Candidates fetched per match wanted. The padded box and matcher clauses usually reject well under three in four. */
+const AREA_CANDIDATES_PER_MATCH = 4;
+/** Hard stop on candidates examined per request so a sparse area can never turn into an unbounded crawl. */
+const AREA_MAX_CANDIDATES = 600;
+
 /**
- * Huntington Harbour active waterfront listings.
+ * Coarse page size for a request wanting `top` matches: a few candidates per
+ * match, never smaller than a useful page and never above Trestle's maximum.
+ * Requesting more than `top` is what keeps the nextLink alive when the first
+ * page's candidates are rejected; requesting the maximum for every call
+ * would pull 200 records plus media for a `top=1` request.
  */
-export async function getHarbourListings(top = 12): Promise<TrestleListing[]> {
-  return getListings({
-    filter:
-      "StandardStatus eq 'Active' and City eq 'Huntington Beach' and PostalCode eq '92649' and PropertyType eq 'Residential'",
-    top,
-    orderBy: "ListPrice desc",
+function coarsePageSize(top: number): number {
+  return Math.min(AREA_PAGE_SIZE, Math.max(AREA_MIN_PAGE_SIZE, top * AREA_CANDIDATES_PER_MATCH));
+}
+
+export type AreaListingsResult = {
+  listings: TrestleListing[];
+  /**
+   * True when the candidate cap was hit while Trestle still had more
+   * candidates and fewer than `top` matches had been found. The listings
+   * returned are correct but may not be the complete set for the area;
+   * consumers should say so rather than present them as everything.
+   */
+  truncated: boolean;
+  /** Number of coarse candidate pages fetched from Trestle. */
+  pagesFetched: number;
+  /** Number of coarse candidates examined. */
+  candidatesExamined: number;
+};
+
+/**
+ * Listings inside a community or city coverage area.
+ *
+ * Two-pass: Trestle gets a coarse OData filter (bounding box + postal code
+ * for communities, City field + postal codes for cities) so the feed only
+ * returns candidates, then every candidate is checked against the page's
+ * polygon and CRMLS subdivision matchers in `resolveCommunity`. A parent
+ * area (Huntington Harbour) returns listings from every child (all five
+ * islands plus Mainland), which is what the dashboards expect.
+ *
+ * Because the coarse filter is wider than the polygon, a single page of
+ * candidates can hold fewer than `top` matches even when more exist. Pages
+ * are followed through `@odata.nextLink` until `top` matches are collected
+ * or the feed is exhausted. The crawl is bounded two ways: the page size
+ * scales with `top` (see coarsePageSize) so a small request stays small,
+ * and AREA_MAX_CANDIDATES caps the records examined per request, enforced
+ * per candidate so a page straddling the cap is never fully processed; when
+ * the cap stops the loop early the result is flagged `truncated` so callers
+ * never present an under-filled page as the whole area. Candidate pages are
+ * fetched without the Media expansion and photos are attached only to the
+ * survivors, so rejected candidates cost no photo rows. Every page fetch
+ * goes through Next's data cache (revalidate 300s), so repeated dashboard
+ * loads of the same area reuse the same Trestle responses. Order is
+ * preserved, so `orderBy` applies across the whole result, not just the
+ * first page.
+ */
+export type PolygonMatchPolicy =
+  /** Pin-only matches count for every area, including rings still marked approximate (default). */
+  | "all"
+  /** Pin-only matches count only for areas whose ring has been reviewed (`precision: "verified"`). */
+  | "verified-only";
+
+export async function getListingsInArea(
+  slug: string,
+  options: {
+    status?: string;
+    propertyType?: string;
+    top?: number;
+    orderBy?: string;
+    /**
+     * How to treat listings that reach a page only through the polygon (no
+     * CRMLS subdivision or street match). Matchers are checked first and
+     * decide most CRMLS records; the polygon is the fallback for pin-only
+     * records. Every listing carries `communityMatchedBy` so a dashboard can
+     * flag polygon matches, and `area.precision` says whether the ring has
+     * been reviewed. "verified-only" drops polygon matches on approximate
+     * rings for callers that would rather show fewer listings than risk a
+     * boundary miss before the geojson.io review pass. Only applies to
+     * community targets; city targets are matcher-routed.
+     */
+    polygonMatches?: PolygonMatchPolicy;
+  } = {},
+): Promise<AreaListingsResult> {
+  const area = getGeoArea(slug);
+  if (!area) throw new Error(`Unknown coverage area: ${slug}`);
+
+  const {
+    status = "Active",
+    propertyType = "Residential",
+    top: topOption = 48,
+    orderBy = "ModificationTimestamp desc",
+    polygonMatches = "all",
+  } = options;
+  // Defensive normalisation for callers other than the route: a non-finite or
+  // non-positive target would otherwise become `$top=NaN` or an off-by-one stop.
+  const top = Number.isFinite(topOption) && topOption >= 1 ? Math.floor(topOption) : 48;
+
+  const filter = [
+    `StandardStatus eq ${odataLiteral(status)}`,
+    `PropertyType eq ${odataLiteral(propertyType)}`,
+    odataFilterForArea(area),
+  ]
+    .filter(Boolean)
+    .join(" and ");
+
+  const belongs = (l: TrestleListing) => {
+    const ok = listingBelongsTo(slug, {
+      latitude: l.latitude,
+      longitude: l.longitude,
+      subdivisionName: l.subdivisionName,
+      streetName: l.streetName,
+      postalCode: l.postalCode,
+      city: l.city,
+    });
+    if (!ok) return false;
+    // City targets are matcher-routed (resolveCity); a community ring's review
+    // state has no bearing on whether a listing belongs to the city.
+    if (area.kind === "community" && polygonMatches === "verified-only" && l.communityMatchedBy === "polygon") {
+      const matched = l.communitySlug ? getGeoArea(l.communitySlug) : undefined;
+      return matched?.precision === "verified";
+    }
+    return true;
+  };
+
+  // Candidates are fetched without Media; photos are attached only to the
+  // listings that survive the precise filter (see attachMedia).
+  const matched: TrestleListing[] = [];
+  let pagesFetched = 1;
+  let candidatesExamined = 0;
+  const finish = async (truncated: boolean): Promise<AreaListingsResult> => ({
+    listings: await attachMedia(matched),
+    truncated,
+    pagesFetched,
+    candidatesExamined,
   });
+
+  let page = await getListingsPage({
+    filter,
+    top: Math.min(coarsePageSize(top), AREA_MAX_CANDIDATES),
+    orderBy,
+    withMedia: false,
+  });
+  for (;;) {
+    for (const l of page.listings) {
+      // The cap is enforced per candidate, not per page: a page that straddles
+      // it is left partly unexamined and the result says so.
+      if (candidatesExamined >= AREA_MAX_CANDIDATES) return finish(true);
+      candidatesExamined++;
+      if (belongs(l)) matched.push(l);
+      if (matched.length >= top) return finish(false);
+    }
+    if (!page.nextLink) return finish(false);
+    if (candidatesExamined >= AREA_MAX_CANDIDATES) return finish(true);
+    const next = await odataFetchUrl<TrestleRawProperty>(page.nextLink);
+    page = { listings: next.value.map(normalise), nextLink: next["@odata.nextLink"] ?? null };
+    pagesFetched++;
+  }
 }
 
 /**

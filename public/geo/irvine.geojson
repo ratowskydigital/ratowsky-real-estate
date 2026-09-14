@@ -1,0 +1,40 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "irvine",
+      "properties": {
+        "slug": "irvine",
+        "name": "Irvine",
+        "kind": "city",
+        "parentSlug": null,
+        "precision": "approximate",
+        "reviewedOn": null,
+        "boundaryNote": "CRMLS City = Irvine.",
+        "subdivisionNames": [],
+        "streetNames": [],
+        "postalCodes": [
+          "92602",
+          "92603",
+          "92604",
+          "92606",
+          "92612",
+          "92614",
+          "92617",
+          "92618",
+          "92619",
+          "92620",
+          "92623"
+        ],
+        "mlsCity": "Irvine",
+        "mlsCityAliases": [],
+        "umbrellaMlsCity": null,
+        "coverage": "matchers",
+        "centroid": null,
+        "pageUrl": "/cities/irvine"
+      },
+      "geometry": null
+    }
+  ]
+}

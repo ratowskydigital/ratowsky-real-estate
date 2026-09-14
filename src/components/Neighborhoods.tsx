@@ -1,14 +1,18 @@
 import Link from "next/link";
-import { communities } from "@/content/communities";
+import { listPublishedCommunities } from "@/content/communities";
+
+const numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
 
 export function Neighborhoods() {
+  const communities = listPublishedCommunities().filter((c) => !c.parentCommunitySlug);
+  const count = numberWords[communities.length] ?? String(communities.length);
   return (
     <section className="border-b border-hairline">
       <div className="max-w-landing mx-auto px-6 lg:px-10 py-section">
         <div className="max-w-2xl">
           <p className="eyebrow">Where we work</p>
           <h2 className="mt-4 font-serif text-2xl leading-tight tracking-tightest">
-            Six communities, in detail.
+            {count.charAt(0).toUpperCase() + count.slice(1)} Huntington Beach communities, in detail.
           </h2>
           <p className="mt-4 text-ink-soft text-md">
             Born and raised in HB. We know which dock fits a 50-foot boat, which streets flood in a

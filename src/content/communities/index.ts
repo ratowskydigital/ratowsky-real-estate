@@ -12,10 +12,14 @@ import { davenportIsland } from "./davenport-island";
 import { gilbertIsland } from "./gilbert-island";
 import { humboldtIsland } from "./humboldt-island";
 import { admiraltyIsland } from "./admiralty-island";
+import { harbourMainland } from "./harbour-mainland";
+import { dutchHavenMarina } from "./dutch-haven-marina";
 
 // -----------------------------------------------------------------------------
-// Stub helper — used until each canonical brief is written by the autoblogger
-// or hand-authored. Stubs render the "in-progress" template with a contact CTA.
+// Stub helper — kept for future communities. A stub renders the "in-progress"
+// template, is noindexed by the route, and is left out of the sitemap, so it
+// can never derank the site. No stubs are live today: every community in the
+// master list below is a full published brief.
 // -----------------------------------------------------------------------------
 export function communityStub(args: {
   slug: string;
@@ -75,16 +79,7 @@ export const communities: Community[] = [
   bolsaLandmark,
   downtownPier,
   sunsetBeach,
-  communityStub({
-    slug: "dutch-haven-marina",
-    name: "Dutch Haven Marina",
-    parentCity: "Huntington Beach",
-    parentCitySlug: "huntington-beach",
-    oneLine:
-      "A small, tucked-in bayside neighborhood at the southern end of Huntington Beach with quiet streets and a tight community feel.",
-    directAnswer:
-      "Dutch Haven Marina is a compact residential neighborhood at the southern end of Huntington Beach, California, set just inland of the Pacific Coast Highway between the wetlands and downtown HB. Inventory is generally 1960s and 1970s single-family homes on modest lots, and the neighborhood's price band typically falls between the entry-level HB inland tier and the downtown coastal cottages.",
-  }),
+  dutchHavenMarina,
 
   // Huntington Harbour — sub-communities (islands + mainland)
   trinidadIsland,
@@ -92,17 +87,7 @@ export const communities: Community[] = [
   gilbertIsland,
   humboldtIsland,
   admiraltyIsland,
-  communityStub({
-    slug: "harbour-mainland",
-    name: "Harbour Mainland",
-    parentCity: "Huntington Beach",
-    parentCitySlug: "huntington-beach",
-    parentCommunitySlug: "huntington-harbour",
-    oneLine:
-      "The non-island section of Huntington Harbour, covering the Cape, Sea Bridge, and adjacent streets, and the entry point for buyers who want Harbour life without an island address.",
-    directAnswer:
-      "Harbour Mainland is the non-island residential section of Huntington Harbour in northwest Huntington Beach, California, including the Cape, Sea Bridge, and adjacent street grids. It functions as the entry point to Harbour living, with most inventory pricing between $1.5M and $3M and a mix of waterfront and interior lots.",
-  }),
+  harbourMainland,
 ];
 
 // -----------------------------------------------------------------------------

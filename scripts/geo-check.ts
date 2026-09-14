@@ -1,0 +1,147 @@
+/**
+ * Coverage validator for the geo layer.
+ *
+ *   npm run geo:check
+ *
+ * Fails the build (exit 1) when:
+ *   - a community or city page has no GeoArea
+ *   - a GeoArea points at a slug with no page
+ *   - a child area is not fully inside its parent (e.g. an island outside the
+ *     Harbour): every vertex inside and no edge crossing or leaving the parent
+ *   - a ring is degenerate (fewer than 3 vertices or zero area)
+ *   - sibling community polygons share interior area (edge crossing or a vertex
+ *     strictly inside the other); touching along a shared boundary is allowed
+ *   - the community's declared parentCommunitySlug disagrees with the geo parentSlug
+ */
+import { communities } from "../src/content/communities";
+import { cities } from "../src/content/cities";
+import { geoAreas, getGeoArea } from "../src/content/geo";
+import {
+  areaContains,
+  areasOverlap,
+  pointInArea,
+  ringSignedArea,
+  descendantSlugs,
+} from "../src/lib/geo";
+
+const errors: string[] = [];
+const warnings: string[] = [];
+
+// 1. Every page has coverage, every coverage has a page.
+for (const c of communities) {
+  const g = getGeoArea(c.slug);
+  if (!g) errors.push(`community "${c.slug}" has no GeoArea`);
+  else if (g.kind !== "community") errors.push(`GeoArea "${c.slug}" should be kind=community`);
+  else {
+    const expectedParent = c.parentCommunitySlug ?? c.parentCitySlug;
+    if (g.parentSlug !== expectedParent) {
+      errors.push(
+        `GeoArea "${c.slug}" parentSlug=${g.parentSlug} but the community page says ${expectedParent}`,
+      );
+    }
+    if (g.polygons.length === 0) errors.push(`community "${c.slug}" has no polygon`);
+  }
+}
+for (const city of cities) {
+  const g = getGeoArea(city.slug);
+  if (!g) errors.push(`city "${city.slug}" has no GeoArea`);
+  else if (g.kind !== "city") errors.push(`GeoArea "${city.slug}" should be kind=city`);
+  else if (!g.mlsCity) errors.push(`city "${city.slug}" has no mlsCity matcher`);
+}
+for (const g of geoAreas) {
+  const hasPage =
+    g.kind === "city" ? cities.some((c) => c.slug === g.slug) : communities.some((c) => c.slug === g.slug);
+  if (!hasPage) errors.push(`GeoArea "${g.slug}" has no matching page`);
+  if (g.parentSlug && !getGeoArea(g.parentSlug)) {
+    errors.push(`GeoArea "${g.slug}" parentSlug "${g.parentSlug}" does not exist`);
+  }
+}
+
+// 2. Ring sanity.
+for (const g of geoAreas) {
+  g.polygons.forEach((ring, i) => {
+    if (ring.length < 3) errors.push(`${g.slug} polygon[${i}] has fewer than 3 vertices`);
+    if (Math.abs(ringSignedArea(ring)) < 1e-9) errors.push(`${g.slug} polygon[${i}] has zero area`);
+    for (const [lng, lat] of ring) {
+      if (lat < 33.3 || lat > 33.95 || lng < -118.3 || lng > -117.5) {
+        errors.push(`${g.slug} polygon[${i}] vertex [${lng}, ${lat}] is outside Orange County`);
+      }
+    }
+  });
+}
+
+// 3. Containment — every child fully inside its parent (vertices and edges).
+for (const g of geoAreas) {
+  if (!g.parentSlug) continue;
+  const parent = getGeoArea(g.parentSlug);
+  if (!parent) continue;
+  if (g.polygons.length === 0) continue;
+  if (parent.polygons.length === 0) {
+    // Matcher-only parents (every city except Huntington Beach today) cannot
+    // prove containment. Surface it so nobody assumes the check ran.
+    warnings.push(
+      `"${g.slug}" containment in "${parent.slug}" cannot be verified: the parent has no polygon. Add a coarse outline to the parent to enforce it.`,
+    );
+    continue;
+  }
+  if (!areaContains(parent, g)) {
+    const bad = g.polygons
+      .flatMap((ring, i) => ring.filter((v) => !pointInArea(v, parent)).map((v) => `poly${i} [${v[0]}, ${v[1]}]`))
+      .slice(0, 4)
+      .join(", ");
+    const why = bad ? `outside vertices: ${bad}` : "an edge crosses or leaves the parent boundary";
+    errors.push(`"${g.slug}" is not fully inside "${parent.slug}" — ${why}`);
+  }
+}
+
+// 4. Overlap — siblings may touch along a boundary but never share area, and a
+//    community may only overlap its own ancestors or descendants. Order-dependent
+//    routing is exactly the bug this prevents: a pin in a shared region would be
+//    assigned by array order rather than by geography.
+const bySlug = new Map(geoAreas.map((g) => [g.slug, g] as const));
+const communitiesOnly = geoAreas.filter((g) => g.kind === "community");
+const related = (a: string, b: string) => a === b || descendantSlugs(a).includes(b) || descendantSlugs(b).includes(a);
+for (let i = 0; i < communitiesOnly.length; i++) {
+  for (let j = i + 1; j < communitiesOnly.length; j++) {
+    const a = communitiesOnly[i];
+    const b = communitiesOnly[j];
+    if (related(a.slug, b.slug)) continue;
+    if (areasOverlap(a, b)) {
+      const kind = a.parentSlug === b.parentSlug ? "sibling" : "unrelated";
+      errors.push(`"${a.slug}" and "${b.slug}" share interior area — ${kind} polygons must be disjoint`);
+    }
+  }
+}
+
+// 5. Report: what each parent covers.
+console.log("Coverage tree:");
+for (const g of geoAreas.filter((a) => !a.parentSlug)) {
+  const print = (slug: string, depth: number) => {
+    const a = bySlug.get(slug)!;
+    const tag = a.precision === "verified" ? "" : "  (approximate)";
+    console.log(`${"  ".repeat(depth)}- ${a.name} [${a.slug}]${tag}`);
+    for (const child of geoAreas.filter((x) => x.parentSlug === slug)) print(child.slug, depth + 1);
+  };
+  print(g.slug, 0);
+}
+const harbour = getGeoArea("huntington-harbour");
+if (harbour) {
+  const kids = descendantSlugs("huntington-harbour");
+  console.log(`\nHuntington Harbour covers ${kids.length} sub-areas: ${kids.join(", ")}`);
+}
+
+const approx = geoAreas.filter((a) => a.precision === "approximate" && a.polygons.length > 0);
+if (approx.length > 0) {
+  warnings.push(
+    `${approx.length} polygon(s) are still marked "approximate": ${approx.map((a) => a.slug).join(", ")}. Review them in geojson.io (npm run geo:export) and set precision: "verified" with a reviewedOn date once checked.`,
+  );
+}
+
+console.log("");
+for (const w of warnings) console.log(`WARN  ${w}`);
+for (const e of errors) console.log(`ERROR ${e}`);
+if (errors.length > 0) {
+  console.log(`\n${errors.length} error(s).`);
+  process.exit(1);
+}
+console.log(`geo:check passed — ${geoAreas.length} areas, ${warnings.length} warning(s).`);
