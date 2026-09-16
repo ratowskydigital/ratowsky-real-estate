@@ -11,6 +11,33 @@ deployment configuration, no `cf:*` scripts in `package.json`, and frozen
 dependencies. Do not propose changes here; open them in the canonical
 repository. The code comments that mention Vercel are from the old host.
 
+## Local facts that are settled: Huntington Beach has no Mello-Roos
+
+**There is no Mello-Roos in Huntington Beach.** The city was substantially built
+out before the 1982 Community Facilities Act created the mechanism, so no CFD was
+ever formed over its housing stock, and that includes the newer coastal projects
+writers reach for as exceptions: Brightwater, Seacliff, Pacific City, and
+Huntington Harbour do not carry it either.
+
+Applies to every surface: website copy, listing remarks, blogs, video scripts,
+social captions, email, CRM touches, BOFU research, and content briefs.
+
+- Do not state it, do not hedge it ("confirm there is no Mello-Roos on the
+  parcel"), and do not list it as a cost to budget for. The hedge is as wrong as
+  the assertion, because it tells a reader the risk is real.
+- Do not sell its absence as a feature either. Nothing in Huntington Beach has
+  it, so "no Mello-Roos" is not a differentiator and implies neighbors carry it.
+- **It is real elsewhere in Orange County**, so this is not a word filter. Irvine
+  villages built after the mid-1980s, Talega in San Clemente, Sea Summit and
+  Marblehead, Pacifica San Juan, and several Newport Coast villages genuinely
+  carry district assessments. That content should stay accurate.
+- Exactly two pages on the live site answer the question, by design: the journal
+  article `/blog/mello-roos-huntington-beach-neighborhoods` and the FAQ on
+  `/cities/huntington-beach`. Do not add a third, and do not add a denial
+  anywhere else.
+- For a Huntington Beach carrying-cost line, write HOA dues and insurance. Those
+  are the two figures that actually move between homes here.
+
 ## Hosting: Cloudflare, not Vercel (as of September 2026)
 
 Every site in Justin's estate deploys to **Cloudflare Workers** on the

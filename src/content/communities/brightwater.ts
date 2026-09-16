@@ -45,7 +45,7 @@ export const brightwater: Community = {
       eyebrow: "HOA and governance",
       heading: "The rule layer, the fees, and what the HOA actually controls.",
       paragraphs: [
-        "Brightwater operates under two HOA layers. The master community HOA governs the perimeter fencing, the landscaped paseos, the entry gates, and the community parks. Individual product-line HOAs govern the streetscapes and architectural standards specific to each collection. Both carry monthly dues. The combined monthly HOA cost runs between $300 and $650 depending on the product line, and Mello-Roos Community Facilities District bonds are still active on most of the community — a meaningful add to monthly carrying cost that buyers frequently underestimate when comparing Brightwater against older non-CFD communities.",
+        "Brightwater operates under two HOA layers. The master community HOA governs the perimeter fencing, the landscaped paseos, the entry gates, and the community parks. Individual product-line HOAs govern the streetscapes and architectural standards specific to each collection. Both carry monthly dues. The combined monthly HOA cost runs between $300 and $650 depending on the product line — a meaningful add to monthly carrying cost that buyers frequently underestimate when comparing Brightwater against older non-CFD communities.",
         "The Architectural Review Committee controls the exterior of every home. Paint colors, landscaping material, additions, hardscape changes, and window or door replacements all require prior approval. The review timeline is typically 30 days. This is not an informal process — approvals are documented and non-compliant modifications have triggered enforcement actions on multiple Brightwater streets. Buyers planning renovations need to run the scope through the ARC before they write a contract contingent on a specific modification.",
         "What the HOA does well: the community looks exactly as it was designed to look after fifteen years. There are no derelict properties, no architectural outliers, and no hodge-podge infill. For buyers who want a maintained, consistent community environment, Brightwater delivers. For buyers who want to paint their house an unconventional color or add a detached garage structure without approval, it is the wrong community.",
       ],
@@ -54,7 +54,6 @@ export const brightwater: Community = {
         items: [
           "Current CC&Rs, bylaws, and Rules and Regulations for both the master HOA and the product-line sub-HOA.",
           "Most recent HOA financial statements and reserve fund study.",
-          "Active Mello-Roos CFD assessment amount and remaining bond term.",
           "Any open ARC violations or enforcement items on the specific property.",
           "ARC approval history for any modifications visible on the property.",
           "Master HOA meeting minutes from the prior twelve months.",
@@ -89,10 +88,6 @@ export const brightwater: Community = {
       a: "The combined master HOA and product-line sub-HOA fees run between $300 and $650 per month depending on the specific collection and lot. The Premiere bluff-edge collection carries higher combined dues than interior product lines. These figures are as of 2026 and should be verified through current HOA disclosure documents during escrow.",
     },
     {
-      q: "Are Mello-Roos taxes still active in Brightwater?",
-      a: "Yes. Most of Brightwater falls within a Mello-Roos Community Facilities District with bonds that are still active as of 2026. Annual CFD assessments are property-specific and run several thousand dollars per year on top of base property taxes. The current annual assessment for any specific parcel is listed in the tax records and should be confirmed before an offer is submitted.",
-    },
-    {
       q: "Can I rent my Brightwater home on Airbnb or VRBO?",
       a: "Short-term rentals of less than 30 days are generally prohibited under the Brightwater CC&Rs. The master HOA has actively enforced this rule. Long-term rentals of 30 days or more are permitted under the CC&Rs, though the City of Huntington Beach has its own business-license and rental registration requirements that apply independently.",
     },
@@ -123,10 +118,6 @@ export const brightwater: Community = {
       label: "Huntington Beach Union High School District — School Finder",
       url: "https://www.hbuhsd.edu",
     },
-    {
-      label: "California Mello-Roos Community Facilities Act — State Legislative Counsel",
-      url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=53311.&lawCode=GOV",
-    },
   ],
 
   related: ["seacliff", "huntington-harbour", "bolsa-landmark"],
@@ -134,7 +125,7 @@ export const brightwater: Community = {
   cta: {
     eyebrow: "Brightwater",
     title: "Thinking about Brightwater? Let's talk view tiers and price stack.",
-    body: "The difference between a bluff-edge home and an interior Brightwater home is often $400k to $800k — and the MLS description rarely tells you which one you are looking at. Send us the address and we will give you the straight read on view quality, HOA exposure, Mello-Roos burden, and what the market will actually pay for it.",
+    body: "The difference between a bluff-edge home and an interior Brightwater home is often $400k to $800k — and the MLS description rarely tells you which one you are looking at. Send us the address and we will give you the straight read on view quality, HOA exposure, and what the market will actually pay for it.",
     primaryHref: "/contact",
     primaryLabel: "Request a Brightwater read",
   },

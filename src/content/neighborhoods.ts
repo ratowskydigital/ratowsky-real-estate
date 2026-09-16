@@ -95,7 +95,6 @@ export const neighborhoods: Neighborhood[] = [
     ceilings: "$3.5M–$8M for Crystal Cove condo; $8M–$30M+ for custom estate.",
     insiderNotes: [
       "Buyer pool is national and international — listings require global Compass network distribution.",
-      "Mello-Roos taxes vary substantially by tract; affects monthly carry calculations.",
       "Pelican Hill HOA has different short-term rental rules than Crystal Cove.",
     ],
   },

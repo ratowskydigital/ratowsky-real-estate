@@ -55,7 +55,6 @@ export const seacliff: Community = {
           "Lot orientation — fairway, interior, cul-de-sac, or PCH-adjacent. Each orientation has a different comp set and a different resale demand profile.",
           "Garage capacity — three-car versus four-car versus motor court is a measurable price line in this market.",
           "HOA architectural-review status — open compliance items must be resolved before closing or disclosed in writing.",
-          "Mello-Roos status if applicable — the original Seacliff tracts are largely outside Mello-Roos, but newer adjacent developments are not.",
           "Bluff stability and drainage — the western edge of the community sits above the wetlands and has its own grading-and-drainage considerations.",
           "Roof age, HVAC age, and electrical panel — common deferred-maintenance categories on the 1980s and 1990s housing stock.",
         ],
@@ -108,7 +107,7 @@ export const seacliff: Community = {
           "Define the priorities in writing — gate, fairway, garage capacity, school zoning, ocean view, lot size. Match against the shortlist before scheduling tours.",
           "Pull the HOA package early — CC&Rs, dues, any open architectural-review items, recent special assessments.",
           "Verify school zoning at the address level if school district matters; Seacliff straddles attendance boundaries and the line is not always intuitive.",
-          "Pull the property tax and Mello-Roos status — most original Seacliff is non-Mello-Roos, but adjacent newer tracts are not, and the carrying-cost difference is real.",
+          "Pull the parcel’s current secured tax bill and confirm the full monthly carry before you write.",
           "Order a structural pre-inspection if the home is on or near the bluff edge — drainage, retaining-wall condition, and slope stability matter more here than on flat interior lots.",
           "Ask the listing agent for the Compass Private Exclusive launch date and the agent-network feedback log if the home moved through the Compass demand-test phase.",
           "Walk the gate community at sunset and at 7:30 a.m. on a weekday. The neighborhood reads differently at different hours and that read is part of the buy decision.",
@@ -133,7 +132,7 @@ export const seacliff: Community = {
       paragraphs: [
         "School district zoning in Seacliff is split. Most addresses fall inside the Huntington Beach City Elementary district at the K-8 level and Huntington Beach Union High School District for high school. Specific elementary-school assignment depends on the street and should be verified at the address level rather than assumed by neighborhood name. We provide this verification as part of buyer-side diligence, not as a generic answer.",
         "HOA dues vary widely by enclave. The smaller patio-home and gated communities inside Seacliff carry monthly dues that include limited maintenance and sometimes a guard-staffed gate. The larger estate streets with their own HOA carry separate dues. Some streets carry no HOA at all and are governed by city zoning only. Before any Seacliff offer we pull the specific HOA package for the address, because the answer to 'what are the dues' is genuinely 'it depends.'",
-        "Property tax base varies. Original Seacliff tracts are non-Mello-Roos and carry a base California property tax assessment. Newer adjacent developments built in the late 1990s and 2000s do carry Mello-Roos special tax districts that can add a meaningful annual cost on top of base property tax. This is one of the most-missed line items in Seacliff buyer underwriting and we make sure to surface it before the offer is written, not after.",
+        "Property tax base varies. Seacliff tracts carry a base California property tax assessment. This is one of the most-missed line items in Seacliff buyer underwriting and we make sure to surface it before the offer is written, not after.",
       ],
     },
     {
@@ -177,7 +176,7 @@ export const seacliff: Community = {
     {
       name: "Inland Seacliff (north of Garfield)",
       profile:
-        "Adjacent newer tracts that share the Seacliff name in casual usage but operate under different HOAs and tax structures. Mello-Roos is more common here than in original Seacliff.",
+        "Adjacent newer tracts that share the Seacliff name in casual usage but operate under different HOAs.",
     },
   ],
 
@@ -193,10 +192,6 @@ export const seacliff: Community = {
     {
       q: "What is the Huntington Club?",
       a: "The Huntington Club is the private 18-hole golf course that anchors the Seacliff community. It is a country club with golf, tennis, dining, and social membership. Membership is independent of buying a Seacliff home — living in Seacliff does not automatically grant club membership, and joining the club does not require living in Seacliff.",
-    },
-    {
-      q: "Are Seacliff homes on Mello-Roos?",
-      a: "Most original Seacliff tract homes built in the late 1970s and 1980s are not subject to Mello-Roos special tax districts. Some newer adjacent developments built in the late 1990s and 2000s are. Mello-Roos status varies block by block and should always be confirmed at the address level before an offer is written.",
     },
     {
       q: "What schools serve Seacliff?",
