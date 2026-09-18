@@ -11,6 +11,39 @@ deployment configuration, no `cf:*` scripts in `package.json`, and frozen
 dependencies. Do not propose changes here; open them in the canonical
 repository. The code comments that mention Vercel are from the old host.
 
+## Mello-Roos and CFD factual guardrail
+
+**Huntington Beach cannot be described with a universal Mello-Roos yes/no rule.**
+Primary city records identify residential CFD 1990-1 (Goldenwest/Ellis) and a
+2024 city contract covering administration of CFDs 2000-1, 2002-1 and 2003-1.
+An earlier version of this rule asserted the city has none. That was wrong, and
+it was corrected on 2026-09-18 against those records.
+
+Keep three facts separate: **district existence** (the legal boundary and
+authority), a **current levy** (what is presently billed to a parcel), and
+**outstanding bonds or remaining terms** (how long an authorized assessment may
+continue). A citywide shortcut can be wrong in either direction.
+
+Applies to every surface: website copy, listing remarks, blogs, video scripts,
+social captions, email, CRM touches, BOFU research, and content briefs.
+
+- Do not infer a parcel's liability from the city, the neighborhood, the build
+  year, or boilerplate listing language. Do not assert citywide presence, and do
+  not assert citywide absence.
+- Do not sell absence as a feature, and do not tell a reader to budget for it as
+  a given. Both are unsourced claims about a specific parcel.
+- Point readers at current official records: the
+  [Orange County Treasurer-Tax Collector Mello-Roos guidance](https://www.octreasurer.gov/melloroos),
+  the current secured tax bill for the address or APN, any Notice of Special Tax,
+  and the relevant Huntington Beach City Clerk district records.
+- Keep tract-specific claims only when individually sourced.
+- Do not store homeowner names, raw tax bills, or private parcel data.
+- On the live site, `/blog/mello-roos-huntington-beach-neighborhoods` explains
+  this verification framework rather than asserting absence, and `validate.mjs`
+  rejects unsupported universal assertions in either direction. Source note:
+  `docs/research/2026-09-18-mello-roos-huntington-beach-sources.md` in
+  `Auto-Authority/client-justin-ratowsky`.
+
 ## Hosting: Cloudflare, not Vercel (as of September 2026)
 
 Every site in Justin's estate deploys to **Cloudflare Workers** on the

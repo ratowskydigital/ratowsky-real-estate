@@ -8,7 +8,7 @@ export const bolsaLandmark: Community = {
   oneLine:
     "A quietly-traded mid-century pocket north of the Bolsa Chica wetlands, with strong buyer demand for single-story floor plans, deep lots, and easy access to the reserve trails.",
   directAnswer:
-    "Bolsa Landmark is a post-war single-family neighborhood in northwest Huntington Beach, California, developed primarily through the late 1950s and 1960s. Homes are mostly single-story on deeper lots, built before the city's current coastal design codes, with larger yards and quieter street patterns than the more recently developed communities to the south. No HOA, no Mello-Roos, and no architectural review — which is exactly what draws a consistent buyer pool of first-time owners, families, and downsizers who want value inside the Huntington Beach school system without the carrying-cost burden of newer master-planned communities.",
+    "Bolsa Landmark is a post-war single-family neighborhood in northwest Huntington Beach, California, developed primarily through the late 1950s and 1960s. Homes are mostly single-story on deeper lots, built before the city's current coastal design codes, with larger yards and quieter street patterns than the more recently developed communities to the south. No HOA and no architectural review — which is exactly what draws a consistent buyer pool of first-time owners, families, and downsizers who want value inside the Huntington Beach school system without the carrying-cost burden of newer master-planned communities.",
   heroImage: "/images/drone/sand-overhead.jpg",
   heroAlt:
     "Aerial overhead view of the Huntington Beach coastline and adjacent neighborhoods.",
@@ -42,10 +42,10 @@ export const bolsaLandmark: Community = {
     },
     {
       id: "no-hoa",
-      eyebrow: "No HOA. No Mello-Roos.",
+      eyebrow: "No HOA.",
       heading: "The carrying-cost advantage over newer communities.",
       paragraphs: [
-        "Bolsa Landmark was built before master-planned community governance was standard. There is no homeowners association, no CC&Rs, no architectural review committee, and no Mello-Roos Community Facilities District. The carrying cost is property tax, insurance, and utilities — nothing else. For a buyer comparing Bolsa Landmark against Brightwater or a gated Seacliff enclave, the monthly cost difference after accounting for HOA dues and CFD assessments is frequently $600 to $1,000 per month. That is the invisible premium buyers pay for newer construction and community governance.",
+        "Bolsa Landmark was built before master-planned community governance was standard. There is no homeowners association, no CC&Rs, and no architectural review committee. The carrying cost is property tax, insurance, and utilities — nothing else. For a buyer comparing Bolsa Landmark against Brightwater or a gated Seacliff enclave, the monthly cost difference after accounting for HOA dues and CFD assessments is frequently $600 to $1,000 per month. That is the invisible premium buyers pay for newer construction and community governance.",
         "No HOA means no restriction on landscaping, exterior paint, additions, or modifications within City of Huntington Beach code. A Bolsa Landmark owner can repaint their house, add a carport, plant a hedge, or install a driveway gate without an approval process beyond the standard city building permit. For buyers who value autonomy over their property and have been burned by HOA processes before, this is a genuine lifestyle feature, not a marketing line.",
         "The flip side of no HOA is no landscaping enforcement on neighbors' properties. Bolsa Landmark has the full spectrum — meticulously maintained homes next to ones that have not been painted since the Clinton administration. We do a street walk on every Bolsa Landmark listing before we advise a seller on price strategy because the immediate neighbor condition materially affects first-impression buyer response.",
       ],

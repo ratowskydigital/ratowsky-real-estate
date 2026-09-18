@@ -48,7 +48,7 @@ export const seacliffOnTheGreens: Community = {
       paragraphs: [
         "Seacliff on the Greens operates under the Seacliff master HOA plus a sub-association specific to this section of the community. Combined monthly dues run between $250 and $450 depending on the specific street and sub-association. The HOA manages the perimeter walls, the community entry gates, and the greenbelts. Interior maintenance — front yard landscaping in some sections, perimeter lighting — is included depending on the specific sub-association CC&Rs.",
         "The architectural review committee controls exterior modifications. This includes paint, roofing, landscape additions, hardscape changes, solar installations, EV charger installations, window replacements, and any structural additions. The review process is not informal — decisions are documented, timelines are stated, and non-compliant modifications have been subject to enforcement in this community. Buyers planning a renovation should run their full scope through the ARC before they commit to a contract contingent on a specific improvement timeline.",
-        "No Mello-Roos applies to most of Seacliff on the Greens — this is a meaningful carrying-cost advantage over Brightwater to the north, where CFD bonds are still active. The absence of a Mello-Roos assessment is worth $150 to $400 per month in carrying-cost savings depending on the assessed value. We note this in every buyer presentation for this community because it gets missed in basic MLS searches.",
+        "We note this in every buyer presentation for this community because it gets missed in basic MLS searches.",
       ],
     },
     {
@@ -77,10 +77,6 @@ export const seacliffOnTheGreens: Community = {
     {
       q: "What is the price range for a home in Seacliff on the Greens?",
       a: "As of 2026, Seacliff on the Greens homes trade between approximately $1.2M for smaller original-condition homes on interior lots and $2.1M for fully updated four-bedroom homes on golf-course-view lots. The fairway premium is real — a renovated home backing directly to a fairway will trade at the top of the range or above it. These figures are derived from recent closed comps and should be verified with current data.",
-    },
-    {
-      q: "Is there Mello-Roos in Seacliff on the Greens?",
-      a: "Most of Seacliff on the Greens does not carry an active Mello-Roos Community Facilities District assessment. This is a meaningful carrying-cost advantage over newer communities like Brightwater to the north. The specific tax burden for any parcel should be confirmed in the property tax records and the preliminary title report during escrow.",
     },
     {
       q: "What does the HOA actually control in this community?",

@@ -60,7 +60,7 @@ const steps = [
   {
     n: "03",
     title: "Showings and dock checks",
-    body: "On the Harbour and Sunset Beach, every showing includes a dock measurement and tide check. On Edwards Hill and Newport Coast, every showing includes the HOA bylaws and Mello-Roos breakdown. Inland or coastal, every showing ends with the comp set written down and the price-per-foot math run.",
+    body: "On the Harbour and Sunset Beach, every showing includes a dock measurement and tide check. On Edwards Hill and Newport Coast, every showing includes the HOA bylaws and dues breakdown. Inland or coastal, every showing ends with the comp set written down and the price-per-foot math run.",
   },
   {
     n: "04",
@@ -240,7 +240,7 @@ export default function BuyersPage() {
             Hyper-local matters more than ever in 2026.
           </h2>
           <p className="mt-4 text-base text-ink-soft leading-relaxed">
-            On the Harbour, dock dimensions move price. In Edwards Hill, HOA rules and Mello-Roos
+            On the Harbour, dock dimensions move price. In Edwards Hill, HOA rules and dues
             tax tracts vary by block. In Sunset Beach, short-term-rental permission separates the
             buyer pool. In downtown HB, lot orientation matters more than square footage. The
             difference between a great purchase and a regret is almost always block-level
