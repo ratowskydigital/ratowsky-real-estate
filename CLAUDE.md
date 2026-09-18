@@ -11,32 +11,38 @@ deployment configuration, no `cf:*` scripts in `package.json`, and frozen
 dependencies. Do not propose changes here; open them in the canonical
 repository. The code comments that mention Vercel are from the old host.
 
-## Local facts that are settled: Huntington Beach has no Mello-Roos
+## Mello-Roos and CFD factual guardrail
 
-**There is no Mello-Roos in Huntington Beach.** The city was substantially built
-out before the 1982 Community Facilities Act created the mechanism, so no CFD was
-ever formed over its housing stock, and that includes the newer coastal projects
-writers reach for as exceptions: Brightwater, Seacliff, Pacific City, and
-Huntington Harbour do not carry it either.
+**Huntington Beach cannot be described with a universal Mello-Roos yes/no rule.**
+Primary city records identify residential CFD 1990-1 (Goldenwest/Ellis) and a
+2024 city contract covering administration of CFDs 2000-1, 2002-1 and 2003-1.
+An earlier version of this rule asserted the city has none. That was wrong, and
+it was corrected on 2026-09-18 against those records.
+
+Keep three facts separate: **district existence** (the legal boundary and
+authority), a **current levy** (what is presently billed to a parcel), and
+**outstanding bonds or remaining terms** (how long an authorized assessment may
+continue). A citywide shortcut can be wrong in either direction.
 
 Applies to every surface: website copy, listing remarks, blogs, video scripts,
 social captions, email, CRM touches, BOFU research, and content briefs.
 
-- Do not state it, do not hedge it ("confirm there is no Mello-Roos on the
-  parcel"), and do not list it as a cost to budget for. The hedge is as wrong as
-  the assertion, because it tells a reader the risk is real.
-- Do not sell its absence as a feature either. Nothing in Huntington Beach has
-  it, so "no Mello-Roos" is not a differentiator and implies neighbors carry it.
-- **It is real elsewhere in Orange County**, so this is not a word filter. Irvine
-  villages built after the mid-1980s, Talega in San Clemente, Sea Summit and
-  Marblehead, Pacifica San Juan, and several Newport Coast villages genuinely
-  carry district assessments. That content should stay accurate.
-- Exactly two pages on the live site answer the question, by design: the journal
-  article `/blog/mello-roos-huntington-beach-neighborhoods` and the FAQ on
-  `/cities/huntington-beach`. Do not add a third, and do not add a denial
-  anywhere else.
-- For a Huntington Beach carrying-cost line, write HOA dues and insurance. Those
-  are the two figures that actually move between homes here.
+- Do not infer a parcel's liability from the city, the neighborhood, the build
+  year, or boilerplate listing language. Do not assert citywide presence, and do
+  not assert citywide absence.
+- Do not sell absence as a feature, and do not tell a reader to budget for it as
+  a given. Both are unsourced claims about a specific parcel.
+- Point readers at current official records: the
+  [Orange County Treasurer-Tax Collector Mello-Roos guidance](https://www.octreasurer.gov/melloroos),
+  the current secured tax bill for the address or APN, any Notice of Special Tax,
+  and the relevant Huntington Beach City Clerk district records.
+- Keep tract-specific claims only when individually sourced.
+- Do not store homeowner names, raw tax bills, or private parcel data.
+- On the live site, `/blog/mello-roos-huntington-beach-neighborhoods` explains
+  this verification framework rather than asserting absence, and `validate.mjs`
+  rejects unsupported universal assertions in either direction. Source note:
+  `docs/research/2026-09-18-mello-roos-huntington-beach-sources.md` in
+  `Auto-Authority/client-justin-ratowsky`.
 
 ## Hosting: Cloudflare, not Vercel (as of September 2026)
 
